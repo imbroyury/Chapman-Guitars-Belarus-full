@@ -1,0 +1,93 @@
+@import "help/variables";
+@import "help/mixins";
+
+.grid-page-wrap {
+  .side-menu-mobile-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: @secondaryColor;
+    box-shadow: 0 0 10px 0 black;
+    font-size: 1.3em;
+    display: none;
+    z-index: 1;
+  }
+  .side-menu {
+    grid-area: side-menu;
+    z-index: 1;
+    background-color: @secondaryColor;
+    box-shadow: -2px 0 7px 0 black;
+    .side-menu-close-icon {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .side-menu-logo-wrap, .side-menu-items, .social-icons-wrap {
+      position: fixed;
+      width: 150px;
+    }
+    .side-menu-logo-wrap {
+      height: 120px;
+      .flex-center;
+      .side-menu-logo {
+        width: 110px;
+      }
+    }
+    .side-menu-items {
+      top: 120px;
+      .side-menu-item {
+        position: relative;
+        a {
+          display: inline-block;
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+        }
+        &::after {
+          display: block;
+          content: '';
+          background-color: @mainFontColor;
+          height: 2px;
+          width: 50%;
+          transition: all .3s;
+          transform: scaleX(0) translateX(50%);
+        }
+        &:hover {
+          color: @secondaryFontColor;
+          &::after {
+            background-color: @secondaryFontColor;
+            transform: scaleX(1) translateX(50%);
+          }
+        }
+        &.active {
+          color: @secondaryFontColor;
+        }
+      }
+    }
+    .social-icons-wrap {
+      top: 350px;
+      height: 100px;
+      display: grid;
+      grid-template: ~'repeat(2, 1fr) / repeat(2, 1fr)';
+      align-items: center;
+      justify-items: center;
+      a {
+        i {
+          transition: all .5s;
+          font-size: 1.5em;
+        }
+        &:hover {
+          i {
+            transform: scale(1.2) rotate(360deg);
+            color: @secondaryFontColor;
+          }
+        }
+      }
+    }
+  }
+}

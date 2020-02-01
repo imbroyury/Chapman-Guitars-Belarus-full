@@ -1,0 +1,81 @@
+@import "../help/variables";
+@import "../help/mixins";
+
+.grid-page-wrap.guitar-gallery {
+  .main-section {
+    .guitar-gallery-wrap {
+      margin: 50px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      justify-items: center;
+      .series-name {
+        grid-column: span 4;
+        text-align: center;
+        margin: 10px;
+        h2 {
+          display: inline-block;
+          &::after {
+            display: block;
+            content: '';
+            background-color: @mainFontColor;
+            height: 2px;
+            width: 100%;
+            transform:  translateY(10px);
+          }
+        }
+      }
+      .guitar-item {
+        display: grid;
+        max-width: 250px;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: repeat(2, auto);
+        grid-template-areas: "guitar-name guitar-image" "color-circles guitar-image";
+        align-items: center;
+        .header-link {
+          grid-area: guitar-name;
+          font-size: 1.1em;
+          transition: all .2s;
+          display: inline-block;
+          text-align: center;
+          &:hover {
+            color: @secondaryFontColor;
+            transform: scale(1.1);
+          }
+        }
+        .circle-wrap {
+          grid-area: color-circles;
+          .flex-center-column;
+          .color-circle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid black;
+            margin: 5px;
+            cursor: pointer;
+            transition: all .5s;
+            &.current-color-circle {
+              box-shadow: 0 0 5px 0 @secondaryColor;
+              transform: scale(1.1);
+            }
+          }
+        }
+        &:hover .guitar-image {
+          filter: drop-shadow(7px 7px 10px @secondaryColor);
+        }
+        .guitar-image {
+          grid-area: guitar-image;
+          width: 150px;
+          filter: drop-shadow(3px 3px 5px @secondaryColor);
+          visibility: hidden;
+          opacity: 0;
+          transition: filter .3s, visibility .5s, opacity .5s;
+          &.current-guitar-image {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
