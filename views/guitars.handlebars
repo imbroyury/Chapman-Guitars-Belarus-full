@@ -1,0 +1,41 @@
+
+<script defer src="/static/js/guitar-gallery-image-changer.js"></script>
+
+<div class="grid-page-wrap guitar-gallery">
+    {{>header}}
+    <section class="main-section">
+        <div class="guitar-gallery-wrap">
+            {{#each guitarSeries}}
+                <div class="series-name"><h2>СЕРИЯ {{this.name}}</h2></div>
+                {{#each this.guitars}}
+                    <div class="guitar-item" data-guitar-name="{{this.name}}">
+                        <a href="guitars/{{../this.uri}}/{{this.uri}}" class="header-link">
+                            <p>{{this.name}}</p>
+                            <p>{{../this.name}}</p>
+                        </a>
+                        <div class="circle-wrap">
+                            {{#each this.colors}}
+                                <img
+                                    class="color-circle {{#unless @index}}current-color-circle{{/unless}}"
+                                    src="/{{this.dot_image}}"
+                                    alt="color-ico"
+                                    data-circle-tag="{{@index}}"
+                                >
+                            {{/each}}
+                        </div>
+                        {{#each this.colors}}
+                            <img
+                                class="guitar-image {{#unless @index}}current-guitar-image{{/unless}}"
+                                src="/{{this.guitar_image}}"
+                                alt="{{../this.name}}-{{@index}}"
+                                data-guitar-image="{{../this.name}}-{{@index}}"
+                            >
+                        {{/each}}
+                    </div>
+                {{/each}}
+            {{/each}}
+        </div>
+    </section>
+    {{>menu}}
+    {{>footer}}
+</div>
