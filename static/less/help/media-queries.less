@@ -1,0 +1,161 @@
+@import "variables";
+@import "mixins";
+@import "side-menu-media";
+
+@media screen and (max-width: 1200px) {
+  .grid-page-wrap {
+    &.guitar-gallery {
+      .main-section {
+        .guitar-gallery-wrap {
+          grid-template-columns: repeat(3, 1fr);
+          .series-name {
+            grid-column: span 3;
+          }
+        }
+      }
+    }
+    &.artists-page {
+      .main-section {
+        .section-header {
+          grid-column: span 3;
+        }
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    &.guitar-page {
+      .main-section {
+        .model-photos-gallery {
+          .model-photo {
+            width: 180px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .grid-page-wrap {
+    .header {
+      display: none;
+    }
+    &.guitar-gallery {
+      .main-section {
+        .guitar-gallery-wrap {
+          grid-template-columns: repeat(2, 1fr);
+          .series-name {
+            grid-column: span 2;
+          }
+        }
+      }
+    }
+    &.artists-page {
+      .main-section {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 70px 30px 30px;
+        .section-header {
+          grid-column: span 2;
+        }
+      }
+    }
+    &.guitar-page {
+      .main-section {
+        .model-photos-gallery {
+          .model-photo {
+            width: 160px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    font-size: 15px;
+  }
+
+  .grid-page-wrap {
+    grid-template-columns: minmax(320px, auto);
+    grid-template-rows: minmax(100vh, auto) 100px;
+    grid-template-areas: "main-section" "footer";
+    &.main-page {
+      .main-section {
+        .image-item {
+          &.image1 {
+            background-image: url("../images/content/main-small/1.jpg");
+          }
+          &.image2 {
+            background-image: url("../images/content/main-small/2.jpg");
+          }
+          &.image3 {
+            background-image: url("../images/content/main-small/3.jpg");
+          }
+          &.image4 {
+            background-image: url("../images/content/main-small/4.jpg");
+          }
+          &.image5 {
+            background-image: url("../images/content/main-small/5.jpg");
+          }
+          &.image6 {
+            background-image: url("../images/content/main-small/6.jpg");
+          }
+          &.image7 {
+            background-image: url("../images/content/main-small/7.jpg");
+          }
+          &.image8 {
+            background-image: url("../images/content/main-small/8.jpg");
+          }
+        }
+      }
+    }
+    &.guitar-gallery {
+      .main-section {
+        .guitar-gallery-wrap {
+          grid-template-columns: 1fr;
+          .series-name {
+            grid-column: span 1;
+          }
+        }
+      }
+    }
+    &.artists-page {
+      .main-section {
+        grid-template-columns: 1fr;
+        .section-header {
+          grid-column: span 1;
+        }
+      }
+    }
+    &.guitar-page {
+      .main-section {
+        padding: 70px 10px 30px;
+        .specs-table {
+          .table-row {
+            .item-description {
+              .guitar-color {
+                width: 70px;
+              }
+            }
+          }
+        }
+        .model-photos-gallery {
+          .model-photo {
+            width: 140px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-height: 550px) {
+  .grid-page-wrap {
+    .header {
+      display: none;
+    }
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(100vh, auto) 100px;
+    grid-template-areas: "main-section" "footer";
+  }
+}
