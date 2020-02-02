@@ -10,11 +10,61 @@ Image.init({
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true,
   },
 }, {
   sequelize,
   modelName: 'image',
+  timestamps: false
+});
+
+export class MainGalleryImage extends Model {}
+MainGalleryImage.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  priority: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true,
+  },
+  image_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Image,
+      key: 'id',
+    },
+  }
+}, {
+  sequelize,
+  modelName: 'main_gallery_image',
+  timestamps: false
+});
+
+export class GuitarSeries extends Model {}
+GuitarSeries.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  uri: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+}, {
+  sequelize,
+  modelName: 'guitar_series',
   timestamps: false
 });
 
@@ -25,7 +75,24 @@ Guitar.init({
     autoIncrement: true,
     primaryKey: true
   },
-  name: DataTypes.STRING,
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  uri: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  series_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: GuitarSeries,
+      key: 'id',
+    },
+  },
 }, {
   sequelize,
   modelName: 'guitar',
@@ -39,7 +106,11 @@ GuitarColor.init({
     autoIncrement: true,
     primaryKey: true
   },
-  name: DataTypes.STRING,
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
   guitar_id: {
     type: DataTypes.INTEGER,
     allowNull: false,

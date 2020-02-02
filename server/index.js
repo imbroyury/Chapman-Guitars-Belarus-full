@@ -10,6 +10,7 @@ import { HTTP_PORT } from '../admin-interface/src/shared/hosts';
 // import { encryptPassword, generateToken } from './crypto';
 // mport errors from '../admin-interface/src/shared/errors';
 // mport headers from '../admin-interface/src/shared/headers';
+import clientRouter from './clientRouter';
 
 const server = express();
 
@@ -19,7 +20,7 @@ server.set('view engine', 'handlebars');
 server.use(bodyParser.json());
 
 const storage = multer.diskStorage({
-  destination: 'server/images/',
+  destination: 'static/uploads',
   filename: function (req, file, cb) {
     cb(null, uuid() + '.' + mime.extension(file.mimetype));
   }
@@ -28,8 +29,8 @@ const upload = multer({ storage });
 
 // const BUILD_FOLDER = path.join(__dirname, '..', 'admin-interface', 'build');
 // server.use(express.static(BUILD_FOLDER));
-server.use(express.static(path.join(__dirname, 'images')));
-server.use('/static', express.static(path.join(__dirname, '..', 'client')));
+server.use(express.static(path.join(__dirname, '..', 'static', 'uploads')));
+server.use('/static', express.static(path.join(__dirname, '..', 'static')));
 
 DBService.init();
 
@@ -55,24 +56,6 @@ server.post('/login', async (req, res) => {
   res.status(500).send();
 });
 
-server.get('/guitar-gallery', async (req, res) => {
-  const guitars = await DBService.getAllGuitars();
-  const vm = guitars.map(guitar => {
-    return {
-      name: guitar.get('name'),
-      colors: guitar.get('guitar_colors').map((gc) => ({
-        name: gc.get('name'),
-        guitar_image: gc.get('guitar_image').get('name'),
-        tab_image: gc.get('tab_image').get('name'),
-        dot_image: gc.get('dot_image').get('name'),
-      }))
-    };
-  });
-  console.log(vm);
-  vm.forEach(v => console.log(v.colors));
-  res.render('guitar-gallery', { guitars: vm });
-});
-
 // For everything else, serve index file
 // server.get('*', (req, res) => {
 //   res.sendFile(path.join(BUILD_FOLDER, 'index.html'));
@@ -81,3 +64,5 @@ server.get('/guitar-gallery', async (req, res) => {
 server.listen(HTTP_PORT, () => {
   console.log(`🎸 Chapman Guitars 🎸 is listening on port ${HTTP_PORT}!`);
 });
+
+server.use('/', clientRouter);
