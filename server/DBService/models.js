@@ -26,10 +26,9 @@ MainGalleryImage.init({
     autoIncrement: true,
     primaryKey: true
   },
-  priority: {
+  order: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
   },
   image_id: {
     type: DataTypes.INTEGER,

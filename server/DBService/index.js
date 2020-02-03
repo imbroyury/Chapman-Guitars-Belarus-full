@@ -9,12 +9,9 @@ export const init = async () => {
 
     await sequelize.authenticate();
 
-    // await sequelize.drop();
+    //await sequelize.drop();
 
     await sequelize.sync();
-    // await Promise.all([
-    //   GuitarSeries, Guitar, GuitarColor, Image,
-    // ].map(model => model.sync()));
 
     console.log('Models x Tables sync complete');
 
@@ -36,7 +33,7 @@ export const init = async () => {
 
     console.log('Relationships established');
 
-    // await seed();
+    //await seed();
 
   } catch(e) {
     console.error('Unable to connect to the database:', e);
@@ -44,7 +41,8 @@ export const init = async () => {
 };
 
 export const saveImageMetaData = async (name) => {
-  await Image.create({ name });
+  const image = await Image.create({ name });
+  return image;
 };
 
 export const getAllGuitars = async () => {
@@ -67,7 +65,29 @@ export const getGuitarByUri = async (uri) => {
 
 export const getMainGalleryImages = async () => {
   const images = await MainGalleryImage.findAll({ include: [Image], order: [
-    ['priority', 'ASC'],
+    ['order', 'ASC'],
   ], });
   return images;
+};
+
+export const putMainGalleryImage = async (imageId, order) => {
+  await MainGalleryImage.create({
+    image_id: imageId,
+    order
+  });
+};
+
+export const deleteMainGalleryImage = async (galleryImageId) => {
+  await MainGalleryImage.destroy({
+    where: {
+      id: galleryImageId,
+    }
+  });
+};
+
+export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
+  const image = await MainGalleryImage
+    .findOne({ where: { id: galleryImageId }});
+  image.order = order;
+  await image.save();
 };

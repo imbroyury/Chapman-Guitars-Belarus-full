@@ -67,6 +67,6 @@ export default async () => {
   ]);
 
   await MainGalleryImage.bulkCreate(
-    images[3].map((galleryImage, i) => ({ priority: i, image_id: galleryImage.id }))
+    images[3].map((galleryImage, i) => ({ order: i, image_id: galleryImage.id }))
   );
 };

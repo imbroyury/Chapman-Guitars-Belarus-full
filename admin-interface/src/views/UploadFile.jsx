@@ -104,8 +104,8 @@ const UploadFile = (props) => {
   }, [shouldInitUpload, uploadId, comment, fileList]);
 
   const renderUploadMessage = () => (fileList === null || fileList.length === 0)
-      ? <Typography>No file chosen</Typography>
-      : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>
+    ? <Typography>No file chosen</Typography>
+    : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>;
 
   const getIsInputDisabled = () => uploadState !== requestStatuses.uninitialized;
 
@@ -121,7 +121,7 @@ const UploadFile = (props) => {
         horizontal: 'left',
       }}
       open
-      >
+    >
       <SnackbarContent
         className={classes.snackbarSuccess}
         message={
@@ -140,7 +140,7 @@ const UploadFile = (props) => {
         horizontal: 'left',
       }}
       open
-      >
+    >
       <SnackbarContent
         className={classes.snackbarError}
         message={
@@ -172,14 +172,14 @@ const UploadFile = (props) => {
       </Grid>
       <Grid container>
         <TextField
-            label="Comment"
-            multiline
-            rowsMax="4"
-            value={comment}
-            onChange={handleCommentChange}
-            variant="filled"
-            disabled={getIsInputDisabled()}
-          />
+          label="Comment"
+          multiline
+          rowsMax="4"
+          value={comment}
+          onChange={handleCommentChange}
+          variant="filled"
+          disabled={getIsInputDisabled()}
+        />
       </Grid>
       <Grid container>
         <Button
@@ -196,6 +196,6 @@ const UploadFile = (props) => {
       {!props.isUserLoggedIn && <Redirect to='/login' />}
     </Paper>
   </Grid>);
-}
+};
 
 export default UploadFile;

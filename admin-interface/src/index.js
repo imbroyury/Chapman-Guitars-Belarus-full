@@ -5,15 +5,15 @@ import {
   Switch,
   Route,
   Link,
-} from "react-router-dom";
+} from 'react-router-dom';
 import {
-    Drawer,
-    List,
-    ListItem,
-    ListItemText,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AllFiles from './views/AllFiles';
+import MainGallery from './views/MainGallery';
 import UploadFile from './views/UploadFile';
 import Login from './views/Login';
 import Register from './views/Register';
@@ -48,14 +48,9 @@ const routes = {
   ],
   auth: [
     {
-      View: AllFiles,
-      path: '/all-files',
-      linkLabel: 'All files',
-    },
-    {
-      View: UploadFile,
-      path: '/upload-file',
-      linkLabel: 'Upload file',
+      View: MainGallery,
+      path: '/gallery',
+      linkLabel: 'Gallery',
     },
   ],
 };
@@ -64,46 +59,46 @@ const PAGE_TITLE = 'FileStorage';
 
 const Root = () => {
   const classes = useStyles();
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
   const loginUser = () => setIsUserLoggedIn(true);
 
-  useEffect(() => {
-    if (isUserLoggedIn) {
-      document.title = PAGE_TITLE + ' - ' + AuthService.getAuthData().login;
-    } else {
-      document.title = PAGE_TITLE;
-    }
-  }, [isUserLoggedIn])
+  // useEffect(() => {
+  //   if (isUserLoggedIn) {
+  //     document.title = PAGE_TITLE + ' - ' + AuthService.getAuthData().login;
+  //   } else {
+  //     document.title = PAGE_TITLE;
+  //   }
+  // }, [isUserLoggedIn])
 
   return (<Router>
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        className={classes.drawer}
-        classes={{paper: classes.drawerPaper}}
-      >
-        <List>
-          {
-            (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => (
-                <ListItem button component={Link} to={route.path} key={route.path}>
-                    <ListItemText>{route.linkLabel}</ListItemText>
-                </ListItem>
-            ))
-          }
-        </List>
-      </Drawer>
-      <main className={classes.view}>
-        <Switch>
-          {
-            [...routes.auth, ...routes.preAuth].map(route => (
-              <Route path={route.path} key={route.path}>
-                  <route.View isUserLoggedIn={isUserLoggedIn} loginUser={loginUser} />
-              </Route>
-            ))
-          }
-        </Switch>
-      </main>
-    </Router>)
-}
+    <Drawer
+      variant="permanent"
+      anchor="left"
+      className={classes.drawer}
+      classes={{paper: classes.drawerPaper}}
+    >
+      <List>
+        {
+          (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => (
+            <ListItem button component={Link} to={route.path} key={route.path}>
+              <ListItemText>{route.linkLabel}</ListItemText>
+            </ListItem>
+          ))
+        }
+      </List>
+    </Drawer>
+    <main className={classes.view}>
+      <Switch>
+        {
+          [...routes.auth, ...routes.preAuth].map(route => (
+            <Route path={route.path} key={route.path}>
+              <route.View isUserLoggedIn={isUserLoggedIn} loginUser={loginUser} />
+            </Route>
+          ))
+        }
+      </Switch>
+    </main>
+  </Router>);
+};
 
 ReactDOM.render(<Root />, document.getElementById('root'));
