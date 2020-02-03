@@ -39,6 +39,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/gallery-images', async (req, res) => {
+  if (Math.random() > 0.6) return res.send(500);
   const images = await DBService.getMainGalleryImages();
   res.send(images);
 });
