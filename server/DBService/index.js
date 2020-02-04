@@ -15,14 +15,17 @@ export const init = async () => {
 
     await GuitarSeries.hasMany(Guitar, { foreignKey: 'seriesId' });
     await Guitar.belongsTo(GuitarSeries, { foreignKey: 'seriesId' });
+
     await Guitar.hasMany(GuitarColor, { foreignKey: 'guitarId' });
     await GuitarColor.belongsTo(Guitar, { foreignKey: 'guitarId' });
+
     await GuitarColor.belongsTo(Image, { foreignKey: 'guitarImageId', as: 'guitarImage' });
     await GuitarColor.belongsTo(Image, { foreignKey: 'tabImageId', as: 'tabImage' });
     await GuitarColor.belongsTo(Image, { foreignKey: 'dotImageId', as: 'dotImage' });
     await Image.hasOne(GuitarColor, { foreignKey: 'guitarImageId', as: 'guitarImage' });
     await Image.hasOne(GuitarColor, { foreignKey: 'tabImageId', as: 'tabImage' });
     await Image.hasOne(GuitarColor, { foreignKey: 'dotImageId', as: 'dotImage' });
+
     await Image.hasOne(MainGalleryImage, { foreignKey: 'imageId' });
     await MainGalleryImage.belongsTo(Image, { foreignKey: 'imageId' });
 
@@ -88,14 +91,6 @@ export const deleteMainGalleryImage = async (galleryImageId) => {
     where: {
       id: galleryImageId,
     },
-  });
-};
-
-export const getImage = async (id) => {
-  await Image.findOne({
-    where: {
-      id,
-    }
   });
 };
 

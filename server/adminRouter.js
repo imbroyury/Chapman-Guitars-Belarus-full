@@ -59,9 +59,9 @@ router.delete('/gallery-image', async (req, res) => {
   try {
     const { id } = req.body;
     const galleryImage = await DBService.getMainGalleryImage(id);
-    await FSService.removeFileFromUploads(galleryImage.Image.name);
     await DBService.deleteMainGalleryImage(id);
-    // TODO: delete associated Image, not just GalleryImage entry
+    await DBService.deleteImage(galleryImage.Image.id);
+    await FSService.removeFileFromUploads(galleryImage.Image.name);
     res.status(200).send();
   } catch(e) {
     res.send(e).status(500);
