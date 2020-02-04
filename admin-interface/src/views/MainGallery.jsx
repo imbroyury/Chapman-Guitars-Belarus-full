@@ -49,10 +49,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ReMountHOC = (Component) => (props) => {
-  const [key, setKey] = useState(Math.random());
-  const remount = () => setKey(Math.random());
-  return <Component key={key} remount={remount} {...props}/>;
+const ReMountHOC = (Component) => {
+  const Remountable = (props) => {
+    const [key, setKey] = useState(Math.random());
+    const remount = () => setKey(Math.random());
+    return <Component key={key} remount={remount} {...props}/>;
+  };
+  return Remountable;
 };
 
 const MainGallery = (props) => {
@@ -117,8 +120,6 @@ const MainGallery = (props) => {
     deleteImageState,
     changeImageOrderState,
   ];
-
-  console.log(requestStates);
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
 
