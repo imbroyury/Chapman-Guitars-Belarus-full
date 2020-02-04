@@ -8,6 +8,8 @@ import {
   Card,
   CardContent,
   CardActions,
+  Dialog,
+  DialogContent,
   Button,
   CircularProgress,
   Snackbar,
@@ -99,12 +101,24 @@ const MainGallery = (props) => {
     return changeResult;
   }, []);
 
-  const isInteractionDisabled = [
+  const requestStates = [
     imagesRequestState,
     uploadImageState,
     deleteImageState,
     changeImageOrderState,
-  ].some(state => state.loading);
+  ];
+
+  const isSomeRequestInProgress = requestStates.some(state => state.loading);
+
+  const requestErrors = requestStates
+    .filter(state => state.error)
+    .map(state => state.error);
+
+  const hasSomeRequestErred = requestErrors.length > 0;
+
+  const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
+
+  const isUploadDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled;
 
   const renderImage = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
@@ -120,7 +134,7 @@ const MainGallery = (props) => {
         }}
       />
     </CardContent>
-    <img src={`${HTTP_URL}/${image.image.name}`} className={classes.img}/>
+    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img}/>
     <CardActions>
       <Button
         variant="contained"
@@ -135,8 +149,6 @@ const MainGallery = (props) => {
   const renderUploadMessage = () => (fileList === null || fileList.length === 0)
     ? <Typography>No file chosen</Typography>
     : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>;
-
-  const isUploadDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled;
 
   const renderUploadInput = () => <>
     <Grid container>
@@ -188,16 +200,12 @@ const MainGallery = (props) => {
     </Snackbar>);
 
   return (<Grid container>
-    {
-      [
-        imagesRequestState,
-        uploadImageState,
-        deleteImageState,
-        changeImageOrderState,
-      ].map(state => state.error ? renderErrorMessage(state.error.message) : null)
-    }
+    {isSomeRequestInProgress &&
+      <Dialog open>
+        <DialogContent><CircularProgress /></DialogContent>
+      </Dialog>}
+    {requestErrors.map(error => renderErrorMessage(error.message))}
     {renderUploadInput()}
-    {imagesRequestState.loading && <Grid container><CircularProgress /></Grid>}
     {images.map(renderImage)}
   </Grid>);
 };
