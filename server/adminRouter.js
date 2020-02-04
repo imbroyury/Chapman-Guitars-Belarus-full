@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
 import * as DBService from './DBService';
+import * as FSService from './FSService';
 import multer from 'multer';
 import mime from 'mime-types';
 import uuid from 'uuid/v1';
@@ -39,7 +40,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/gallery-images', async (req, res) => {
-  if (Math.random() > 0.7) return res.send(500);
   const images = await DBService.getMainGalleryImages();
   res.send(images);
 });
@@ -58,8 +58,11 @@ router.put('/gallery-image', upload.single('image'), async (req, res) => {
 router.delete('/gallery-image', async (req, res) => {
   try {
     const { id } = req.body;
-    const result = await DBService.deleteMainGalleryImage(id);
-    res.send(result);
+    const galleryImage = await DBService.getMainGalleryImage(id);
+    await FSService.removeFileFromUploads(galleryImage.Image.name);
+    await DBService.deleteMainGalleryImage(id);
+    // TODO: delete associated Image, not just GalleryImage entry
+    res.status(200).send();
   } catch(e) {
     res.send(e).status(500);
   }

@@ -9,30 +9,26 @@ export const init = async () => {
 
     await sequelize.authenticate();
 
-    // await sequelize.drop();
-
     await sequelize.sync();
 
     console.log('Models x Tables sync complete');
 
-    GuitarSeries.hasMany(Guitar, { foreignKey: 'seriesId' });
-    Guitar.belongsTo(GuitarSeries, { foreignKey: 'seriesId' });
-
-    Guitar.hasMany(GuitarColor, { foreignKey: 'guitarId' });
-    GuitarColor.belongsTo(Guitar, { foreignKey: 'guitarId' });
-
-    GuitarColor.belongsTo(Image, { foreignKey: 'guitarImageId', as: 'guitarImage' });
-    GuitarColor.belongsTo(Image, { foreignKey: 'tabImageId', as: 'tabImage' });
-    GuitarColor.belongsTo(Image, { foreignKey: 'dotImageId', as: 'dotImage' });
-    Image.hasOne(GuitarColor, { foreignKey: 'guitarImageId', as: 'guitarImage' });
-    Image.hasOne(GuitarColor, { foreignKey: 'tabImageId', as: 'tabImage' });
-    Image.hasOne(GuitarColor, { foreignKey: 'dotImageId', as: 'dotImage' });
-
-    Image.hasOne(MainGalleryImage, { foreignKey: 'imageId' });
-    MainGalleryImage.belongsTo(Image, { foreignKey: 'imageId' });
+    await GuitarSeries.hasMany(Guitar, { foreignKey: 'seriesId' });
+    await Guitar.belongsTo(GuitarSeries, { foreignKey: 'seriesId' });
+    await Guitar.hasMany(GuitarColor, { foreignKey: 'guitarId' });
+    await GuitarColor.belongsTo(Guitar, { foreignKey: 'guitarId' });
+    await GuitarColor.belongsTo(Image, { foreignKey: 'guitarImageId', as: 'guitarImage' });
+    await GuitarColor.belongsTo(Image, { foreignKey: 'tabImageId', as: 'tabImage' });
+    await GuitarColor.belongsTo(Image, { foreignKey: 'dotImageId', as: 'dotImage' });
+    await Image.hasOne(GuitarColor, { foreignKey: 'guitarImageId', as: 'guitarImage' });
+    await Image.hasOne(GuitarColor, { foreignKey: 'tabImageId', as: 'tabImage' });
+    await Image.hasOne(GuitarColor, { foreignKey: 'dotImageId', as: 'dotImage' });
+    await Image.hasOne(MainGalleryImage, { foreignKey: 'imageId' });
+    await MainGalleryImage.belongsTo(Image, { foreignKey: 'imageId' });
 
     console.log('Relationships established');
 
+    // await sequelize.drop();
     // await seed();
 
   } catch(e) {
@@ -70,6 +66,16 @@ export const getMainGalleryImages = async () => {
   return images;
 };
 
+export const getMainGalleryImage = async (galleryImageId) => {
+  const image = await MainGalleryImage.findOne({
+    where: {
+      id: galleryImageId,
+    },
+    include: [Image],
+  });
+  return image;
+};
+
 export const putMainGalleryImage = async (imageId, order) => {
   await MainGalleryImage.create({
     imageId: imageId,
@@ -81,13 +87,29 @@ export const deleteMainGalleryImage = async (galleryImageId) => {
   await MainGalleryImage.destroy({
     where: {
       id: galleryImageId,
+    },
+  });
+};
+
+export const getImage = async (id) => {
+  await Image.findOne({
+    where: {
+      id,
+    }
+  });
+};
+
+export const deleteImage = async (id) => {
+  await Image.destroy({
+    where: {
+      id,
     }
   });
 };
 
 export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
-  const image = await MainGalleryImage
+  const galleryImage = await MainGalleryImage
     .findOne({ where: { id: galleryImageId }});
-  image.order = order;
-  await image.save();
+  galleryImage.order = order;
+  await galleryImage.save();
 };
