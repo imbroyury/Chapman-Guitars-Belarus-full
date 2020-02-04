@@ -142,3 +142,31 @@ GuitarColor.init({
   sequelize,
   timestamps: false
 });
+
+export class Artist extends Model {}
+Artist.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  description: {
+    type: DataTypes.TEXT,
+  },
+  photoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Image,
+      key: 'id',
+    }
+  }
+}, {
+  sequelize,
+  timestamps: false
+});

@@ -1,28 +1,19 @@
-<script defer src="../js/artist-page-toggle-description.js"></script>
+<script defer src="/static/js/artist-page-toggle-description.js"></script>
 <div class="grid-page-wrap artists-page">
     {{>header}}
     <section class="main-section">
         <h1 class="section-header">Артисты бренда Champan Guitars</h1>
-        <div class="artist-section">
-            <div class="artist-name">
-                <h2>Rob Chapman</h2>
+        {{#each artists}}
+            <div class="artist-section">
+                <div class="artist-name">
+                    <h2>{{this.name}}</h2>
+                </div>
+                <img class="artist-photo" src="/{{this.photo}}" alt="{{this.name}}">
+                <div class="artist-description">
+                    {{this.description}}
+                </div>
             </div>
-            <img class="artist-photo" src="../images/content/artists/rob-chapman-01.jpg" alt="rob-chapman">
-            <div class="artist-description">
-                Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje,
-                обозреватель для магазина Andertons Music.
-            </div>
-        </div>
-        <div class="artist-section">
-            <div class="artist-name">
-                <h2>Chris Mike</h2>
-            </div>
-            <img class="artist-photo" src="../images/content/artists/chris-mike-01.jpg" alt="chris-mike">
-            <div class="artist-description">
-                Крис - сессионный гитарист. Дает более 100 концертов в год, был в турах по всей Европе, Северной
-                Америке, а также в Австралии. С 2013 года записывает инструментальные гитарные треки.
-            </div>
-        </div>
+        {{/each}}
     </section>
     {{>menu}}
     {{>footer}}

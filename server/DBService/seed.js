@@ -1,4 +1,4 @@
-import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image } from './Models.js';
+import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist } from './Models.js';
 
 const imgs = [
   // ml-1 Midnight Sky
@@ -26,6 +26,10 @@ const galleryImgs = [
   '615248e0-45d3-11ea-9f37-75cdc8dd7f78.jpeg',
 ];
 
+const artistImgs = [
+  '26f13240-4521-11ea-ab06-ad38a67e52fc.jpeg',
+];
+
 export default async () => {
   const series = await GuitarSeries.create({ name: 'Standard', uri: 'st' });
 
@@ -40,7 +44,7 @@ export default async () => {
   }]);
 
   const images = await Promise.all(
-    [...imgs, galleryImgs].map(imgSet => Image.bulkCreate(imgSet.map(name => ({ name }))))
+    [...imgs, galleryImgs, artistImgs].map(imgSet => Image.bulkCreate(imgSet.map(name => ({ name }))))
   );
 
   await GuitarColor.bulkCreate([{
@@ -69,4 +73,10 @@ export default async () => {
   await MainGalleryImage.bulkCreate(
     images[3].map((galleryImage, i) => ({ order: i, imageId: galleryImage.id }))
   );
+
+  await Artist.create({
+    name: 'Rob Chapman',
+    description: 'Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje, обозреватель для магазина Andertons Music.',
+    photoId: images[4][0].id,
+  });
 };

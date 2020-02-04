@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import sequelize from './sequelize.js';
-import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage } from './Models.js';
+import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist } from './Models.js';
 import seed from './seed.js';
 
 export const init = async () => {
@@ -28,6 +28,9 @@ export const init = async () => {
 
     await Image.hasOne(MainGalleryImage, { foreignKey: 'imageId' });
     await MainGalleryImage.belongsTo(Image, { foreignKey: 'imageId' });
+
+    await Image.hasOne(Artist, { foreignKey: 'photoId', as: 'photo' });
+    await Artist.belongsTo(Image, { foreignKey: 'photoId', as: 'photo' });
 
     console.log('Relationships established');
 
@@ -107,4 +110,9 @@ export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
     .findOne({ where: { id: galleryImageId }});
   galleryImage.order = order;
   await galleryImage.save();
+};
+
+export const getAllArtists = async () => {
+  const artists = await Artist.findAll({ include: { all: true, nested: true } });
+  return artists;
 };

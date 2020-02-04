@@ -24,10 +24,10 @@ router.get('/guitars', async (req, res) => {
   const vm = guitarSeries.map(series => ({
     name: series.name.toUpperCase(),
     uri: series.uri,
-    guitars: series.guitars.map(guitar => ({
+    guitars: series.Guitars.map(guitar => ({
       name: guitar.name.toUpperCase(),
       uri: guitar.uri,
-      colors: guitar.guitarColors.map(mapGuitarColorToViewModel),
+      colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
     })),
   }));
 
@@ -48,7 +48,13 @@ router.get('/guitars/:series/:model', async (req, res) => {
 });
 
 router.get('/artists', async (req, res) => {
-  res.render('artists');
+  const artists = await DBService.getAllArtists();
+  const vm = artists.map(artist => ({
+    name: artist.name,
+    description: artist.description,
+    photo: artist.photo.name,
+  }));
+  res.render('artists', { artists: vm });
 });
 
 export default router;
