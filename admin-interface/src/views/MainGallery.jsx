@@ -43,6 +43,9 @@ const useStyles = makeStyles(theme => ({
   },
   snackbarError: {
     backgroundColor: theme.palette.error.dark,
+  },
+  reloadButton: {
+    color: 'white'
   }
 }));
 
@@ -53,7 +56,7 @@ const ReMountHOC = (Component) => (props) => {
 };
 
 const MainGallery = (props) => {
-  const remountHandler = props.remount;
+  const reloadHandler = props.remount;
   const classes = useStyles();
 
   // cache fetched images for smooth re-render
@@ -206,7 +209,7 @@ const MainGallery = (props) => {
           </span>
         }
         action={
-          <Button color="primary" onClick={remountHandler}>Reload</Button>
+          <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
         }
       />
     </Snackbar>);
