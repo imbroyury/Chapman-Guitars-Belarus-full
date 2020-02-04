@@ -47,34 +47,28 @@ const useStyles = makeStyles(theme => ({
 const MainGallery = (props) => {
   const classes = useStyles();
 
-  const [isInteractionDisabled, setIsInteractionDisabled] = useState(false);
-  const disableInteraction = () => setIsInteractionDisabled(true);
-  const enableInteraction = () => setIsInteractionDisabled(false);
-
   // cache fetched images for smooth re-render
   const [images, setImages] = useState([]);
+  // input type='file'
   const [fileList, setFileList] = useState(null);
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const handleChangeFileList = (e) => setFileList(e.target.files);
+
+  const scheduleRefetch = () => setShouldRefetch(true);
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
     setFileList(null);
   };
 
-  const scheduleRefetch = () => setShouldRefetch(true);
-
   const imagesRequestState = useAsync(async () => {
-    disableInteraction();
     const { data: images } = await axios.get('/gallery-images');
     resetAfterFetch();
-    enableInteraction();
     setImages(images);
     return images;
   }, [shouldRefetch]);
 
   const [uploadImageState, uploadImage] = useAsyncFn(async () => {
-    disableInteraction();
     const formData = new FormData();
     const order = Math.max(...images.map(image => image.order), -1) + 1;
     formData.append('image', fileList[0]);
@@ -84,31 +78,33 @@ const MainGallery = (props) => {
       formData,
     );
     scheduleRefetch();
-    enableInteraction();
     return uploadResult;
   }, [fileList]);
 
   const [deleteImageState, deleteImage] = useAsyncFn(async (id) => {
-    disableInteraction();
     const { data: deleteResult } = await axios.delete(
       '/gallery-image',
       { data: { id } },
     );
     scheduleRefetch();
-    enableInteraction();
     return deleteResult;
   }, []);
 
   const [changeImageOrderState, changeImageOrder] = useAsyncFn(async (id, order) => {
-    disableInteraction();
     const { data: changeResult } = await axios.post(
       '/gallery-image-order',
       { id, order },
     );
     scheduleRefetch();
-    enableInteraction();
     return changeResult;
   }, []);
+
+  const isInteractionDisabled = [
+    imagesRequestState,
+    uploadImageState,
+    deleteImageState,
+    changeImageOrderState,
+  ].some(state => state.loading);
 
   const renderImage = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
