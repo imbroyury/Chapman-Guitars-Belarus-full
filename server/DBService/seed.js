@@ -21,7 +21,7 @@ const imgs = [
   ],
 ];
 
-const gallery_imgs = [
+const galleryImgs = [
   '5d3d83f0-45d3-11ea-9f37-75cdc8dd7f78.jpeg',
   '615248e0-45d3-11ea-9f37-75cdc8dd7f78.jpeg',
 ];
@@ -32,41 +32,41 @@ export default async () => {
   const guitars = await Guitar.bulkCreate([{
     name: 'ML1 Modern',
     uri: 'ml1-m',
-    series_id: series.get('id'),
+    seriesId: series.get('id'),
   }, {
     name: 'ML2 Modern',
     uri: 'ml2-m',
-    series_id: series.get('id'),
+    seriesId: series.get('id'),
   }]);
 
   const images = await Promise.all(
-    [...imgs, gallery_imgs].map(imgSet => Image.bulkCreate(imgSet.map(name => ({ name }))))
+    [...imgs, galleryImgs].map(imgSet => Image.bulkCreate(imgSet.map(name => ({ name }))))
   );
 
   await GuitarColor.bulkCreate([{
     name: 'Midnight Sky',
-    guitar_id: guitars[0].get('id'),
-    tab_image_id: images[0][0].get('id'),
-    dot_image_id: images[0][1].get('id'),
-    guitar_image_id: images[0][2].get('id'),
+    guitarId: guitars[0].get('id'),
+    tabImageId: images[0][0].get('id'),
+    dotImageId: images[0][1].get('id'),
+    guitarImageId: images[0][2].get('id'),
   },
   {
     name: 'Lunar',
-    guitar_id: guitars[0].get('id'),
-    tab_image_id: images[1][0].get('id'),
-    dot_image_id: images[1][1].get('id'),
-    guitar_image_id: images[1][2].get('id'),
+    guitarId: guitars[0].get('id'),
+    tabImageId: images[1][0].get('id'),
+    dotImageId: images[1][1].get('id'),
+    guitarImageId: images[1][2].get('id'),
   },
   {
     name: 'White Dove',
-    guitar_id: guitars[1].get('id'),
-    tab_image_id: images[2][0].get('id'),
-    dot_image_id: images[2][1].get('id'),
-    guitar_image_id: images[2][2].get('id'),
+    guitarId: guitars[1].get('id'),
+    tabImageId: images[2][0].get('id'),
+    dotImageId: images[2][1].get('id'),
+    guitarImageId: images[2][2].get('id'),
   },
   ]);
 
   await MainGalleryImage.bulkCreate(
-    images[3].map((galleryImage, i) => ({ order: i, image_id: galleryImage.id }))
+    images[3].map((galleryImage, i) => ({ order: i, imageId: galleryImage.id }))
   );
 };

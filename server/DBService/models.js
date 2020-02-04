@@ -15,7 +15,6 @@ Image.init({
   },
 }, {
   sequelize,
-  modelName: 'image',
   timestamps: false
 });
 
@@ -30,7 +29,7 @@ MainGalleryImage.init({
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  image_id: {
+  imageId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -40,7 +39,6 @@ MainGalleryImage.init({
   }
 }, {
   sequelize,
-  modelName: 'main_gallery_image',
   timestamps: false
 });
 
@@ -63,7 +61,6 @@ GuitarSeries.init({
   },
 }, {
   sequelize,
-  modelName: 'guitar_series',
   timestamps: false
 });
 
@@ -84,7 +81,7 @@ Guitar.init({
     allowNull: false,
     unique: true,
   },
-  series_id: {
+  seriesId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -94,7 +91,6 @@ Guitar.init({
   },
 }, {
   sequelize,
-  modelName: 'guitar',
   timestamps: false
 });
 
@@ -110,7 +106,7 @@ GuitarColor.init({
     allowNull: false,
     unique: true,
   },
-  guitar_id: {
+  guitarId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -118,7 +114,7 @@ GuitarColor.init({
       key: 'id',
     }
   },
-  tab_image_id: {
+  tabImageId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -126,7 +122,7 @@ GuitarColor.init({
       key: 'id',
     },
   },
-  dot_image_id: {
+  dotImageId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -134,7 +130,7 @@ GuitarColor.init({
       key: 'id',
     },
   },
-  guitar_image_id: {
+  guitarImageId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -144,6 +140,5 @@ GuitarColor.init({
   },
 }, {
   sequelize,
-  modelName: 'guitar_color',
   timestamps: false
 });

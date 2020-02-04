@@ -9,31 +9,31 @@ export const init = async () => {
 
     await sequelize.authenticate();
 
-    //await sequelize.drop();
+    // await sequelize.drop();
 
     await sequelize.sync();
 
     console.log('Models x Tables sync complete');
 
-    GuitarSeries.hasMany(Guitar, { foreignKey: 'series_id' });
-    Guitar.belongsTo(GuitarSeries, { foreignKey: 'series_id' });
+    GuitarSeries.hasMany(Guitar, { foreignKey: 'seriesId' });
+    Guitar.belongsTo(GuitarSeries, { foreignKey: 'seriesId' });
 
-    Guitar.hasMany(GuitarColor, { foreignKey: 'guitar_id' });
-    GuitarColor.belongsTo(Guitar, { foreignKey: 'guitar_id' });
+    Guitar.hasMany(GuitarColor, { foreignKey: 'guitarId' });
+    GuitarColor.belongsTo(Guitar, { foreignKey: 'guitarId' });
 
-    GuitarColor.belongsTo(Image, { foreignKey: 'guitar_image_id', as: 'guitar_image' });
-    GuitarColor.belongsTo(Image, { foreignKey: 'tab_image_id', as: 'tab_image' });
-    GuitarColor.belongsTo(Image, { foreignKey: 'dot_image_id', as: 'dot_image' });
-    Image.hasOne(GuitarColor, { foreignKey: 'guitar_image_id', as: 'guitar_image' });
-    Image.hasOne(GuitarColor, { foreignKey: 'tab_image_id', as: 'tab_image' });
-    Image.hasOne(GuitarColor, { foreignKey: 'dot_image_id', as: 'dot_image' });
+    GuitarColor.belongsTo(Image, { foreignKey: 'guitarImageId', as: 'guitarImage' });
+    GuitarColor.belongsTo(Image, { foreignKey: 'tabImageId', as: 'tabImage' });
+    GuitarColor.belongsTo(Image, { foreignKey: 'dotImageId', as: 'dotImage' });
+    Image.hasOne(GuitarColor, { foreignKey: 'guitarImageId', as: 'guitarImage' });
+    Image.hasOne(GuitarColor, { foreignKey: 'tabImageId', as: 'tabImage' });
+    Image.hasOne(GuitarColor, { foreignKey: 'dotImageId', as: 'dotImage' });
 
-    Image.hasOne(MainGalleryImage, { foreignKey: 'image_id' });
-    MainGalleryImage.belongsTo(Image, { foreignKey: 'image_id' });
+    Image.hasOne(MainGalleryImage, { foreignKey: 'imageId' });
+    MainGalleryImage.belongsTo(Image, { foreignKey: 'imageId' });
 
     console.log('Relationships established');
 
-    //await seed();
+    // await seed();
 
   } catch(e) {
     console.error('Unable to connect to the database:', e);
@@ -72,7 +72,7 @@ export const getMainGalleryImages = async () => {
 
 export const putMainGalleryImage = async (imageId, order) => {
   await MainGalleryImage.create({
-    image_id: imageId,
+    imageId: imageId,
     order
   });
 };

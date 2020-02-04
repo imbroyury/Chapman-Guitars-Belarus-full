@@ -6,16 +6,16 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   const images = await DBService.getMainGalleryImages();
   const vm = images.map(image => ({
-    src: image.image.name,
+    src: image.Image.name,
   }));
   res.render('home', { images: vm });
 });
 
 const mapGuitarColorToViewModel = (gc) => ({
   name: gc.name,
-  guitar_image: gc.guitar_image.name,
-  tab_image: gc.tab_image.name,
-  dot_image: gc.dot_image.name,
+  guitarImage: gc.guitarImage.name,
+  tabImage: gc.tabImage.name,
+  dotImage: gc.dotImage.name,
 });
 
 router.get('/guitars', async (req, res) => {
@@ -27,7 +27,7 @@ router.get('/guitars', async (req, res) => {
     guitars: series.guitars.map(guitar => ({
       name: guitar.name.toUpperCase(),
       uri: guitar.uri,
-      colors: guitar.guitar_colors.map(mapGuitarColorToViewModel),
+      colors: guitar.guitarColors.map(mapGuitarColorToViewModel),
     })),
   }));
 
@@ -42,7 +42,7 @@ router.get('/guitars/:series/:model', async (req, res) => {
 
   const vm = {
     name: guitar.name,
-    colors: guitar.guitar_colors.map(mapGuitarColorToViewModel),
+    colors: guitar.guitarColors.map(mapGuitarColorToViewModel),
   };
   res.render('guitar', { guitar: vm });
 });

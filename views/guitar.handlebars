@@ -3,7 +3,9 @@
     <section class="main-section">
         <h1 class="model-name">Chapman {{guitar.name}}</h1>
         <div class="specs-table">
-            <div class="table-header"><h2>Спецификация</h2></div>
+            <div class="table-header">
+                <h2>Спецификация</h2>
+            </div>
             <div class="table-row">
                 <div class="item-name">Гриф</div>
                 <div class="item-description">Клен с матовым финишем</div>
@@ -20,18 +22,14 @@
                 <div class="item-name">Доступные цвета</div>
                 <div class="item-description">
                     {{#each guitar.colors}}
-                        <img
-                            class="guitar-color"
-                            src="/{{this.tab_image}}"
-                            alt="color-{{@index}}"
-                        >
+                    <img class="guitar-color" src="/{{this.tabImage}}" alt="color-{{@index}}">
                     {{/each}}
                 </div>
             </div>
         </div>
         <div class="model-photos-gallery">
             {{#each guitar.colors}}
-                <img class="model-photo" src="/{{this.guitar_image}}" alt="{{../this.name}}-{{@index}}">
+            <img class="model-photo" src="/{{this.guitarImage}}" alt="{{../this.name}}-{{@index}}">
             {{/each}}
         </div>
     </section>
