@@ -28,6 +28,7 @@
   "scripts": {
     "start": "nodemon -r esm server/index.js --ignore admin-interface",
     "production": "server/index.js",
-    "watch-styles": "gulp watch"
+    "watch-styles": "gulp watch",
+    "build-styles": "gulp less"
   }
 }
