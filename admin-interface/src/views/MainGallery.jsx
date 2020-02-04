@@ -46,7 +46,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const ReMountHOC = (Component) => (props) => {
+  const [key, setKey] = useState(Math.random());
+  const remount = () => setKey(Math.random());
+  return <Component key={key} remount={remount} {...props}/>;
+};
+
 const MainGallery = (props) => {
+  const remountHandler = props.remount;
   const classes = useStyles();
 
   // cache fetched images for smooth re-render
@@ -107,6 +114,8 @@ const MainGallery = (props) => {
     deleteImageState,
     changeImageOrderState,
   ];
+
+  console.log(requestStates);
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
 
@@ -196,6 +205,9 @@ const MainGallery = (props) => {
             {'.\nPlease try again later'}
           </span>
         }
+        action={
+          <Button color="primary" onClick={remountHandler}>Reload</Button>
+        }
       />
     </Snackbar>);
 
@@ -210,4 +222,4 @@ const MainGallery = (props) => {
   </Grid>);
 };
 
-export default MainGallery;
+export default ReMountHOC(MainGallery);
