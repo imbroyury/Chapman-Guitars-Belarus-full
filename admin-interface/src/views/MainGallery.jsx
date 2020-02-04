@@ -62,18 +62,21 @@ const MainGallery = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+  const scheduleRefetch = () => setShouldRefetch(true);
   // cache fetched images for smooth re-render
   const [images, setImages] = useState([]);
   // input type='file'
   const [fileList, setFileList] = useState(null);
-  const [shouldRefetch, setShouldRefetch] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(Math.random());
   const handleChangeFileList = (e) => setFileList(e.target.files);
+  const rerenderFileInput = () => setFileInputKey(Math.random());
 
-  const scheduleRefetch = () => setShouldRefetch(true);
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
     setFileList(null);
+    rerenderFileInput();
   };
 
   const imagesRequestState = useAsync(async () => {
@@ -173,6 +176,7 @@ const MainGallery = (props) => {
       Select image to upload
         <input
           type="file"
+          key={fileInputKey}
           className={classes.uploadInput}
           onChange={handleChangeFileList}
         />
