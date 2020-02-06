@@ -35,7 +35,12 @@ export const init = async () => {
     console.log('Relationships established');
 
     // await sequelize.drop();
-    // await seed();
+    try {
+      await seed();
+    } catch (e) {
+      console.error(e);
+      console.log('*** Seeding failed because reasons ***');
+    }
 
   } catch(e) {
     console.error('Unable to connect to the database:', e);
@@ -112,6 +117,9 @@ export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
 };
 
 export const getAllArtists = async () => {
-  const artists = await Artist.findAll({ include: [{ model: Image, as: 'photo' }] });
+  const artists = await Artist.findAll({
+    include: [{ model: Image, as: 'photo' }], order: [
+      ['order', 'ASC'],
+    ],  });
   return artists;
 };

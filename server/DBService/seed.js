@@ -76,6 +76,7 @@ export default async () => {
 
   await Artist.create({
     name: 'Rob Chapman',
+    order: 1,
     description: 'Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje, обозреватель для магазина Andertons Music.',
     photoId: images[4][0].id,
   });

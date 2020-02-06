@@ -66,19 +66,26 @@ const Artists = (props) => {
   const scheduleRefetch = () => setShouldRefetch(true);
   // cache fetched images for smooth re-render
   const [artists, setArtists] = useState([]);
+  const setArtistsState = (artists) => {
+    setArtists(artists.map(artist => ({ isEditMode: false, ...artist })));
+  };
+
+  const setArtistEditMode = (id) => {
+    setArtists(artists.map(artist => ({ ...artist, isEditMode: artist.id === id })));
+  };
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
   };
 
-  const imagesRequestState = useAsync(async () => {
+  const artistsRequestState = useAsync(async () => {
     const { data: images } = await axios.get('/artists');
     resetAfterFetch();
-    setArtists(images);
+    setArtistsState(images);
     return images;
   }, [shouldRefetch]);
 
-  const [uploadImageState, uploadImage] = useAsyncFn(async () => {
+  const [saveArtistState, saveArtist] = useAsyncFn(async () => {
   }, []);
 
   const [deleteImageState, deleteImage] = useAsyncFn(async () => {
@@ -86,8 +93,8 @@ const Artists = (props) => {
 
 
   const requestStates = [
-    imagesRequestState,
-    uploadImageState,
+    artistsRequestState,
+    saveArtistState,
     deleteImageState,
   ];
 
@@ -101,14 +108,43 @@ const Artists = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const renderArtist = (artist) => (<Card className={classes.card} key={artist.id}>
+  const renderEditMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Typography>{`Id: ${artist.id}`}</Typography>
+      <Grid container><TextField label='Order' defaultValue={artist.order} /></Grid>
+      <Grid container><TextField label='Name' defaultValue={artist.name} /></Grid>
+      <Grid container><TextField label='Description' defaultValue={artist.description} multiline /></Grid>
+      <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
+    </CardContent>
+    <CardActions>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => saveArtist(artist.id)}
+      >
+        Save
+      </Button>
+    </CardActions >
+  </Card>);
+
+  const renderDisplayMode = (artist) => (<Card className={classes.card} key={artist.id}>
+    <CardContent>
+      <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
       <Typography>{`Description: ${artist.description}`}</Typography>
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
+    <CardActions>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => setArtistEditMode(artist.id)}
+      >
+        Edit
+      </Button>
+    </CardActions >
   </Card>);
+
+  const renderArtist = (artist) => artist.isEditMode ? renderEditMode(artist) : renderDisplayMode(artist);
 
   const renderErrorMessage = (errorMessage) =>
     (<Snackbar
