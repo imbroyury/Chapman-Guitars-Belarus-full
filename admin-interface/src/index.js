@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MainGallery from './views/MainGallery';
-import UploadFile from './views/UploadFile';
+import Artists from './views/Artists';
 import Login from './views/Login';
 import Register from './views/Register';
 import AuthService from './AuthService';
@@ -51,6 +51,11 @@ const routes = {
       View: MainGallery,
       path: '/gallery',
       linkLabel: 'Gallery',
+    },
+    {
+      View: Artists,
+      path: '/artists',
+      linkLabel: 'Artists',
     },
   ],
 };

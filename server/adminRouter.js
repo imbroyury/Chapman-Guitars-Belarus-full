@@ -78,6 +78,11 @@ router.post('/gallery-image-order', async (req, res) => {
   }
 });
 
+router.get('/artists', async (req, res) => {
+  const artists = await DBService.getAllArtists();
+  res.send(artists);
+});
+
 const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
 // For everything else, serve index file
 router.get('*', (req, res) => {

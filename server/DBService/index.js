@@ -106,13 +106,12 @@ export const deleteImage = async (id) => {
 };
 
 export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
-  const galleryImage = await MainGalleryImage
-    .findOne({ where: { id: galleryImageId }});
+  const galleryImage = await MainGalleryImage.findOne({ where: { id: galleryImageId }});
   galleryImage.order = order;
   await galleryImage.save();
 };
 
 export const getAllArtists = async () => {
-  const artists = await Artist.findAll({ include: { all: true, nested: true } });
+  const artists = await Artist.findAll({ include: [{ model: Image, as: 'photo' }] });
   return artists;
 };

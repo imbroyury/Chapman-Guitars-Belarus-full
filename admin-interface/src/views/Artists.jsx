@@ -65,63 +65,30 @@ const Artists = (props) => {
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const scheduleRefetch = () => setShouldRefetch(true);
   // cache fetched images for smooth re-render
-  const [images, setImages] = useState([]);
-  // input type='file'
-  const [fileList, setFileList] = useState(null);
-  const [fileInputKey, setFileInputKey] = useState(Math.random());
-  const handleChangeFileList = (e) => setFileList(e.target.files);
-  const rerenderFileInput = () => setFileInputKey(Math.random());
-
+  const [artists, setArtists] = useState([]);
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
-    setFileList(null);
-    rerenderFileInput();
   };
 
   const imagesRequestState = useAsync(async () => {
-    const { data: images } = await axios.get('/gallery-images');
+    const { data: images } = await axios.get('/artists');
     resetAfterFetch();
-    setImages(images);
+    setArtists(images);
     return images;
   }, [shouldRefetch]);
 
   const [uploadImageState, uploadImage] = useAsyncFn(async () => {
-    const formData = new FormData();
-    const order = Math.max(...images.map(image => image.order), -1) + 1;
-    formData.append('image', fileList[0]);
-    formData.append('order', order);
-    const { data: uploadResult } = await axios.put(
-      '/gallery-image',
-      formData,
-    );
-    scheduleRefetch();
-    return uploadResult;
-  }, [fileList]);
-
-  const [deleteImageState, deleteImage] = useAsyncFn(async (id) => {
-    const { data: deleteResult } = await axios.delete(
-      '/gallery-image',
-      { data: { id } },
-    );
-    scheduleRefetch();
-    return deleteResult;
   }, []);
 
-  const [changeImageOrderState, changeImageOrder] = useAsyncFn(async (id, order) => {
-    const { data: changeResult } = await axios.post(
-      '/gallery-image-order',
-      { id, order },
-    );
-    scheduleRefetch();
-    return changeResult;
+  const [deleteImageState, deleteImage] = useAsyncFn(async () => {
   }, []);
+
 
   const requestStates = [
     imagesRequestState,
     uploadImageState,
     deleteImageState,
-    changeImageOrderState,
   ];
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
@@ -134,66 +101,14 @@ const Artists = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const isUploadDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled;
-
-  const renderImage = (image) => (<Card className={classes.card} key={image.id}>
+  const renderArtist = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Typography>{`Id: ${image.id}`}</Typography>
-      <TextField
-        label="Order"
-        defaultValue={image.order}
-        type="number"
-        disabled={isInteractionDisabled}
-        onBlur={(e) => {
-          const { value } = e.target;
-          if (value !== image.order) changeImageOrder(image.id, e.target.value);
-        }}
-      />
+      <Typography>{`Id: ${artist.id}`}</Typography>
+      <Typography>{`Name: ${artist.name}`}</Typography>
+      <Typography>{`Description: ${artist.description}`}</Typography>
+      <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
-    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img}/>
-    <CardActions>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => deleteImage(image.id)} disabled={isInteractionDisabled}
-      >
-        Delete
-      </Button>
-    </CardActions>
   </Card>);
-
-  const renderUploadMessage = () => (fileList === null || fileList.length === 0)
-    ? <Typography>No file chosen</Typography>
-    : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>;
-
-  const renderUploadInput = () => <>
-    <Grid container>
-      <Button
-        variant="contained"
-        component="label"
-        disabled={isInteractionDisabled}
-      >
-      Select image to upload
-        <input
-          type="file"
-          key={fileInputKey}
-          className={classes.uploadInput}
-          onChange={handleChangeFileList}
-        />
-      </Button><br/>
-      {renderUploadMessage()}
-    </Grid>
-    <Grid container>
-      <Button
-        variant="contained"
-        onClick={uploadImage}
-        color="primary"
-        disabled={isUploadDisabled}
-      >
-      Upload
-      </Button>
-    </Grid>
-  </>;
 
   const renderErrorMessage = (errorMessage) =>
     (<Snackbar
@@ -225,8 +140,7 @@ const Artists = (props) => {
         <DialogContent><CircularProgress /></DialogContent>
       </Dialog>}
     {requestErrors.map(error => renderErrorMessage(error.message))}
-    {renderUploadInput()}
-    {images.map(renderImage)}
+    {artists.map(renderArtist)}
   </Grid>);
 };
 
