@@ -1,6 +1,12 @@
 import express from 'express';
 import * as DBService from './DBService';
 
+const getActiveMenuItemConfig = (activeItem) => {
+  if (activeItem === null) return { activeMenuItem: {} };
+  console.log({ activeMenuItem: { [activeItem]: true } });
+  return { activeMenuItem: { [activeItem]: true } };
+};
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -8,7 +14,7 @@ router.get('/', async (req, res) => {
   const vm = images.map(image => ({
     src: image.Image.name,
   }));
-  res.render('home', { images: vm });
+  res.render('home', { images: vm, ...getActiveMenuItemConfig(null) });
 });
 
 const mapGuitarColorToViewModel = (gc) => ({
@@ -30,8 +36,7 @@ router.get('/guitars', async (req, res) => {
       colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
     })),
   }));
-
-  res.render('guitars', { guitarSeries: vm });
+  res.render('guitars', { guitarSeries: vm, ...getActiveMenuItemConfig('guitars') });
 });
 
 router.get('/guitars/:series/:model', async (req, res) => {
@@ -44,7 +49,7 @@ router.get('/guitars/:series/:model', async (req, res) => {
     name: guitar.name,
     colors: guitar.guitarColors.map(mapGuitarColorToViewModel),
   };
-  res.render('guitar', { guitar: vm });
+  res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });
 });
 
 router.get('/artists', async (req, res) => {
@@ -54,7 +59,7 @@ router.get('/artists', async (req, res) => {
     description: artist.description,
     photo: artist.photo.name,
   }));
-  res.render('artists', { artists: vm });
+  res.render('artists', { artists: vm, ...getActiveMenuItemConfig('artists') });
 });
 
 export default router;
