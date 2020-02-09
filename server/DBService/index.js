@@ -34,8 +34,8 @@ export const init = async () => {
 
     console.log('Relationships established');
 
-    // await sequelize.drop();
     try {
+      // await sequelize.drop();
       await seed();
     } catch (e) {
       console.error(e);
@@ -122,4 +122,30 @@ export const getAllArtists = async () => {
       ['order', 'ASC'],
     ],  });
   return artists;
+};
+
+export const getArtist = async (id) => {
+  const artist = await Artist.findOne({
+    where: {
+      id,
+    },
+    include: [{ model: Image, as: 'photo' }],
+  });
+  return artist;
+};
+
+export const deleteArtist = async (id) => {
+  await Artist.destroy({
+    where: {
+      id,
+    }
+  });
+};
+
+export const editArtist = async (id, order, name, description) => {
+  const artist = await getArtist(id);
+  artist.order = order;
+  artist.name = name;
+  artist.description = description;
+  await artist.save();
 };

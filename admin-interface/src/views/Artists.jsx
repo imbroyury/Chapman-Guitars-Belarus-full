@@ -70,8 +70,18 @@ const Artists = (props) => {
     setArtists(artists.map(artist => ({ isEditMode: false, ...artist })));
   };
 
-  const setArtistEditMode = (id) => {
-    setArtists(artists.map(artist => ({ ...artist, isEditMode: artist.id === id })));
+  const setArtistEditModeOn = (id) => {
+    setArtists(artists.map(artist => ({
+      ...artist,
+      ...(artist.id === id ? { isEditMode: true } : {})
+    })));
+  };
+
+  const setArtistEditModeOff = (id) => {
+    setArtists(artists.map(artist => ({
+      ...artist,
+      ...(artist.id === id ? { isEditMode: false } : {})
+    })));
   };
 
   const resetAfterFetch = () => {
@@ -79,23 +89,34 @@ const Artists = (props) => {
   };
 
   const artistsRequestState = useAsync(async () => {
-    const { data: images } = await axios.get('/artists');
+    const { data: artists } = await axios.get('/artists');
     resetAfterFetch();
-    setArtistsState(images);
-    return images;
+    setArtistsState(artists);
+    return artists;
   }, [shouldRefetch]);
 
-  const [saveArtistState, saveArtist] = useAsyncFn(async () => {
+  const [saveArtistState, saveArtist] = useAsyncFn(async (id) => {
+    console.log(id);
   }, []);
 
-  const [deleteImageState, deleteImage] = useAsyncFn(async () => {
+  const [deleteArtistState, deleteArtist] = useAsyncFn(async (id) => {
+    const { data: deleteResult } = await axios.delete(
+      '/artist',
+      { data: { id } },
+    );
+    scheduleRefetch();
+    return deleteResult;
   }, []);
 
+  const handleSaveArtist = (id) => {
+    setArtistEditModeOff(id);
+    saveArtist(id);
+  };
 
   const requestStates = [
     artistsRequestState,
     saveArtistState,
-    deleteImageState,
+    deleteArtistState,
   ];
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
@@ -118,10 +139,17 @@ const Artists = (props) => {
     <CardActions>
       <Button
         variant="contained"
-        color="secondary"
-        onClick={() => saveArtist(artist.id)}
+        color="primary"
+        onClick={() => handleSaveArtist(artist.id)}
       >
         Save
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => deleteArtist(artist.id)}
+      >
+        Delete
       </Button>
     </CardActions >
   </Card>);
@@ -137,7 +165,7 @@ const Artists = (props) => {
       <Button
         variant="contained"
         color="secondary"
-        onClick={() => setArtistEditMode(artist.id)}
+        onClick={() => setArtistEditModeOn(artist.id)}
       >
         Edit
       </Button>

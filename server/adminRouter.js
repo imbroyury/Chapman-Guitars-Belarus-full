@@ -83,6 +83,29 @@ router.get('/artists', async (req, res) => {
   res.send(artists);
 });
 
+router.post('/artist', async (req, res) => {
+  try {
+    const { id, order, name, description } = req.body;
+    await DBService.editArtist(id, order, name, description);
+  } catch(e) {
+    res.send(e).status(500);
+  }
+});
+
+router.delete('/artist', async (req, res) => {
+  try {
+    const { id } = req.body;
+    const artist = await DBService.getArtist(id);
+    await DBService.deleteArtist(id);
+    await DBService.deleteImage(artist.photo.id);
+    await FSService.removeFileFromUploads(artist.photo.name);
+    res.status(200).send();
+  } catch(e) {
+    console.log(e);
+    res.send(e).status(500);
+  }
+});
+
 const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
 // For everything else, serve index file
 router.get('*', (req, res) => {
