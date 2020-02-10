@@ -46,7 +46,7 @@ router.get('/guitars/:series/:model', async (req, res) => {
 
   const vm = {
     name: guitar.name,
-    colors: guitar.guitarColors.map(mapGuitarColorToViewModel),
+    colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
   };
   res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });
 });
