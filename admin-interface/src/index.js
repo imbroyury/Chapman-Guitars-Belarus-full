@@ -4,7 +4,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
+  NavLink,
 } from 'react-router-dom';
 import {
   Drawer,
@@ -51,11 +51,13 @@ const routes = {
       View: MainGallery,
       path: '/gallery',
       linkLabel: 'Gallery',
+      sidebar: () => <div>gallery</div>
     },
     {
       View: Artists,
       path: '/artists',
       linkLabel: 'Artists',
+      sidebar: () => <div>artist</div>
     },
   ],
 };
@@ -85,7 +87,7 @@ const Root = () => {
       <List>
         {
           (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => (
-            <ListItem button component={Link} to={route.path} key={route.path}>
+            <ListItem button component={NavLink} to={route.path} key={route.path} activeClassName="Mui-selected">
               <ListItemText>{route.linkLabel}</ListItemText>
             </ListItem>
           ))
@@ -101,6 +103,9 @@ const Root = () => {
             </Route>
           ))
         }
+        <Route path="*">
+          404
+        </Route>
       </Switch>
     </main>
   </Router>);
