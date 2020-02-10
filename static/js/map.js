@@ -88,7 +88,7 @@ function initMap() {
   let marker = new google.maps.Marker({
     position: shopLocation,
     map: map,
-    icon: '../images/design/chapman-logo-map.png'
+    icon: 'static/images/design/chapman-logo-map.png'
   });
 
   map.addListener('idle', function() {

@@ -61,4 +61,8 @@ router.get('/artists', async (req, res) => {
   res.render('artists', { artists: vm, ...getActiveMenuItemConfig('artists') });
 });
 
+router.get('/purchase', async (req, res) => {
+  res.render('purchase', { ...getActiveMenuItemConfig('purchase') });
+});
+
 export default router;

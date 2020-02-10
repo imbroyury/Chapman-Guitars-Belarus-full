@@ -1,0 +1,49 @@
+<script defer src="/static/js/map.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi-Q5ndCgT24jm_POlna1a549B-bjVBn8&callback=initMap"></script>
+
+<div class="grid-page-wrap purchase-page">
+    {{>header}}
+    <section class="main-section">
+        <h1>Как купить нашу гитару?</h1>
+        <p>Приобрести гитару Chapman в Минске можно в нашем шоу-руме, располагающемся по адресу ул. Скрыганова, 14
+        </p>
+        <div class="shop-map" id="shop-map"></div>
+        <p>Осуществляем доставку инструментов следующими способами:</p>
+        <div class="delivery">
+            <div class="delivery-item">
+                <h3 class="heading">Курьером по Минску</h3>
+                <div class="text-block">
+                    <p>Доставка прямо к порогу по г. Минску.</p>
+                    <p>Компетентная консультация.</p>
+                    <p>Срок доставки:</p>
+                    <p>от 2 до 6 часов, при заказе до 17:00</p>
+                    <p>Стоимость доставки:</p>
+                    <p>Бесплатно</p>
+                </div>
+            </div>
+            <div class="delivery-item">
+                <h3 class="heading">Почтой по Беларуси</h3>
+                <div class="text-block">
+                    <p>Доставка в любую точку Республики Беларусь по почте наложенным платежом.</p>
+                    <p>Срок доставки:</p>
+                    <p>от 2 до 3 дней</p>
+                    <p>Стоимость доставки:</p>
+                    <p>Бесплатно</p>
+                </div>
+            </div>
+            <div class="delivery-item">
+                <h3 class="heading">Ускоренной почтой EMS по Беларуси</h3>
+                <div class="text-block">
+                    <p>Доставка в любую точку Республики Беларусь службой доставки EMS до порога.</p>
+                    <p>Срок доставки:</p>
+                    <p>до 24 часов</p>
+                    <p>Стоимость доставки:</p>
+                    <p>3% от суммы + вес товара</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{>menu activeMenuItem}}
+    {{>footer}}
+</div>
