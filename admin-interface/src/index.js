@@ -15,6 +15,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import MainGallery from './views/MainGallery';
 import Artists from './views/Artists';
+import AddArtist from './views/AddArtist';
 import Login from './views/Login';
 import Register from './views/Register';
 import AuthService from './AuthService';
@@ -51,18 +52,21 @@ const routes = {
       View: MainGallery,
       path: '/gallery',
       linkLabel: 'Gallery',
-      sidebar: () => <div>gallery</div>
     },
     {
       View: Artists,
       path: '/artists',
       linkLabel: 'Artists',
-      sidebar: () => <div>artist</div>
+    },
+    {
+      View: AddArtist,
+      path: '/add-artist',
+      linkLabel: 'Add artist',
     },
   ],
 };
 
-const PAGE_TITLE = 'FileStorage';
+// const PAGE_TITLE = 'FileStorage';
 
 const Root = () => {
   const classes = useStyles();

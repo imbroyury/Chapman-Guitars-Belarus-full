@@ -135,6 +135,15 @@ export const getArtist = async (id) => {
   return artist;
 };
 
+export const putArtist = async (order, name, description, photoId) => {
+  await Artist.create({
+    order,
+    name,
+    description,
+    photoId,
+  });
+};
+
 export const deleteArtist = async (id) => {
   await Artist.destroy({
     where: {

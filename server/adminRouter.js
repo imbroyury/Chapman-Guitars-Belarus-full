@@ -83,6 +83,18 @@ router.get('/artists', async (req, res) => {
   res.send(artists);
 });
 
+router.put('/artist', upload.single('photo'), async (req, res) => {
+  try {
+    const { file, body } = req;
+    const { order, name, description } = body;
+    const image = await DBService.saveImageMetaData(file.filename);
+    await DBService.putArtist(order, name, description, image.id);
+    res.status(200).send();
+  } catch(e) {
+    res.send(e).status(500);
+  }
+});
+
 router.post('/artist', async (req, res) => {
   try {
     const { id, order, name, description } = req.body;

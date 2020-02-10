@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     margin: '10px',
+    width: '100%',
   },
   img: {
     maxWidth: '300px',
@@ -49,6 +50,9 @@ const useStyles = makeStyles(theme => ({
   },
   reloadButton: {
     color: 'white'
+  },
+  descriptonHTML: {
+    fontFamily: theme.typography.fontFamily
   }
 }));
 
@@ -204,7 +208,7 @@ const Artists = (props) => {
     <CardContent>
       <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
-      <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}}></div>
+      <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}} className={classes.descriptonHTML}></div>
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
     <CardActions>
