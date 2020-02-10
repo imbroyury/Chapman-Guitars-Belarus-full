@@ -19,6 +19,7 @@ import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
+import { Remount } from '../HOC/Remount';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -49,25 +50,42 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ReMountHOC = (Component) => {
-  const Remountable = (props) => {
-    const [key, setKey] = useState(Math.random());
-    const remount = () => setKey(Math.random());
-    return <Component key={key} remount={remount} {...props}/>;
-  };
-  return Remountable;
-};
-
 const Artists = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const scheduleRefetch = () => setShouldRefetch(true);
-  // cache fetched images for smooth re-render
+  // cache fetched artists for smooth re-render
   const [artists, setArtists] = useState([]);
-  const setArtistsState = (artists) => {
-    setArtists(artists.map(artist => ({ isEditMode: false, ...artist })));
+
+  const setInitialArtistsState = (artists) => {
+    const toStateModel = artist => ({
+      id: artist.id,
+      isEditMode: false,
+      initial: {
+        ...artist,
+      },
+      edited: {
+        ...artist,
+      }
+    });
+    setArtists(artists.map(toStateModel));
+  };
+
+  const setEditedArtistState = (id, newState) => {
+    const arrayId = artists.findIndex(artist => artist.id === id);
+    const artist = artists[arrayId];
+    const artistStateModel = {
+      ...artist,
+      edited: newState,
+    };
+    const newArtists = [
+      ...artists.slice(0, arrayId),
+      artistStateModel,
+      ...artists.slice(arrayId + 1)
+    ];
+    setArtists(newArtists);
   };
 
   const setArtistEditModeOn = (id) => {
@@ -84,6 +102,18 @@ const Artists = (props) => {
     })));
   };
 
+  const handleEditArtistInput = (id) => (e) => {
+    e.persist();
+    const { name, value } = e.target;
+    const artist = artists.find(artist => artist.id === id);
+    const { edited } = artist;
+    const afterEdit = {
+      ...edited,
+      [name]: value,
+    };
+    setEditedArtistState(id, afterEdit);
+  };
+
   const resetAfterFetch = () => {
     setShouldRefetch(false);
   };
@@ -91,13 +121,19 @@ const Artists = (props) => {
   const artistsRequestState = useAsync(async () => {
     const { data: artists } = await axios.get('/artists');
     resetAfterFetch();
-    setArtistsState(artists);
+    setInitialArtistsState(artists);
     return artists;
   }, [shouldRefetch]);
 
   const [saveArtistState, saveArtist] = useAsyncFn(async (id) => {
-    console.log(id);
-  }, []);
+    const { order, name, description } = artists.find(artist => artist.id === id).edited;
+    const { data: saveResult } = await axios.post(
+      '/artist',
+      { id, order, name, description },
+    );
+    scheduleRefetch();
+    return saveResult;
+  }, [artists]);
 
   const [deleteArtistState, deleteArtist] = useAsyncFn(async (id) => {
     const { data: deleteResult } = await axios.delete(
@@ -131,9 +167,9 @@ const Artists = (props) => {
 
   const renderEditMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Grid container><TextField label='Order' defaultValue={artist.order} /></Grid>
-      <Grid container><TextField label='Name' defaultValue={artist.name} /></Grid>
-      <Grid container><TextField label='Description' defaultValue={artist.description} multiline /></Grid>
+      <Grid container><TextField label='Order' name="order" type="number" value={artist.order} onChange={handleEditArtistInput(artist.id)}/></Grid>
+      <Grid container><TextField label='Name' name="name" value={artist.name} onChange={handleEditArtistInput(artist.id)}/></Grid>
+      <Grid container><TextField label='Description' name="description" value={artist.description} multiline onChange={handleEditArtistInput(artist.id)}/></Grid>
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
     <CardActions>
@@ -151,14 +187,14 @@ const Artists = (props) => {
       >
         Delete
       </Button>
-    </CardActions >
+    </CardActions>
   </Card>);
 
   const renderDisplayMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
       <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
-      <Typography>{`Description: ${artist.description}`}</Typography>
+      <Typography variant="body2">{`Description: ${artist.description}`}</Typography>
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
     <CardActions>
@@ -172,7 +208,7 @@ const Artists = (props) => {
     </CardActions >
   </Card>);
 
-  const renderArtist = (artist) => artist.isEditMode ? renderEditMode(artist) : renderDisplayMode(artist);
+  const renderArtist = (artist) => artist.isEditMode ? renderEditMode(artist.edited) : renderDisplayMode(artist.initial);
 
   const renderErrorMessage = (errorMessage) =>
     (<Snackbar
@@ -208,4 +244,4 @@ const Artists = (props) => {
   </Grid>);
 };
 
-export default ReMountHOC(Artists);
+export default Remount(Artists);

@@ -19,6 +19,7 @@ import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
+import { Remount } from '../HOC/Remount';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -48,15 +49,6 @@ const useStyles = makeStyles(theme => ({
     color: 'white'
   }
 }));
-
-const ReMountHOC = (Component) => {
-  const Remountable = (props) => {
-    const [key, setKey] = useState(Math.random());
-    const remount = () => setKey(Math.random());
-    return <Component key={key} remount={remount} {...props}/>;
-  };
-  return Remountable;
-};
 
 const MainGallery = (props) => {
   const reloadHandler = props.remount;
@@ -230,4 +222,4 @@ const MainGallery = (props) => {
   </Grid>);
 };
 
-export default ReMountHOC(MainGallery);
+export default Remount(MainGallery);

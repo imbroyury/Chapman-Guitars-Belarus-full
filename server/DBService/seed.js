@@ -28,6 +28,7 @@ const galleryImgs = [
 
 const artistImgs = [
   '26f13240-4521-11ea-ab06-ad38a67e52fc.jpeg',
+  '8a14a38d-f830-4bfa-a21d-bd9a91bbd37f.jpeg',
 ];
 
 export default async () => {
@@ -74,10 +75,15 @@ export default async () => {
     images[3].map((galleryImage, i) => ({ order: i, imageId: galleryImage.id }))
   );
 
-  await Artist.create({
+  await Artist.bulkCreate([{
     name: 'Rob Chapman',
     order: 1,
     description: 'Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje, обозреватель для магазина Andertons Music.',
     photoId: images[4][0].id,
-  });
+  }, {
+    name: 'Rabea Massaad',
+    order: 2,
+    description: 'Рабеа - гитарист групп Dorje (#1 в рок чарте Великобритании в 2015 году) и Toska (#1 в мировом чартеBandcamp). Занимался музыкой с детских лет - в 8 лет он сел за барабанную установку, а в 15 взялся за гитару.Участвовал в разработке многих гитар Chapman.',
+    photoId: images[4][1].id
+  }]);
 };

@@ -87,6 +87,7 @@ router.post('/artist', async (req, res) => {
   try {
     const { id, order, name, description } = req.body;
     await DBService.editArtist(id, order, name, description);
+    res.status(200).send();
   } catch(e) {
     res.send(e).status(500);
   }
