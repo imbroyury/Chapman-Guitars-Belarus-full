@@ -17,23 +17,6 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-router.get('/upload', async (req, res) => {
-  res.status(200).send(`
-      <form action="/upload-image" method="post" enctype="multipart/form-data">
-        <input type='file' name="image" id="image"/>
-        <input type='submit' value="upload"/>
-      </form>
-    `);
-});
-
-router.post('/upload-image',
-  upload.single('image'),
-  async (req, res) => {
-    console.log(req.file);
-    console.log(req.body);
-    await DBService.saveImageMetaData(req.file.filename);
-    res.send('OK');
-  });
 
 router.post('/login', async (req, res) => {
   res.status(500).send();
