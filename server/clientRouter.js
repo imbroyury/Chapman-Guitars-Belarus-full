@@ -65,4 +65,8 @@ router.get('/purchase', async (req, res) => {
   res.render('purchase', { ...getActiveMenuItemConfig('purchase') });
 });
 
+router.get('*', async (req, res) => {
+  res.render('404');
+});
+
 export default router;
