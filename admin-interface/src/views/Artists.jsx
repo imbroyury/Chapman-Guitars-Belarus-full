@@ -20,6 +20,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -114,6 +116,13 @@ const Artists = (props) => {
     setEditedArtistState(id, afterEdit);
   };
 
+  const handleEditArtistDescription = (id) => (content) => {
+    handleEditArtistInput(id)({
+      target: { name: 'description', value: content },
+      persist: () => {}
+    }); // emulate event interface not to duplicate code in handleEditArtistInput
+  };
+
   const resetAfterFetch = () => {
     setShouldRefetch(false);
   };
@@ -169,7 +178,10 @@ const Artists = (props) => {
     <CardContent>
       <Grid container><TextField label='Order' name="order" type="number" value={artist.order} onChange={handleEditArtistInput(artist.id)}/></Grid>
       <Grid container><TextField label='Name' name="name" value={artist.name} onChange={handleEditArtistInput(artist.id)}/></Grid>
-      <Grid container><TextField label='Description' name="description" value={artist.description} multiline onChange={handleEditArtistInput(artist.id)}/></Grid>
+      <ReactQuill
+        value={artist.description}
+        onChange={handleEditArtistDescription(artist.id)}
+      />
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
     <CardActions>
@@ -194,7 +206,7 @@ const Artists = (props) => {
     <CardContent>
       <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
-      <Typography variant="body2">{`Description: ${artist.description}`}</Typography>
+      <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}}></div>
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
     <CardActions>

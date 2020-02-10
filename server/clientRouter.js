@@ -3,7 +3,6 @@ import * as DBService from './DBService';
 
 const getActiveMenuItemConfig = (activeItem) => {
   if (activeItem === null) return { activeMenuItem: {} };
-  console.log({ activeMenuItem: { [activeItem]: true } });
   return { activeMenuItem: { [activeItem]: true } };
 };
 
