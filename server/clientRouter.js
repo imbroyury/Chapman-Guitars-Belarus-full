@@ -65,6 +65,10 @@ router.get('/purchase', async (req, res) => {
   res.render('purchase', { ...getActiveMenuItemConfig('purchase') });
 });
 
+router.get('/contact', async (req, res) => {
+  res.render('contact', { ...getActiveMenuItemConfig('contact') });
+});
+
 router.get('*', async (req, res) => {
   res.render('404');
 });

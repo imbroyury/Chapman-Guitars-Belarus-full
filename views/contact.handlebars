@@ -1,0 +1,26 @@
+<script defer src="/static/js/contact-form.js"></script>
+<div class="grid-page-wrap contact-page">
+    {{>header}}
+    <section class="main-section">
+        <h1>Есть вопросы? Позвоните нам!</h1>
+        <div class="contact-data">
+            <a href="tel:+375-17-270-70-70">+375-(17)-270-70-70</a>
+            <a href="tel:+375-29-570-70-70">+375-(29)-570-70-70</a>
+        </div>
+        <h1>..или отправьте сообщение</h1>
+        <form action="" class="contact-form">
+            <label for="name">Ваше имя*</label>
+            <input type="text" id="name" required>
+            <label for="email">Адрес электронной почты*</label>
+            <input type="email" id="email" required>
+            <label for="tel">Номер телефона</label>
+            <input type="tel" id="tel" maxlength="13" placeholder="+375-29-111-22-33">
+            <label for="message">Ваше сообщение*</label>
+            <textarea name="message" id="message" cols="30" rows="10" required></textarea>
+            <p class="form-info">*Обязательные для заполнения поля</p>
+            <button type="button">Отправьте нам сообщение</button>
+        </form>
+    </section>
+    {{>menu activeMenuItem}}
+    {{>footer}}
+</div>
