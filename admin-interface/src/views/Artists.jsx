@@ -105,7 +105,6 @@ const Artists = (props) => {
   };
 
   const handleEditArtistInput = (id) => (e) => {
-    e.persist();
     const { name, value } = e.target;
     const artist = artists.find(artist => artist.id === id);
     const { edited } = artist;
@@ -117,10 +116,9 @@ const Artists = (props) => {
   };
 
   const handleEditArtistDescription = (id) => (content) => {
-    handleEditArtistInput(id)({
-      target: { name: 'description', value: content },
-      persist: () => {}
-    }); // emulate event interface not to duplicate code in handleEditArtistInput
+    // emulate event interface not to duplicate code in handleEditArtistInput
+    const e = { target: { name: 'description', value: content } };
+    handleEditArtistInput(id)(e);
   };
 
   const resetAfterFetch = () => {
