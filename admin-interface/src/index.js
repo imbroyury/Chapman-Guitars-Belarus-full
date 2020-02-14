@@ -18,6 +18,8 @@ import Artists from './views/Artists';
 import AddArtist from './views/AddArtist';
 import Login from './views/Login';
 import Register from './views/Register';
+import GuitarSeries from './views/GuitarSeries';
+import AddGuitarSeries from './views/AddGuitarSeries';
 import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
@@ -63,6 +65,16 @@ const routes = {
       path: '/add-artist',
       linkLabel: 'Add artist',
     },
+    {
+      View: GuitarSeries,
+      path: '/guitar-series',
+      linkLabel: 'Guitar Series'
+    },
+    {
+      View: AddGuitarSeries,
+      path: '/add-guitar-series',
+      linkLabel: 'Add Guitar Series'
+    }
   ],
 };
 

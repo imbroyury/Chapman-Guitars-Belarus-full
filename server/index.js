@@ -26,8 +26,8 @@ server.use(express.static(UPLOADS));
 server.use('/static', express.static(STATIC));
 
 // Routers
-server.use('/', clientRouter);
 server.use('/admin', adminRouter);
+server.use('/', clientRouter);
 
 // Entry-point
 (async() => {

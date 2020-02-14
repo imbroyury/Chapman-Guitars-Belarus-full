@@ -102,6 +102,38 @@ router.delete('/artist', async (req, res) => {
   }
 });
 
+router.get('/all-guitar-series', async (req, res) => {
+  try {
+    const guitarSeries = await DBService.getAllGuitarSeries();
+    res.send(guitarSeries);
+  } catch (e) {
+    console.log(e);
+    res.send(e).status(500);
+  }
+});
+
+router.put('/guitar-series', async (req, res) => {
+  try {
+    const { name, uri } = req.body;
+    await DBService.putGuitarSeries(name, uri);
+    res.send(200);
+  } catch (e) {
+    console.log(e);
+    res.send(e).status(500);
+  }
+});
+
+router.delete('/guitar-series', async (req, res) => {
+  try {
+    const { id } = req.body;
+    await DBService.deleteGuitarSeries(id);
+    res.send(200);
+  } catch (e) {
+    console.log(e);
+    res.send(e).status(500);
+  }
+});
+
 const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
 // For everything else, serve index file
 router.get('*', (req, res) => {

@@ -159,3 +159,39 @@ export const editArtist = async (id, order, name, description) => {
   artist.description = description;
   await artist.save();
 };
+
+export const getAllGuitarSeries = async () => {
+  const guitarSeries = await GuitarSeries.findAll({ include: [Guitar]});
+  return guitarSeries;
+};
+
+export const getGuitarSeries = async (id) => {
+  const guitarSeries = await GuitarSeries.findOne({
+    where: {
+      id
+    }
+  });
+  return guitarSeries;
+};
+
+export const putGuitarSeries = async (name, uri) => {
+  await GuitarSeries.create({
+    name,
+    uri
+  });
+};
+
+export const deleteGuitarSeries = async (id) => {
+  await GuitarSeries.destroy({
+    where: {
+      id
+    }
+  });
+};
+
+export const editGuitarSeries = async (id, name, uri) => {
+  const guitarSeries = await getGuitarSeries(id);
+  guitarSeries.name = name;
+  guitarSeries.uri = uri;
+  await guitarSeries.save();
+};
