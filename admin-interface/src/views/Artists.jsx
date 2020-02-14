@@ -183,6 +183,7 @@ const Artists = (props) => {
       <ReactQuill
         value={artist.description}
         onChange={handleEditArtistDescription(artist.id)}
+        readOnly={isInteractionDisabled}
       />
       <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
     </CardContent>
@@ -191,6 +192,7 @@ const Artists = (props) => {
         variant="contained"
         color="primary"
         onClick={() => handleSaveArtist(artist.id)}
+        disabled={isInteractionDisabled}
       >
         Save
       </Button>
@@ -198,6 +200,7 @@ const Artists = (props) => {
         variant="contained"
         color="secondary"
         onClick={() => deleteArtist(artist.id)}
+        disabled={isInteractionDisabled}
       >
         Delete
       </Button>
@@ -216,6 +219,7 @@ const Artists = (props) => {
         variant="contained"
         color="secondary"
         onClick={() => setArtistEditModeOn(artist.id)}
+        disabled={isInteractionDisabled}
       >
         Edit
       </Button>
