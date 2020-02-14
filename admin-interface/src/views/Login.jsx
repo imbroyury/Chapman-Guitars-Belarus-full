@@ -59,14 +59,14 @@ const Login = (props) => {
     if (typeof validator === 'function') {
       setInputErrors(errors => ({...errors, [name]: !validator(value)}));
     }
-  }
+  };
 
   const handleInputChange = (event) => {
     event.persist();
     const { name, value } = event.target;
     setInputs(inputs => ({...inputs, [name]: value}));
     setInputError(name, value);
-  }
+  };
 
   useEffect(() => {
     if (shouldInitLogin) {
@@ -112,7 +112,7 @@ const Login = (props) => {
     setShouldInitLogin(false);
     setLoginState(requestStatuses.uninitialized);
     setLoginError(null);
-  }
+  };
 
   const initializeLogin = () => setShouldInitLogin(true);
 
@@ -124,86 +124,86 @@ const Login = (props) => {
     loginState !== requestStatuses.uninitialized;
 
   const renderSuccessMessage = () =>
-  (<Snackbar
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    open
-    autoHideDuration={3000}
-    onClose={() => setShouldRedirect(true)}
+    (<Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open
+      autoHideDuration={3000}
+      onClose={() => setShouldRedirect(true)}
     >
-    <SnackbarContent
-      className={classes.snackbarSuccess}
-      message={
-        <span className={classes.snackbarMessage}>
-          <CheckCircleIcon className={classes.snackbarIcon}/>
+      <SnackbarContent
+        className={classes.snackbarSuccess}
+        message={
+          <span className={classes.snackbarMessage}>
+            <CheckCircleIcon className={classes.snackbarIcon}/>
           Done! You've successfully logged in.
-        </span>
-      }
-    />
-  </Snackbar>);
+          </span>
+        }
+      />
+    </Snackbar>);
 
-const renderErrorMessage = () =>
-  (<Snackbar
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    open
-    autoHideDuration={3000}
-    onClose={resetLoginState}
+  const renderErrorMessage = () =>
+    (<Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open
+      autoHideDuration={3000}
+      onClose={resetLoginState}
     >
-    <SnackbarContent
-      className={classes.snackbarError}
-      message={
-        <span className={classes.snackbarMessage}>
-          <ErrorIcon className={classes.snackbarIcon}/>
-          {loginError}
-        </span>
-      }
-    />
-  </Snackbar>);
+      <SnackbarContent
+        className={classes.snackbarError}
+        message={
+          <span className={classes.snackbarMessage}>
+            <ErrorIcon className={classes.snackbarIcon}/>
+            {loginError}
+          </span>
+        }
+      />
+    </Snackbar>);
 
   return (<Grid container>
-        <Paper className={classes.paper}>
-          <Typography variant="h5" gutterBottom>Enter your credentials to log in</Typography>
-          <Grid container>
-            <TextField
-                label="Login"
-                name={inputType.login}
-                value={inputs[inputType.login]}
-                onChange={handleInputChange}
-                disabled={isInputDisabled}
-              />
-          </Grid>
-          <Grid container>
-            <TextField
-                label="Password"
-                name={inputType.password}
-                value={inputs[inputType.password]}
-                onChange={handleInputChange}
-                type="password"
-                disabled={isInputDisabled}
-                error={inputErrors[inputType.password]}
-                helperText={inputConfig[inputType.password].message}
-              />
-          </Grid>
-          <Grid container>
-            <Button
-              variant="contained"
-              onClick={initializeLogin}
-              color="primary"
-              disabled={isLoginDisabled}
-            >
+    <Paper className={classes.paper}>
+      <Typography variant="h5" gutterBottom>Enter your credentials to log in</Typography>
+      <Grid container>
+        <TextField
+          label="Login"
+          name={inputType.login}
+          value={inputs[inputType.login]}
+          onChange={handleInputChange}
+          disabled={isInputDisabled}
+        />
+      </Grid>
+      <Grid container>
+        <TextField
+          label="Password"
+          name={inputType.password}
+          value={inputs[inputType.password]}
+          onChange={handleInputChange}
+          type="password"
+          disabled={isInputDisabled}
+          error={inputErrors[inputType.password]}
+          helperText={inputConfig[inputType.password].message}
+        />
+      </Grid>
+      <Grid container>
+        <Button
+          variant="contained"
+          onClick={initializeLogin}
+          color="primary"
+          disabled={isLoginDisabled}
+        >
               Log in
-            </Button>
-          </Grid>
-        </Paper>
-        {loginState === requestStatuses.done && renderSuccessMessage()}
-        {loginState === requestStatuses.error && renderErrorMessage()}
-        {shouldRedirect && <Redirect to='/upload-file'/>}
-      </Grid>);
-}
+        </Button>
+      </Grid>
+    </Paper>
+    {loginState === requestStatuses.done && renderSuccessMessage()}
+    {loginState === requestStatuses.error && renderErrorMessage()}
+    {shouldRedirect && <Redirect to='/upload-file'/>}
+  </Grid>);
+};
 
 export default Login;

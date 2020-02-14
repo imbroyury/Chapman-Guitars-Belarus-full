@@ -59,14 +59,14 @@ const Register = () => {
     if (typeof validator === 'function') {
       setInputErrors(errors => ({...errors, [name]: !validator(value)}));
     }
-  }
+  };
 
   const handleInputChange = (event) => {
     event.persist();
     const { name, value } = event.target;
     setInputs(inputs => ({...inputs, [name]: value}));
     setInputError(name, value);
-  }
+  };
 
   useEffect(() => {
     if (shouldInitRegister) {
@@ -111,7 +111,7 @@ const Register = () => {
     setShouldInitRegister(false);
     setRegisterState(requestStatuses.uninitialized);
     setRegisterError(null);
-  }
+  };
 
   const initializeRegister = () => setShouldInitRegister(true);
 
@@ -123,95 +123,95 @@ const Register = () => {
     registerState !== requestStatuses.uninitialized;
 
   const renderSuccessMessage = () =>
-  (<Snackbar
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    open
+    (<Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open
     >
-    <SnackbarContent
-      className={classes.snackbarSuccess}
-      message={
-        <span className={classes.snackbarMessage}>
-          <CheckCircleIcon className={classes.snackbarIcon}/>
+      <SnackbarContent
+        className={classes.snackbarSuccess}
+        message={
+          <span className={classes.snackbarMessage}>
+            <CheckCircleIcon className={classes.snackbarIcon}/>
           Done! You've successfully registered an account. Please log in to proceed.
-        </span>
-      }
-    />
-  </Snackbar>);
+          </span>
+        }
+      />
+    </Snackbar>);
 
-const renderErrorMessage = () =>
-  (<Snackbar
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    open
-    autoHideDuration={3000}
-    onClose={resetRegisterState}
+  const renderErrorMessage = () =>
+    (<Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open
+      autoHideDuration={3000}
+      onClose={resetRegisterState}
     >
-    <SnackbarContent
-      className={classes.snackbarError}
-      message={
-        <span className={classes.snackbarMessage}>
-          <ErrorIcon className={classes.snackbarIcon}/>
-          {registerError}
-        </span>
-      }
-    />
-  </Snackbar>);
+      <SnackbarContent
+        className={classes.snackbarError}
+        message={
+          <span className={classes.snackbarMessage}>
+            <ErrorIcon className={classes.snackbarIcon}/>
+            {registerError}
+          </span>
+        }
+      />
+    </Snackbar>);
 
   return (<Grid container>
-      <Paper className={classes.paper}>
-        <Typography variant="h5" gutterBottom>Register to use FileStorage service</Typography>
-        <Grid container>
-          <TextField
-              label="Email"
-              name={inputType.email}
-              value={inputs.email}
-              onChange={handleInputChange}
-              type="email"
-              error={inputErrors[inputType.email]}
-              helperText={inputConfig[inputType.email].message}
-              disabled={isInputDisabled}
-            />
-        </Grid>
-        <Grid container>
-          <TextField
-              label="Login"
-              name={inputType.login}
-              value={inputs.login}
-              onChange={handleInputChange}
-              disabled={isInputDisabled}
-            />
-        </Grid>
-        <Grid container>
-          <TextField
-              label="Password"
-              name={inputType.password}
-              value={inputs.password}
-              onChange={handleInputChange}
-              type="password"
-              error={inputErrors[inputType.password]}
-              helperText={inputConfig[inputType.password].message}
-              disabled={isInputDisabled}
-            />
-        </Grid>
-        <Grid container>
-          <Button
-            variant="contained"
-            onClick={initializeRegister}
-            color="primary"
-            disabled={isRegisterDisabled}
-          >
+    <Paper className={classes.paper}>
+      <Typography variant="h5" gutterBottom>Register to use FileStorage service</Typography>
+      <Grid container>
+        <TextField
+          label="Email"
+          name={inputType.email}
+          value={inputs.email}
+          onChange={handleInputChange}
+          type="email"
+          error={inputErrors[inputType.email]}
+          helperText={inputConfig[inputType.email].message}
+          disabled={isInputDisabled}
+        />
+      </Grid>
+      <Grid container>
+        <TextField
+          label="Login"
+          name={inputType.login}
+          value={inputs.login}
+          onChange={handleInputChange}
+          disabled={isInputDisabled}
+        />
+      </Grid>
+      <Grid container>
+        <TextField
+          label="Password"
+          name={inputType.password}
+          value={inputs.password}
+          onChange={handleInputChange}
+          type="password"
+          error={inputErrors[inputType.password]}
+          helperText={inputConfig[inputType.password].message}
+          disabled={isInputDisabled}
+        />
+      </Grid>
+      <Grid container>
+        <Button
+          variant="contained"
+          onClick={initializeRegister}
+          color="primary"
+          disabled={isRegisterDisabled}
+        >
             Register
-          </Button>
-        </Grid>
-      </Paper>
-      {registerState === requestStatuses.done && renderSuccessMessage()}
-      {registerState === requestStatuses.error && renderErrorMessage()}
-    </Grid>);
-}
+        </Button>
+      </Grid>
+    </Paper>
+    {registerState === requestStatuses.done && renderSuccessMessage()}
+    {registerState === requestStatuses.error && renderErrorMessage()}
+  </Grid>);
+};
 
 export default Register;
