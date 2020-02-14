@@ -24,6 +24,7 @@ const imgs = [
 const galleryImgs = [
   '5d3d83f0-45d3-11ea-9f37-75cdc8dd7f78.jpeg',
   '615248e0-45d3-11ea-9f37-75cdc8dd7f78.jpeg',
+  'dc002870-4f4f-11ea-989a-bb3e4aa67001.jpeg',
 ];
 
 const artistImgs = [
