@@ -34,7 +34,7 @@ router.put('/gallery-image', upload.single('image'), async (req, res) => {
     const galleryImage = await DBService.putMainGalleryImage(image.id, body.order);
     res.send(galleryImage);
   } catch(e) {
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -47,7 +47,7 @@ router.delete('/gallery-image', async (req, res) => {
     await FSService.removeFileFromUploads(galleryImage.Image.name);
     res.status(200).send();
   } catch(e) {
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -57,7 +57,7 @@ router.post('/gallery-image-order', async (req, res) => {
     const result = await DBService.changeMainGalleryImageOrder(id, order);
     res.send(result);
   } catch(e) {
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -74,7 +74,7 @@ router.put('/artist', upload.single('photo'), async (req, res) => {
     await DBService.putArtist(order, name, description, image.id);
     res.status(200).send();
   } catch(e) {
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -84,7 +84,7 @@ router.post('/artist', async (req, res) => {
     await DBService.editArtist(id, order, name, description);
     res.status(200).send();
   } catch(e) {
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -98,7 +98,7 @@ router.delete('/artist', async (req, res) => {
     res.status(200).send();
   } catch(e) {
     console.log(e);
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
@@ -108,18 +108,28 @@ router.get('/all-guitar-series', async (req, res) => {
     res.send(guitarSeries);
   } catch (e) {
     console.log(e);
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 
 router.put('/guitar-series', async (req, res) => {
   try {
-    const { name, uri } = req.body;
-    await DBService.putGuitarSeries(name, uri);
-    res.send(200);
+    const { name, uri, order } = req.body;
+    await DBService.putGuitarSeries(name, uri, order);
+    res.status(200).send();
   } catch (e) {
     console.log(e);
-    res.send(e).status(500);
+    res.status(500).send(e);
+  }
+});
+
+router.post('/guitar-series', async (req, res) => {
+  try {
+    const { id, name, uri, order } = req.body;
+    await DBService.editGuitarSeries(id, name, uri, order);
+    res.status(200).send();
+  } catch(e) {
+    res.status(500).send(e);
   }
 });
 
@@ -130,7 +140,7 @@ router.delete('/guitar-series', async (req, res) => {
     res.send(200);
   } catch (e) {
     console.log(e);
-    res.send(e).status(500);
+    res.status(500).send(e);
   }
 });
 

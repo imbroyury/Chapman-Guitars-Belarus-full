@@ -68,7 +68,7 @@ const Artists = (props) => {
   };
 
   const [
-    setInitialArtistsState,
+    setInitialArtists,
     setArtistEditModeOn,
     setArtistEditModeOff,
     editArtistProperty,
@@ -84,7 +84,7 @@ const Artists = (props) => {
   const artistsRequestState = useAsync(async () => {
     const { data: artists } = await axios.get('/artists');
     resetAfterFetch();
-    setInitialArtistsState(artists);
+    setInitialArtists(artists);
     return artists;
   }, [shouldRefetch]);
 

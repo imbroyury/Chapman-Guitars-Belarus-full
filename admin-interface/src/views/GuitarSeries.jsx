@@ -15,11 +15,11 @@ import {
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { HTTP_URL } from '../shared/hosts.js';
-import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
+import useEditableCollection from '../hooks/useEditableCollection.js';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -56,20 +56,34 @@ const GuitarSeries = (props) => {
 
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const scheduleRefetch = () => setShouldRefetch(true);
-  // cache fetched images for smooth re-render
-  const [series, setSeries] = useState([]);
-
   const resetAfterFetch = () => {
     setShouldRefetch(false);
   };
 
+  const [
+    setInitialSeries,
+    setSeriesEditModeOn,
+    setSeriesEditModeOff,
+    editSeriesProperty,
+    series,
+  ] = useEditableCollection();
+
   const seriesRequestState = useAsync(async () => {
     const { data: series } = await axios.get('/all-guitar-series');
     resetAfterFetch();
-    setSeries(series);
-    console.log(series);
+    setInitialSeries(series);
     return series;
   }, [shouldRefetch]);
+
+  const [saveSeriesState, saveSeries] = useAsyncFn(async (id) => {
+    const { name, uri, order } = series.find(series => series.id === id).edited;
+    const { data: saveResult } = await axios.post(
+      '/guitar-series',
+      { id, name, uri, order },
+    );
+    scheduleRefetch();
+    return saveResult;
+  }, [series]);
 
   const [deleteSeriesState, deleteSeries] = useAsyncFn(async (id) => {
     const { data: deleteResult } = await axios.delete(
@@ -80,9 +94,14 @@ const GuitarSeries = (props) => {
     return deleteResult;
   }, []);
 
+  const handleSaveSeries = (id) => {
+    setSeriesEditModeOff(id);
+    saveSeries(id);
+  };
 
   const requestStates = [
     seriesRequestState,
+    saveSeriesState,
     deleteSeriesState,
   ];
 
@@ -103,24 +122,59 @@ const GuitarSeries = (props) => {
     </CardContent>
   </Card>);
 
-  const renderSeries = (series) => (<Card className={classes.card} key={series.id}>
+  const renderEditMode = (series) => (<Card className={classes.card} key={series.id}>
     <CardContent>
-      <Typography>{`Id: ${series.id}`}</Typography>
+      <Grid container><TextField label='Name' name="name" value={series.name} onChange={editSeriesProperty(series.id)}/></Grid>
+      <Grid container><TextField label='Uri' name="uri" value={series.uri} onChange={editSeriesProperty(series.id)}/></Grid>
+      <Grid container><TextField label='Order' name="order" type="number" value={series.order} onChange={editSeriesProperty(series.id)}/></Grid>
+      <Typography>Guitars: </Typography>
+      {series.Guitars.map(renderGuitar)}
+      <Alert variant="outlined" severity="warning">
+        Deleting guitar series will also delete all guitars associated with it!
+      </Alert>
+    </CardContent>
+    <CardActions>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleSaveSeries(series.id)}
+        disabled={isInteractionDisabled}
+      >
+        Save
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => deleteSeries(series.id)}
+        disabled={isInteractionDisabled}
+      >
+        Delete
+      </Button>
+    </CardActions>
+  </Card>);
+
+  const renderDisplayMode = (series) => (<Card className={classes.card} key={series.id}>
+    <CardContent>
       <Typography>{`Name: ${series.name}`}</Typography>
       <Typography>{`Uri: ${series.uri}`}</Typography>
+      <Typography>{`Order: ${series.order}`}</Typography>
       <Typography>Guitars: </Typography>
       {series.Guitars.map(renderGuitar)}
     </CardContent>
     <CardActions>
       <Button
         variant="contained"
-        color="secondary"
-        onClick={() => deleteSeries(series.id)} disabled={isInteractionDisabled}
+        color="primary"
+        onClick={() => setSeriesEditModeOn(series.id)} disabled={isInteractionDisabled}
       >
-        Delete
+        Edit
       </Button>
     </CardActions>
   </Card>);
+
+  const renderSeries = (series) => series.isEditMode ?
+    renderEditMode(series.edited) :
+    renderDisplayMode(series.initial);
 
   const renderErrorMessage = (errorMessage) =>
     (<Snackbar

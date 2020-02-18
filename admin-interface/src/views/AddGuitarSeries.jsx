@@ -56,6 +56,7 @@ const AddGuitarSeries = () => {
   const [series, setSeries] = useState({
     name: '',
     uri: '',
+    order: 0,
   });
 
   const handleChangeInput = (e) => {
@@ -68,10 +69,10 @@ const AddGuitarSeries = () => {
 
   const [addSeriesState, addSeries] = useAsyncFn(async () => {
     const formData = new FormData();
-    const { name, uri } = series;
+    const { name, uri, order } = series;
     const { data: uploadResult } = await axios.put(
       '/guitar-series',
-      { name, uri },
+      { name, uri, order },
       formData,
     );
     setShouldRedirect(true);
@@ -116,10 +117,11 @@ const AddGuitarSeries = () => {
       />
     </Snackbar>);
 
-  const renderAddArtistForm = () => <Card className={classes.card}>
+  const renderAddSeriesForm = () => <Card className={classes.card}>
     <CardContent>
       <Grid container><TextField label='Name' name="name" value={series.name} onChange={handleChangeInput}/></Grid>
-      <Grid container><TextField label='Uri' name="uri" value={series.order} onChange={handleChangeInput}/></Grid>
+      <Grid container><TextField label='Uri' name="uri" value={series.uri} onChange={handleChangeInput}/></Grid>
+      <Grid container><TextField label='Order' name="order" type="number" value={series.order} onChange={handleChangeInput}/></Grid>
     </CardContent>
     <CardActions>
       <Button
@@ -139,7 +141,7 @@ const AddGuitarSeries = () => {
         <DialogContent><CircularProgress /></DialogContent>
       </Dialog>}
     {requestErrors.map(error => renderErrorMessage(error.message))}
-    {renderAddArtistForm()}
+    {renderAddSeriesForm()}
     {shouldRedirect && <Redirect to="/guitar-series" />}
   </Grid>);
 };

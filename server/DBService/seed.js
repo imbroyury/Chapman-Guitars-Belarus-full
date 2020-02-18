@@ -33,16 +33,18 @@ const artistImgs = [
 ];
 
 export default async () => {
-  const series = await GuitarSeries.create({ name: 'Standard', uri: 'st' });
+  const series = await GuitarSeries.create({ name: 'Standard', uri: 'st', order: 1 });
 
   const guitars = await Guitar.bulkCreate([{
     name: 'ML1 Modern',
     uri: 'ml1-m',
     seriesId: series.get('id'),
+    order: 1,
   }, {
     name: 'ML2 Modern',
     uri: 'ml2-m',
     seriesId: series.get('id'),
+    order: 2,
   }]);
 
   const images = await Promise.all(

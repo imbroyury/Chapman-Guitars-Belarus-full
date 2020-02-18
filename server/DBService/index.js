@@ -59,7 +59,10 @@ export const getAllGuitars = async () => {
 };
 
 export const getAllGuitarsGroupedBySeries = async () => {
-  const guitarSeries = await GuitarSeries.findAll({ include: { all: true, nested: true } });
+  const guitarSeries = await GuitarSeries.findAll({
+    include: { all: true, nested: true },
+    order: [['order', 'ASC'], [Guitar, 'order', 'ASC']],
+  });
   return guitarSeries;
 };
 
@@ -72,9 +75,10 @@ export const getGuitarByUri = async (uri) => {
 };
 
 export const getMainGalleryImages = async () => {
-  const images = await MainGalleryImage.findAll({ include: [Image], order: [
-    ['order', 'ASC'],
-  ], });
+  const images = await MainGalleryImage.findAll({
+    include: [Image],
+    order: [['order', 'ASC']],
+  });
   return images;
 };
 
@@ -119,9 +123,9 @@ export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
 
 export const getAllArtists = async () => {
   const artists = await Artist.findAll({
-    include: [{ model: Image, as: 'photo' }], order: [
-      ['order', 'ASC'],
-    ],  });
+    include: [{ model: Image, as: 'photo' }],
+    order: [['order', 'ASC']],
+  });
   return artists;
 };
 
@@ -161,7 +165,10 @@ export const editArtist = async (id, order, name, description) => {
 };
 
 export const getAllGuitarSeries = async () => {
-  const guitarSeries = await GuitarSeries.findAll({ include: [Guitar]});
+  const guitarSeries = await GuitarSeries.findAll({
+    include: [Guitar],
+    order: [['order', 'ASC']],
+  });
   return guitarSeries;
 };
 
@@ -174,10 +181,11 @@ export const getGuitarSeries = async (id) => {
   return guitarSeries;
 };
 
-export const putGuitarSeries = async (name, uri) => {
+export const putGuitarSeries = async (name, uri, order) => {
   await GuitarSeries.create({
     name,
-    uri
+    uri,
+    order
   });
 };
 
@@ -189,9 +197,10 @@ export const deleteGuitarSeries = async (id) => {
   });
 };
 
-export const editGuitarSeries = async (id, name, uri) => {
+export const editGuitarSeries = async (id, name, uri, order) => {
   const guitarSeries = await getGuitarSeries(id);
   guitarSeries.name = name;
   guitarSeries.uri = uri;
+  guitarSeries.order = order;
   await guitarSeries.save();
 };
