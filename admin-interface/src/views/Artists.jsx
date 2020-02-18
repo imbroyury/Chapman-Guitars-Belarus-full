@@ -22,6 +22,7 @@ import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import useEditableCollection from '../hooks/useEditableCollection.js';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -62,71 +63,22 @@ const Artists = (props) => {
 
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const scheduleRefetch = () => setShouldRefetch(true);
-  // cache fetched artists for smooth re-render
-  const [artists, setArtists] = useState([]);
-
-  const setInitialArtistsState = (artists) => {
-    const toStateModel = artist => ({
-      id: artist.id,
-      isEditMode: false,
-      initial: {
-        ...artist,
-      },
-      edited: {
-        ...artist,
-      }
-    });
-    setArtists(artists.map(toStateModel));
+  const resetAfterFetch = () => {
+    setShouldRefetch(false);
   };
 
-  const setEditedArtistState = (id, newState) => {
-    const arrayId = artists.findIndex(artist => artist.id === id);
-    const artist = artists[arrayId];
-    const artistStateModel = {
-      ...artist,
-      edited: newState,
-    };
-    const newArtists = [
-      ...artists.slice(0, arrayId),
-      artistStateModel,
-      ...artists.slice(arrayId + 1)
-    ];
-    setArtists(newArtists);
-  };
-
-  const setArtistEditModeOn = (id) => {
-    setArtists(artists.map(artist => ({
-      ...artist,
-      ...(artist.id === id ? { isEditMode: true } : {})
-    })));
-  };
-
-  const setArtistEditModeOff = (id) => {
-    setArtists(artists.map(artist => ({
-      ...artist,
-      ...(artist.id === id ? { isEditMode: false } : {})
-    })));
-  };
-
-  const handleEditArtistInput = (id) => (e) => {
-    const { name, value } = e.target;
-    const artist = artists.find(artist => artist.id === id);
-    const { edited } = artist;
-    const afterEdit = {
-      ...edited,
-      [name]: value,
-    };
-    setEditedArtistState(id, afterEdit);
-  };
+  const [
+    setInitialArtistsState,
+    setArtistEditModeOn,
+    setArtistEditModeOff,
+    editArtistProperty,
+    artists,
+  ] = useEditableCollection();
 
   const handleEditArtistDescription = (id) => (content) => {
     // emulate event interface not to duplicate code in handleEditArtistInput
     const e = { target: { name: 'description', value: content } };
-    handleEditArtistInput(id)(e);
-  };
-
-  const resetAfterFetch = () => {
-    setShouldRefetch(false);
+    editArtistProperty(id)(e);
   };
 
   const artistsRequestState = useAsync(async () => {
@@ -178,8 +130,8 @@ const Artists = (props) => {
 
   const renderEditMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Grid container><TextField label='Order' name="order" type="number" value={artist.order} onChange={handleEditArtistInput(artist.id)}/></Grid>
-      <Grid container><TextField label='Name' name="name" value={artist.name} onChange={handleEditArtistInput(artist.id)}/></Grid>
+      <Grid container><TextField label='Order' name="order" type="number" value={artist.order} onChange={editArtistProperty(artist.id)}/></Grid>
+      <Grid container><TextField label='Name' name="name" value={artist.name} onChange={editArtistProperty(artist.id)}/></Grid>
       <ReactQuill
         value={artist.description}
         onChange={handleEditArtistDescription(artist.id)}
@@ -226,7 +178,9 @@ const Artists = (props) => {
     </CardActions >
   </Card>);
 
-  const renderArtist = (artist) => artist.isEditMode ? renderEditMode(artist.edited) : renderDisplayMode(artist.initial);
+  const renderArtist = (artist) => artist.isEditMode ?
+    renderEditMode(artist.edited) :
+    renderDisplayMode(artist.initial);
 
   const renderErrorMessage = (errorMessage) =>
     (<Snackbar
