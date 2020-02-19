@@ -40,11 +40,31 @@ export default async () => {
     uri: 'ml1-m',
     seriesId: series.get('id'),
     order: 1,
+    tuners: 'Закрытые Chapman Classic (18:1)',
+    neck: 'Клён с матовым финишем',
+    fretboard: 'Макассарский эбен',
+    frets: '24 джамбо лада (никель)',
+    scaleLength: 648,
+    body: 'Махогани',
+    neckPickup: 'Chapman Sonorous Zerø Humbucker',
+    bridgePickup: 'Chapman Sonorous Zerø Humbucker',
+    bridge: 'Хардтейл (струны сквозь корпус)',
+    weight: 3500,
   }, {
     name: 'ML2 Modern',
     uri: 'ml2-m',
     seriesId: series.get('id'),
     order: 2,
+    tuners: 'Закрытые Chapman Classic (18:1)',
+    neck: 'Клён с матовым финишем',
+    fretboard: 'Макассарский эбен',
+    frets: '24 джамбо лада (никель)',
+    scaleLength: 635,
+    body: 'Махогани',
+    neckPickup: 'Chapman Stentorian Zerø Humbucker',
+    bridgePickup: 'Chapman Stentorian Zerø Humbucker',
+    bridge: 'Tune-o-matic со стоп-баром',
+    weight: 3500,
   }]);
 
   const images = await Promise.all(
@@ -53,6 +73,7 @@ export default async () => {
 
   await GuitarColor.bulkCreate([{
     name: 'Midnight Sky',
+    order: 10,
     guitarId: guitars[0].get('id'),
     tabImageId: images[0][0].get('id'),
     dotImageId: images[0][1].get('id'),
@@ -60,6 +81,7 @@ export default async () => {
   },
   {
     name: 'Lunar',
+    order: 1,
     guitarId: guitars[0].get('id'),
     tabImageId: images[1][0].get('id'),
     dotImageId: images[1][1].get('id'),
@@ -67,6 +89,7 @@ export default async () => {
   },
   {
     name: 'White Dove',
+    order: 0,
     guitarId: guitars[1].get('id'),
     tabImageId: images[2][0].get('id'),
     dotImageId: images[2][1].get('id'),

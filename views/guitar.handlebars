@@ -6,18 +6,12 @@
             <div class="table-header">
                 <h2>Спецификация</h2>
             </div>
-            <div class="table-row">
-                <div class="item-name">Гриф</div>
-                <div class="item-description">Клен с матовым финишем</div>
-            </div>
-            <div class="table-row">
-                <div class="item-name">Накладка</div>
-                <div class="item-description">Макассарский эбен</div>
-            </div>
-            <div class="table-row">
-                <div class="item-name">Hardcoded ... </div>
-                <div class="item-description">24 джамбо лада (никель)</div>
-            </div>
+            {{#each guitar.specs}}
+                <div class="table-row">
+                    <div class="item-name">{{this.key}}</div>
+                    <div class="item-description">{{this.value}}</div>
+                </div>
+            {{/each}}
             <div class="table-row">
                 <div class="item-name">Доступные цвета</div>
                 <div class="item-description">

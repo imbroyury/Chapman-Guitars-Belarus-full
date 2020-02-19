@@ -23,17 +23,31 @@ const mapGuitarColorToViewModel = (gc) => ({
   dotImage: gc.dotImage.name,
 });
 
+const mapGuitarToViewModel = (guitar) => ({
+  name: guitar.name,
+  uri: guitar.uri,
+  colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
+  specs: [
+    { key: 'Колки', value: guitar.tuners },
+    { key: 'Гриф', value: guitar.neck },
+    { key: 'Накладка', value: guitar.fretboard },
+    { key: 'Лады', value: guitar.frets },
+    { key: 'Мензура, мм', value: guitar.scaleLength },
+    { key: 'Дека', value: guitar.body },
+    { key: 'Нековый звукосниматель', value: guitar.neckPickup },
+    { key: 'Бриджевый звукосниматель', value: guitar.bridgePickup },
+    { key: 'Бридж', value: guitar.bridge },
+    { key: 'Вес, г', value: guitar.weight },
+  ]
+});
+
 router.get('/guitars', async (req, res) => {
   const guitarSeries = await DBService.getAllGuitarsGroupedBySeries();
 
   const vm = guitarSeries.map(series => ({
     name: series.name.toUpperCase(),
     uri: series.uri,
-    guitars: series.Guitars.map(guitar => ({
-      name: guitar.name.toUpperCase(),
-      uri: guitar.uri,
-      colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
-    })),
+    guitars: series.Guitars.map(mapGuitarToViewModel),
   }));
   res.render('guitars', { guitarSeries: vm, ...getActiveMenuItemConfig('guitars') });
 });
@@ -44,10 +58,7 @@ router.get('/guitars/:series/:model', async (req, res) => {
 
   if (guitar === null) res.status(404).send('Nothing found');
 
-  const vm = {
-    name: guitar.name,
-    colors: guitar.GuitarColors.map(mapGuitarColorToViewModel),
-  };
+  const vm = mapGuitarToViewModel(guitar);
   res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });
 });
 

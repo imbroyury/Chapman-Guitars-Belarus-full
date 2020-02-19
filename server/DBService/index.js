@@ -35,9 +35,9 @@ export const init = async () => {
     console.log('Relationships established');
 
     try {
-      await sequelize.drop();
-      await sequelize.sync();
-      await seed();
+      // await sequelize.drop();
+      // await sequelize.sync();
+      // await seed();
     } catch (e) {
       console.error(e);
       console.log('*** Seeding failed because reasons ***');
@@ -61,7 +61,7 @@ export const getAllGuitars = async () => {
 export const getAllGuitarsGroupedBySeries = async () => {
   const guitarSeries = await GuitarSeries.findAll({
     include: { all: true, nested: true },
-    order: [['order', 'ASC'], [Guitar, 'order', 'ASC']],
+    order: [['order', 'ASC'], [Guitar, 'order', 'ASC']]
   });
   return guitarSeries;
 };

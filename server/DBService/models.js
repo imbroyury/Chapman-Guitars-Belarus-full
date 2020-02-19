@@ -96,6 +96,46 @@ Guitar.init({
       key: 'id',
     },
   },
+  tuners: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  neck: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  fretboard: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  frets: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  scaleLength: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  body: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  neckPickup: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  bridgePickup: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  bridge: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  weight: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 }, {
   sequelize,
 });
@@ -106,6 +146,10 @@ GuitarColor.init({
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
+  },
+  order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   name: {
     type: DataTypes.STRING,
