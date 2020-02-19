@@ -8,10 +8,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Dialog,
-  DialogContent,
   Button,
-  CircularProgress,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -23,6 +20,7 @@ import { Remount } from '../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import useEditableCollection from '../hooks/useEditableCollection.js';
+import Spinner from '../components/Spinner.jsx';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -207,10 +205,7 @@ const Artists = (props) => {
     </Snackbar>);
 
   return (<Grid container>
-    {isSomeRequestInProgress &&
-      <Dialog open>
-        <DialogContent><CircularProgress /></DialogContent>
-      </Dialog>}
+    {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {artists.map(renderArtist)}
   </Grid>);

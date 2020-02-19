@@ -8,10 +8,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Dialog,
-  DialogContent,
   Button,
-  CircularProgress,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -20,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
+import Spinner from '../components/Spinner.jsx';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -212,10 +210,7 @@ const MainGallery = (props) => {
     </Snackbar>);
 
   return (<Grid container>
-    {isSomeRequestInProgress &&
-      <Dialog open>
-        <DialogContent><CircularProgress /></DialogContent>
-      </Dialog>}
+    {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {renderUploadInput()}
     {images.map(renderImage)}

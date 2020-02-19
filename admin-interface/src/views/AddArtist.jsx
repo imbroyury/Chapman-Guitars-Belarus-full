@@ -8,10 +8,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Dialog,
-  DialogContent,
   Button,
-  CircularProgress,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -20,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Spinner from '../components/Spinner';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -172,10 +170,7 @@ const AddArtist = () => {
   </Card>;
 
   return (<Grid container>
-    {isSomeRequestInProgress &&
-      <Dialog open>
-        <DialogContent><CircularProgress /></DialogContent>
-      </Dialog>}
+    {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {renderAddArtistForm()}
     {shouldRedirect && <Redirect to="/artists" />}

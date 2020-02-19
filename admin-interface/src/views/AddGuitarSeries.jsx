@@ -3,15 +3,11 @@ import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  Typography,
   TextField,
   Card,
   CardContent,
   CardActions,
-  Dialog,
-  DialogContent,
   Button,
-  CircularProgress,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -19,6 +15,7 @@ import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
+import Spinner from '../components/Spinner';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -136,10 +133,7 @@ const AddGuitarSeries = () => {
   </Card>;
 
   return (<Grid container>
-    {isSomeRequestInProgress &&
-      <Dialog open>
-        <DialogContent><CircularProgress /></DialogContent>
-      </Dialog>}
+    {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {renderAddSeriesForm()}
     {shouldRedirect && <Redirect to="/guitar-series" />}

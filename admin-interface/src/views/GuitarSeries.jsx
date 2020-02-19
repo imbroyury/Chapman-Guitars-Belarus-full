@@ -8,10 +8,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Dialog,
-  DialogContent,
   Button,
-  CircularProgress,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -20,6 +17,7 @@ import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../HOC/Remount';
 import useEditableCollection from '../hooks/useEditableCollection.js';
+import Spinner from '../components/Spinner';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -201,10 +199,7 @@ const GuitarSeries = (props) => {
     </Snackbar>);
 
   return (<Grid container>
-    {isSomeRequestInProgress &&
-      <Dialog open>
-        <DialogContent><CircularProgress /></DialogContent>
-      </Dialog>}
+    {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {series.map(renderSeries)}
   </Grid>);
