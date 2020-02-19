@@ -65,7 +65,6 @@ GuitarSeries.init({
   },
 }, {
   sequelize,
-  timestamps: false
 });
 
 export class Guitar extends Model {}
@@ -99,7 +98,6 @@ Guitar.init({
   },
 }, {
   sequelize,
-  timestamps: false
 });
 
 export class GuitarColor extends Model {}
@@ -148,7 +146,6 @@ GuitarColor.init({
   },
 }, {
   sequelize,
-  timestamps: false
 });
 
 export class Artist extends Model {}
@@ -180,5 +177,4 @@ Artist.init({
   }
 }, {
   sequelize,
-  timestamps: false
 });
