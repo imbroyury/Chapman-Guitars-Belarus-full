@@ -9,17 +9,14 @@ import {
   CardContent,
   CardActions,
   Button,
-  Snackbar,
-  SnackbarContent,
 } from '@material-ui/core';
-import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
-import Spinner from '../components/Spinner.jsx';
+import { ErrorSnackbar, Spinner } from '../components/index.js';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   paper: {
     padding: '20px',
   },
@@ -32,21 +29,10 @@ const useStyles = makeStyles(theme => ({
   uploadInput: {
     display: 'none'
   },
-  snackbarMessage: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  snackbarIcon: {
-    fontSize: 20,
-    marginRight: '0.5rem',
-  },
-  snackbarError: {
-    backgroundColor: theme.palette.error.dark,
-  },
   reloadButton: {
     color: 'white'
   }
-}));
+});
 
 const MainGallery = (props) => {
   const reloadHandler = props.remount;
@@ -170,7 +156,7 @@ const MainGallery = (props) => {
           className={classes.uploadInput}
           onChange={handleChangeFileList}
         />
-      </Button><br/>
+      </Button>
       {renderUploadMessage()}
     </Grid>
     <Grid container>
@@ -185,29 +171,14 @@ const MainGallery = (props) => {
     </Grid>
   </>;
 
-  const renderErrorMessage = (errorMessage) =>
-    (<Snackbar
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      open
-      key={errorMessage}
-    >
-      <SnackbarContent
-        className={classes.snackbarError}
-        message={
-          <span className={classes.snackbarMessage}>
-            <ErrorIcon className={classes.snackbarIcon}/>
-            {errorMessage}
-            {'.\nPlease try again later'}
-          </span>
-        }
-        action={
-          <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
-        }
-      />
-    </Snackbar>);
+  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
+    open
+    errorMessage={errorMessage}
+    key={errorMessage}
+    action={
+      <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
+    }
+  />);
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}

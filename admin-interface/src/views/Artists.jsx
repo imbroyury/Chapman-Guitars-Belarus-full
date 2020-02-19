@@ -9,10 +9,7 @@ import {
   CardContent,
   CardActions,
   Button,
-  Snackbar,
-  SnackbarContent,
 } from '@material-ui/core';
-import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
@@ -21,6 +18,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import useEditableCollection from '../hooks/useEditableCollection.js';
 import Spinner from '../components/Spinner.jsx';
+import { ErrorSnackbar } from '../components/index.js';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -35,17 +33,6 @@ const useStyles = makeStyles(theme => ({
   },
   uploadInput: {
     display: 'none'
-  },
-  snackbarMessage: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  snackbarIcon: {
-    fontSize: 20,
-    marginRight: '0.5rem',
-  },
-  snackbarError: {
-    backgroundColor: theme.palette.error.dark,
   },
   reloadButton: {
     color: 'white'
@@ -180,29 +167,14 @@ const Artists = (props) => {
     renderEditMode(artist.edited) :
     renderDisplayMode(artist.initial);
 
-  const renderErrorMessage = (errorMessage) =>
-    (<Snackbar
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      open
-      key={errorMessage}
-    >
-      <SnackbarContent
-        className={classes.snackbarError}
-        message={
-          <span className={classes.snackbarMessage}>
-            <ErrorIcon className={classes.snackbarIcon}/>
-            {errorMessage}
-            {'.\nPlease try again later'}
-          </span>
-        }
-        action={
-          <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
-        }
-      />
-    </Snackbar>);
+  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
+    open
+    errorMessage={errorMessage}
+    key={errorMessage}
+    action={
+      <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
+    }
+  />);
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}

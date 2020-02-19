@@ -9,17 +9,14 @@ import {
   CardContent,
   CardActions,
   Button,
-  Snackbar,
-  SnackbarContent,
 } from '@material-ui/core';
-import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Spinner from '../components/Spinner';
+import { Spinner, ErrorSnackbar } from '../components';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   paper: {
     padding: '20px',
   },
@@ -32,21 +29,10 @@ const useStyles = makeStyles(theme => ({
   uploadInput: {
     display: 'none'
   },
-  snackbarMessage: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  snackbarIcon: {
-    fontSize: 20,
-    marginRight: '0.5rem',
-  },
-  snackbarError: {
-    backgroundColor: theme.palette.error.dark,
-  },
   reloadButton: {
     color: 'white'
   }
-}));
+});
 
 const AddArtist = () => {
   const classes = useStyles();
@@ -123,29 +109,14 @@ const AddArtist = () => {
     </Grid>
   </>;
 
-  const renderErrorMessage = (errorMessage) =>
-    (<Snackbar
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      open
-      key={errorMessage}
-    >
-      <SnackbarContent
-        className={classes.snackbarError}
-        message={
-          <span className={classes.snackbarMessage}>
-            <ErrorIcon className={classes.snackbarIcon}/>
-            {errorMessage}
-            {'.\nPlease try again later'}
-          </span>
-        }
-        action={
-          <Button onClick={addArtist} size="small" className={classes.reloadButton}>Retry</Button>
-        }
-      />
-    </Snackbar>);
+  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
+    open
+    errorMessage={errorMessage}
+    key={errorMessage}
+    action={
+      <Button onClick={addArtist} size="small" className={classes.reloadButton}>Retry</Button>
+    }
+  />);
 
   const renderAddArtistForm = () => <Card className={classes.card}>
     <CardContent>

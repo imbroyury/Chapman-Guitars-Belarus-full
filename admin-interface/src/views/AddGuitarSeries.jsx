@@ -8,14 +8,11 @@ import {
   CardContent,
   CardActions,
   Button,
-  Snackbar,
-  SnackbarContent,
 } from '@material-ui/core';
-import { Error as ErrorIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
-import Spinner from '../components/Spinner';
+import { Spinner, ErrorSnackbar } from '../components';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -88,31 +85,16 @@ const AddGuitarSeries = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress;
 
-  const isAddDisabled = isInteractionDisabled || series.name === '' || series.uri === '';
+  const isAddDisabled = isInteractionDisabled || series.name === '' || series.uri === '' || series.order === '';
 
-  const renderErrorMessage = (errorMessage) =>
-    (<Snackbar
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      open
-      key={errorMessage}
-    >
-      <SnackbarContent
-        className={classes.snackbarError}
-        message={
-          <span className={classes.snackbarMessage}>
-            <ErrorIcon className={classes.snackbarIcon}/>
-            {errorMessage}
-            {'.\nPlease try again later'}
-          </span>
-        }
-        action={
-          <Button onClick={addSeries} size="small" className={classes.reloadButton}>Retry</Button>
-        }
-      />
-    </Snackbar>);
+  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
+    open
+    errorMessage={errorMessage}
+    key={errorMessage}
+    action={
+      <Button onClick={addSeries} size="small" className={classes.reloadButton}>Retry</Button>
+    }
+  />);
 
   const renderAddSeriesForm = () => <Card className={classes.card}>
     <CardContent>
