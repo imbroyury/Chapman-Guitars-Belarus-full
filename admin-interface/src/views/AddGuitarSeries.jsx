@@ -14,7 +14,7 @@ import { Redirect } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import { Spinner, ErrorSnackbar } from '../components';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   paper: {
     padding: '20px',
   },
@@ -27,21 +27,10 @@ const useStyles = makeStyles(theme => ({
   uploadInput: {
     display: 'none'
   },
-  snackbarMessage: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  snackbarIcon: {
-    fontSize: 20,
-    marginRight: '0.5rem',
-  },
-  snackbarError: {
-    backgroundColor: theme.palette.error.dark,
-  },
   reloadButton: {
     color: 'white'
   }
-}));
+});
 
 const AddGuitarSeries = () => {
   const classes = useStyles();
@@ -85,7 +74,8 @@ const AddGuitarSeries = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress;
 
-  const isAddDisabled = isInteractionDisabled || series.name === '' || series.uri === '' || series.order === '';
+  const isAddDisabled = isInteractionDisabled ||
+    [series.name, series.uri, series.order].some(value => value === '');
 
   const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
     open
