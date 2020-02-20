@@ -17,8 +17,7 @@ import { Remount } from '../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import useEditableCollection from '../hooks/useEditableCollection.js';
-import Spinner from '../components/Spinner.jsx';
-import { ErrorSnackbar } from '../components/index.js';
+import { Spinner, ErrorSnackbar } from '../components';
 
 const useStyles = makeStyles(theme => ({
   card: {
