@@ -54,12 +54,12 @@ const routes = {
     {
       View: GalleryImages,
       path: '/gallery-images',
-      linkLabel: 'Gallery images',
+      linkLabel: 'Gallery Images',
     },
     {
       View: AddGalleryImage,
       path: '/add-gallery-image',
-      linkLabel: 'Add gallery image',
+      linkLabel: 'Add Gallery Image',
     },
     {
       View: Artists,

@@ -36,11 +36,9 @@ const Artists = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
-  const [shouldRefetch, setShouldRefetch] = useState(false);
-  const scheduleRefetch = () => setShouldRefetch(true);
-  const resetAfterFetch = () => {
-    setShouldRefetch(false);
-  };
+  const [shouldFetch, setShouldFetch] = useState(true);
+  const scheduleRefetch = () => setShouldFetch(true);
+  const resetAfterFetch = () => setShouldFetch(false);
 
   const [
     setInitialArtists,
@@ -57,11 +55,12 @@ const Artists = (props) => {
   };
 
   const artistsRequestState = useAsync(async () => {
+    if (!shouldFetch) return;
     const { data: artists } = await axios.get('/artists');
     resetAfterFetch();
     setInitialArtists(artists);
     return artists;
-  }, [shouldRefetch]);
+  }, [shouldFetch]);
 
   const [saveArtistState, saveArtist] = useAsyncFn(async (id) => {
     const { order, name, description } = artists.find(artist => artist.id === id).edited;

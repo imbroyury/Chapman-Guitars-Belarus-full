@@ -30,11 +30,9 @@ const GalleryImages = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
-  const [shouldRefetch, setShouldRefetch] = useState(false);
-  const scheduleRefetch = () => setShouldRefetch(true);
-  const resetAfterFetch = () => {
-    setShouldRefetch(false);
-  };
+  const [shouldFetch, setShouldFetch] = useState(true);
+  const scheduleRefetch = () => setShouldFetch(true);
+  const resetAfterFetch = () => setShouldFetch(false);
 
   const [
     setInitialImages,
@@ -45,11 +43,12 @@ const GalleryImages = (props) => {
   ] = useEditableCollection();
 
   const imagesRequestState = useAsync(async () => {
+    if (!shouldFetch) return;
     const { data: images } = await axios.get('/gallery-images');
     resetAfterFetch();
     setInitialImages(images);
     return images;
-  }, [shouldRefetch]);
+  }, [shouldFetch]);
 
   const [deleteImageState, deleteImage] = useAsyncFn(async (id) => {
     const { data: deleteResult } = await axios.delete(

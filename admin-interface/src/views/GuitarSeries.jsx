@@ -27,11 +27,9 @@ const GuitarSeries = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
-  const [shouldRefetch, setShouldRefetch] = useState(false);
-  const scheduleRefetch = () => setShouldRefetch(true);
-  const resetAfterFetch = () => {
-    setShouldRefetch(false);
-  };
+  const [shouldFetch, setShouldFetch] = useState(true);
+  const scheduleRefetch = () => setShouldFetch(true);
+  const resetAfterFetch = () => setShouldFetch(false);
 
   const [
     setInitialSeries,
@@ -42,11 +40,12 @@ const GuitarSeries = (props) => {
   ] = useEditableCollection();
 
   const seriesRequestState = useAsync(async () => {
+    if (!shouldFetch) return;
     const { data: series } = await axios.get('/all-guitar-series');
     resetAfterFetch();
     setInitialSeries(series);
     return series;
-  }, [shouldRefetch]);
+  }, [shouldFetch]);
 
   const [saveSeriesState, saveSeries] = useAsyncFn(async (id) => {
     const { name, uri, order } = series.find(series => series.id === id).edited;
