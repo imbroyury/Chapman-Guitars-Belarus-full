@@ -1,4 +1,3 @@
-import { Op } from 'sequelize';
 import sequelize from './sequelize.js';
 import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist } from './Models.js';
 import seed from './seed.js';
@@ -68,10 +67,94 @@ export const getAllGuitarsGroupedBySeries = async () => {
 
 export const getGuitarByUri = async (uri) => {
   const guitar = await Guitar.findOne({
-    where: { uri: { [Op.eq]: uri } },
+    where: { uri },
     include: { all: true, nested: true }
   });
   return guitar;
+};
+
+export const getGuitar = async (id) => {
+  const guitar = await Guitar.findOne({
+    where: id,
+  });
+  return guitar;
+};
+
+export const putGuitar = async (
+  name,
+  uri,
+  seriesId,
+  order,
+  tuners,
+  neck,
+  fretboard,
+  frets,
+  scaleLength,
+  body,
+  neckPickup,
+  bridgePickup,
+  bridge,
+  weight,
+) => {
+  await Guitar.create({
+    name,
+    uri,
+    seriesId,
+    order,
+    tuners,
+    neck,
+    fretboard,
+    frets,
+    scaleLength,
+    body,
+    neckPickup,
+    bridgePickup,
+    bridge,
+    weight,
+  });
+};
+
+export const deleteGuitar = async (id) => {
+  await Guitar.destroy({
+    where: {
+      id,
+    }
+  });
+};
+
+export const editGuitar = async (
+  id,
+  name,
+  uri,
+  seriesId,
+  order,
+  tuners,
+  neck,
+  fretboard,
+  frets,
+  scaleLength,
+  body,
+  neckPickup,
+  bridgePickup,
+  bridge,
+  weight,
+) => {
+  const guitar = await getGuitar(id);
+  guitar.name = name,
+  guitar.uri = uri,
+  guitar.seriesId = seriesId,
+  guitar.order = order,
+  guitar.tuners = tuners,
+  guitar.neck = neck,
+  guitar.fretboard = fretboard,
+  guitar.frets = frets,
+  guitar.scaleLength = scaleLength,
+  guitar.body = body,
+  guitar.neckPickup = neckPickup,
+  guitar.bridgePickup = bridgePickup,
+  guitar.bridge = bridge,
+  guitar.weight = weight,
+  await guitar.save();
 };
 
 export const getMainGalleryImages = async () => {

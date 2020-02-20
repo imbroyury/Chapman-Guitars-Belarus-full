@@ -61,8 +61,6 @@ const GalleryImages = (props) => {
 
   const [saveImageState, saveImage] = useAsyncFn(async (id) => {
     const { order } = images.find(image => image.id === id).edited;
-    console.log(images);
-    console.log(order);
     const { data: changeResult } = await axios.post(
       '/gallery-image',
       { id, order },

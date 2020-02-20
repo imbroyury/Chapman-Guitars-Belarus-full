@@ -56,7 +56,7 @@ router.get('/guitars/:series/:model', async (req, res) => {
   const { model } = req.params;
   const guitar = await DBService.getGuitarByUri(model);
 
-  if (guitar === null) res.status(404).send('Nothing found');
+  if (guitar === null) return res.render('404');
 
   const vm = mapGuitarToViewModel(guitar);
   res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });

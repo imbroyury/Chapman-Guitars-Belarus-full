@@ -21,6 +21,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import GuitarSeries from './views/GuitarSeries';
 import AddGuitarSeries from './views/AddGuitarSeries';
+import Guitars from './views/Guitars';
 // import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
@@ -80,7 +81,12 @@ const routes = {
       View: AddGuitarSeries,
       path: '/add-guitar-series',
       linkLabel: 'Add Guitar Series'
-    }
+    },
+    {
+      View: Guitars,
+      path: '/guitars',
+      linkLabel: 'Guitars'
+    },
   ],
 };
 
