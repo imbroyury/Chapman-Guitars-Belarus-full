@@ -45,7 +45,10 @@ FileInput.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  fileList: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf([null])]).isRequired,
+  fileList: PropTypes.shape({
+    length: PropTypes.number,
+    0: PropTypes.object,
+  }),
 };
 
 export default FileInput;
