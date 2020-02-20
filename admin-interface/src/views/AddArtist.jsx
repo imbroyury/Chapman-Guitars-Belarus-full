@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
@@ -127,6 +128,10 @@ const AddArtist = () => {
     {renderAddArtistForm()}
     {shouldRedirect && <Redirect to="/artists" />}
   </Grid>);
+};
+
+AddArtist.propTypes = {
+  remount: PropTypes.func,
 };
 
 export default AddArtist;

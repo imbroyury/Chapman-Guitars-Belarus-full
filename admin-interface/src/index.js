@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
@@ -25,7 +25,7 @@ import AddGuitarSeries from './views/AddGuitarSeries';
 
 const drawerWidth = '10rem';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   drawer: {
     width: drawerWidth,
   },
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   view: {
     marginLeft: drawerWidth,
   },
-}));
+});
 
 const routes = {
   preAuth: [

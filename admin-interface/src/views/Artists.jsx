@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import {
@@ -12,7 +13,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
-import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -181,6 +181,10 @@ const Artists = (props) => {
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {artists.map(renderArtist)}
   </Grid>);
+};
+
+Artists.propTypes = {
+  remount: PropTypes.func,
 };
 
 export default Remount(Artists);

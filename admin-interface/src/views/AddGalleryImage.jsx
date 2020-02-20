@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useAsync, useAsyncFn } from 'react-use';
+import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  Typography,
   TextField,
   Card,
   CardContent,
@@ -11,7 +10,6 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { HTTP_URL } from '../shared/hosts.js';
 import { Remount } from '../HOC/Remount';
 import { Redirect } from 'react-router-dom';
 import { ErrorSnackbar, Spinner, FileInput } from '../components/index.js';
