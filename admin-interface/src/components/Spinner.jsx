@@ -11,7 +11,7 @@ const Spinner = (props) => <Dialog open={props.open}>
 </Dialog>;
 
 Spinner.propTypes = {
-  open: PropTypes.bool,
+  open: PropTypes.bool.isRequired,
 };
 
 export default Spinner;

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  Typography,
   TextField,
   Card,
   CardContent,
@@ -14,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Spinner, ErrorSnackbar } from '../components';
+import { Spinner, ErrorSnackbar, FileInput } from '../components';
 
 const useStyles = makeStyles({
   paper: {
@@ -25,9 +24,6 @@ const useStyles = makeStyles({
   },
   img: {
     maxWidth: '300px',
-  },
-  uploadInput: {
-    display: 'none'
   },
   reloadButton: {
     color: 'white'
@@ -87,27 +83,12 @@ const AddArtist = () => {
 
   const isAddDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled || artist.name === '' || artist.description === '';
 
-  const renderUploadMessage = () => (fileList === null || fileList.length === 0)
-    ? <Typography>No file chosen</Typography>
-    : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>;
-
-  const renderUploadInput = () => <>
-    <Grid container>
-      <Button
-        variant="contained"
-        component="label"
-        disabled={isInteractionDisabled}
-      >
-      Select artist photo
-        <input
-          type="file"
-          className={classes.uploadInput}
-          onChange={handleChangeFileList}
-        />
-      </Button>
-      {renderUploadMessage()}
-    </Grid>
-  </>;
+  const renderUploadInput = () => <FileInput
+    label="Select artist photo"
+    onChange={handleChangeFileList}
+    disabled={isInteractionDisabled}
+    fileList={fileList}
+  />;
 
   const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
     open

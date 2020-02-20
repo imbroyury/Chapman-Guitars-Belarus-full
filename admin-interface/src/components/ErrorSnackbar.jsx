@@ -46,8 +46,8 @@ const ErrorSnackbar = (props) => {
 };
 
 ErrorSnackbar.propTypes = {
-  open: PropTypes.bool,
-  errorMessage: PropTypes.string,
+  open: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   action: PropTypes.node,
 };
 

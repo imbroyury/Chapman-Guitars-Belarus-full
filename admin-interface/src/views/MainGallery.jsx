@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
-import { ErrorSnackbar, Spinner } from '../components/index.js';
+import { ErrorSnackbar, Spinner, FileInput } from '../components/index.js';
 
 const useStyles = makeStyles({
   paper: {
@@ -25,9 +25,6 @@ const useStyles = makeStyles({
   },
   img: {
     maxWidth: '300px',
-  },
-  uploadInput: {
-    display: 'none'
   },
   reloadButton: {
     color: 'white'
@@ -47,7 +44,6 @@ const MainGallery = (props) => {
   const [fileInputKey, setFileInputKey] = useState(Math.random());
   const handleChangeFileList = (e) => setFileList(e.target.files);
   const rerenderFileInput = () => setFileInputKey(Math.random());
-
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
@@ -138,27 +134,14 @@ const MainGallery = (props) => {
     </CardActions>
   </Card>);
 
-  const renderUploadMessage = () => (fileList === null || fileList.length === 0)
-    ? <Typography>No file chosen</Typography>
-    : <Typography variant="overline" className={classes.fileLabel}>{fileList[0].name}</Typography>;
-
   const renderUploadInput = () => <>
-    <Grid container>
-      <Button
-        variant="contained"
-        component="label"
-        disabled={isInteractionDisabled}
-      >
-      Select image to upload
-        <input
-          type="file"
-          key={fileInputKey}
-          className={classes.uploadInput}
-          onChange={handleChangeFileList}
-        />
-      </Button>
-      {renderUploadMessage()}
-    </Grid>
+    <FileInput
+      label="Select image to upload"
+      onChange={handleChangeFileList}
+      disabled={isInteractionDisabled}
+      fileList={fileList}
+      key={fileInputKey}
+    />
     <Grid container>
       <Button
         variant="contained"
