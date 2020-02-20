@@ -115,7 +115,7 @@ export const deleteImage = async (id) => {
   });
 };
 
-export const changeMainGalleryImageOrder = async (galleryImageId, order) => {
+export const editMainGalleryImage = async (galleryImageId, order) => {
   const galleryImage = await MainGalleryImage.findOne({ where: { id: galleryImageId }});
   galleryImage.order = order;
   await galleryImage.save();

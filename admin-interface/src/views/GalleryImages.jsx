@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
 import { Remount } from '../HOC/Remount';
 import { ErrorSnackbar, Spinner } from '../components/index.js';
+import useEditableCollection from '../hooks/useEditableCollection.js';
 
 const useStyles = makeStyles({
   card: {
@@ -31,17 +32,22 @@ const GalleryImages = (props) => {
 
   const [shouldRefetch, setShouldRefetch] = useState(false);
   const scheduleRefetch = () => setShouldRefetch(true);
-  // cache fetched images for smooth re-render
-  const [images, setImages] = useState([]);
-
   const resetAfterFetch = () => {
     setShouldRefetch(false);
   };
 
+  const [
+    setInitialImages,
+    setImageEditModeOn,
+    setImageEditModeOff,
+    editImageProperty,
+    images,
+  ] = useEditableCollection();
+
   const imagesRequestState = useAsync(async () => {
     const { data: images } = await axios.get('/gallery-images');
     resetAfterFetch();
-    setImages(images);
+    setInitialImages(images);
     return images;
   }, [shouldRefetch]);
 
@@ -54,19 +60,27 @@ const GalleryImages = (props) => {
     return deleteResult;
   }, []);
 
-  const [changeImageOrderState, changeImageOrder] = useAsyncFn(async (id, order) => {
+  const [saveImageState, saveImage] = useAsyncFn(async (id) => {
+    const { order } = images.find(image => image.id === id).edited;
+    console.log(images);
+    console.log(order);
     const { data: changeResult } = await axios.post(
-      '/gallery-image-order',
+      '/gallery-image',
       { id, order },
     );
     scheduleRefetch();
     return changeResult;
-  }, []);
+  }, [images]);
+
+  const handleSaveImage = (id) => {
+    setImageEditModeOff(id);
+    saveImage(id);
+  };
 
   const requestStates = [
     imagesRequestState,
     deleteImageState,
-    changeImageOrderState,
+    saveImageState,
   ];
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
@@ -79,22 +93,43 @@ const GalleryImages = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const renderImage = (image) => (<Card className={classes.card} key={image.id}>
+  const renderDisplayMode = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
-      <Typography>{`Id: ${image.id}`}</Typography>
+      <Typography>{`Order: ${image.order}`}</Typography>
+    </CardContent>
+    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img} />
+    <CardActions>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => setImageEditModeOn(image.id)} disabled={isInteractionDisabled}
+      >
+        Edit
+      </Button>
+    </CardActions>
+  </Card>);
+
+  const renderEditMode = (image) => (<Card className={classes.card} key={image.id}>
+    <CardContent>
       <TextField
         label="Order"
         defaultValue={image.order}
+        name="order"
         type="number"
         disabled={isInteractionDisabled}
-        onBlur={(e) => {
-          const { value } = e.target;
-          if (value !== image.order) changeImageOrder(image.id, e.target.value);
-        }}
+        onChange={editImageProperty(image.id)}
       />
     </CardContent>
-    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img}/>
+    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img} />
     <CardActions>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleSaveImage(image.id)}
+        disabled={isInteractionDisabled}
+      >
+        Save
+      </Button>
       <Button
         variant="contained"
         color="secondary"
@@ -104,6 +139,10 @@ const GalleryImages = (props) => {
       </Button>
     </CardActions>
   </Card>);
+
+  const renderImage = (image) => image.isEditMode ?
+    renderEditMode(image.edited) :
+    renderDisplayMode(image.initial);
 
   const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
     open

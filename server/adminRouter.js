@@ -51,10 +51,10 @@ router.delete('/gallery-image', async (req, res) => {
   }
 });
 
-router.post('/gallery-image-order', async (req, res) => {
+router.post('/gallery-image', async (req, res) => {
   try {
     const { id, order } = req.body;
-    const result = await DBService.changeMainGalleryImageOrder(id, order);
+    const result = await DBService.editMainGalleryImage(id, order);
     res.send(result);
   } catch(e) {
     res.status(500).send(e);
