@@ -21,18 +21,12 @@ import Spinner from '../components/Spinner.jsx';
 import { ErrorSnackbar } from '../components/index.js';
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: '20px',
-  },
   card: {
     margin: '10px',
     width: '100%',
   },
   img: {
     maxWidth: '300px',
-  },
-  uploadInput: {
-    display: 'none'
   },
   reloadButton: {
     color: 'white'

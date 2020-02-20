@@ -15,14 +15,8 @@ import { Redirect } from 'react-router-dom';
 import { ErrorSnackbar, Spinner, FileInput } from '../components/index.js';
 
 const useStyles = makeStyles({
-  paper: {
-    padding: '20px',
-  },
   card: {
     margin: '10px',
-  },
-  img: {
-    maxWidth: '300px',
   },
   reloadButton: {
     color: 'white'

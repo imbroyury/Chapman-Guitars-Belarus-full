@@ -17,14 +17,8 @@ import 'react-quill/dist/quill.snow.css';
 import { Spinner, ErrorSnackbar, FileInput } from '../components';
 
 const useStyles = makeStyles({
-  paper: {
-    padding: '20px',
-  },
   card: {
     margin: '10px',
-  },
-  img: {
-    maxWidth: '300px',
   },
   reloadButton: {
     color: 'white'

@@ -17,9 +17,6 @@ import { Remount } from '../HOC/Remount';
 import { ErrorSnackbar, Spinner } from '../components/index.js';
 
 const useStyles = makeStyles({
-  paper: {
-    padding: '20px',
-  },
   card: {
     margin: '10px',
   },
