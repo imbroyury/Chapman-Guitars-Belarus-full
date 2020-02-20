@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Button,
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
@@ -19,28 +20,36 @@ const useStyles = makeStyles(theme => ({
   snackbarError: {
     backgroundColor: theme.palette.error.dark,
   },
+  actionButton: {
+    color: 'white'
+  }
 }));
 
 const ErrorSnackbar = (props) => {
   const classes = useStyles();
+  const { open, errorMessage, actionLabel, actionHandler } = props;
+
+  const renderAction = () => (actionLabel && actionHandler)
+    ? <Button onClick={actionHandler} size="small" className={classes.actionButton}>{actionLabel}</Button>
+    : null;
 
   return (<Snackbar
     anchorOrigin={{
       vertical: 'bottom',
       horizontal: 'left',
     }}
-    open={props.open}
+    open={open}
   >
     <SnackbarContent
       className={classes.snackbarError}
       message={
         <span className={classes.snackbarMessage}>
           <ErrorIcon className={classes.snackbarIcon}/>
-          {props.errorMessage}
+          {errorMessage}
           {'.\nPlease try again later'}
         </span>
       }
-      action={props.action}
+      action={renderAction()}
     />
   </Snackbar>);
 };
@@ -48,7 +57,8 @@ const ErrorSnackbar = (props) => {
 ErrorSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string.isRequired,
-  action: PropTypes.node,
+  actionLabel: PropTypes.string,
+  actionHandler: PropTypes.func,
 };
 
 export default ErrorSnackbar;

@@ -28,9 +28,6 @@ const useStyles = makeStyles(theme => ({
   img: {
     maxWidth: '300px',
   },
-  reloadButton: {
-    color: 'white'
-  },
   descriptonHTML: {
     fontFamily: theme.typography.fontFamily
   }
@@ -165,9 +162,8 @@ const Artists = (props) => {
     open
     errorMessage={errorMessage}
     key={errorMessage}
-    action={
-      <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
-    }
+    actionLabel='Reload'
+    actionHandler={reloadHandler}
   />);
 
   return (<Grid container>

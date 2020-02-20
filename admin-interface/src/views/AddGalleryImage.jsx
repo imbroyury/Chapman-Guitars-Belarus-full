@@ -18,9 +18,6 @@ const useStyles = makeStyles({
   card: {
     margin: '10px',
   },
-  reloadButton: {
-    color: 'white'
-  }
 });
 
 const AddGalleryImage = () => {
@@ -93,9 +90,8 @@ const AddGalleryImage = () => {
     open
     errorMessage={errorMessage}
     key={errorMessage}
-    action={
-      <Button onClick={uploadImage} size="small" className={classes.reloadButton}>Retry</Button>
-    }
+    actionLabel='Retry'
+    actionHandler={uploadImage}
   />);
 
   return (<Grid container>

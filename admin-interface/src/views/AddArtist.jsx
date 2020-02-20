@@ -20,9 +20,6 @@ const useStyles = makeStyles({
   card: {
     margin: '10px',
   },
-  reloadButton: {
-    color: 'white'
-  }
 });
 
 const AddArtist = () => {
@@ -89,9 +86,8 @@ const AddArtist = () => {
     open
     errorMessage={errorMessage}
     key={errorMessage}
-    action={
-      <Button onClick={addArtist} size="small" className={classes.reloadButton}>Retry</Button>
-    }
+    actionLabel='Retry'
+    actionHandler={addArtist}
   />);
 
   const renderAddArtistForm = () => <Card className={classes.card}>

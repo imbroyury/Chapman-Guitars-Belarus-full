@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import {
@@ -20,9 +21,6 @@ const useStyles = makeStyles({
   card: {
     margin: '10px',
   },
-  reloadButton: {
-    color: 'white'
-  }
 });
 
 const GuitarSeries = (props) => {
@@ -155,9 +153,8 @@ const GuitarSeries = (props) => {
     open
     errorMessage={errorMessage}
     key={errorMessage}
-    action={
-      <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
-    }
+    actionLabel='Reload'
+    actionHandler={reloadHandler}
   />);
 
   return (<Grid container>
@@ -165,6 +162,10 @@ const GuitarSeries = (props) => {
     {requestErrors.map(error => renderErrorMessage(error.message))}
     {series.map(renderSeries)}
   </Grid>);
+};
+
+GuitarSeries.propTypes = {
+  remount: PropTypes.func,
 };
 
 export default Remount(GuitarSeries);

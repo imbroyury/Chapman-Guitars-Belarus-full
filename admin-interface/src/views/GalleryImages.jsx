@@ -23,9 +23,6 @@ const useStyles = makeStyles({
   img: {
     maxWidth: '300px',
   },
-  reloadButton: {
-    color: 'white'
-  }
 });
 
 const GalleryImages = (props) => {
@@ -112,9 +109,8 @@ const GalleryImages = (props) => {
     open
     errorMessage={errorMessage}
     key={errorMessage}
-    action={
-      <Button onClick={reloadHandler} size="small" className={classes.reloadButton}>Reload</Button>
-    }
+    actionLabel='Reload'
+    actionHandler={reloadHandler}
   />);
 
   return (<Grid container>
