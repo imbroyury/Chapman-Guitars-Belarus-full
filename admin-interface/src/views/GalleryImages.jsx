@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HTTP_URL } from '../shared/hosts.js';
-import { Redirect } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
 import { ErrorSnackbar, Spinner, FileInput } from '../components/index.js';
 
@@ -31,7 +30,7 @@ const useStyles = makeStyles({
   }
 });
 
-const MainGallery = (props) => {
+const GalleryImages = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
@@ -39,16 +38,9 @@ const MainGallery = (props) => {
   const scheduleRefetch = () => setShouldRefetch(true);
   // cache fetched images for smooth re-render
   const [images, setImages] = useState([]);
-  // input type='file'
-  const [fileList, setFileList] = useState(null);
-  const [fileInputKey, setFileInputKey] = useState(Math.random());
-  const handleChangeFileList = (e) => setFileList(e.target.files);
-  const rerenderFileInput = () => setFileInputKey(Math.random());
 
   const resetAfterFetch = () => {
     setShouldRefetch(false);
-    setFileList(null);
-    rerenderFileInput();
   };
 
   const imagesRequestState = useAsync(async () => {
@@ -57,19 +49,6 @@ const MainGallery = (props) => {
     setImages(images);
     return images;
   }, [shouldRefetch]);
-
-  const [uploadImageState, uploadImage] = useAsyncFn(async () => {
-    const formData = new FormData();
-    const order = Math.max(...images.map(image => image.order), -1) + 1;
-    formData.append('image', fileList[0]);
-    formData.append('order', order);
-    const { data: uploadResult } = await axios.put(
-      '/gallery-image',
-      formData,
-    );
-    scheduleRefetch();
-    return uploadResult;
-  }, [fileList]);
 
   const [deleteImageState, deleteImage] = useAsyncFn(async (id) => {
     const { data: deleteResult } = await axios.delete(
@@ -91,7 +70,6 @@ const MainGallery = (props) => {
 
   const requestStates = [
     imagesRequestState,
-    uploadImageState,
     deleteImageState,
     changeImageOrderState,
   ];
@@ -105,8 +83,6 @@ const MainGallery = (props) => {
   const hasSomeRequestErred = requestErrors.length > 0;
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
-
-  const isUploadDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled;
 
   const renderImage = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
@@ -134,26 +110,6 @@ const MainGallery = (props) => {
     </CardActions>
   </Card>);
 
-  const renderUploadInput = () => <>
-    <FileInput
-      label="Select image to upload"
-      onChange={handleChangeFileList}
-      disabled={isInteractionDisabled}
-      fileList={fileList}
-      key={fileInputKey}
-    />
-    <Grid container>
-      <Button
-        variant="contained"
-        onClick={uploadImage}
-        color="primary"
-        disabled={isUploadDisabled}
-      >
-      Upload
-      </Button>
-    </Grid>
-  </>;
-
   const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
     open
     errorMessage={errorMessage}
@@ -164,11 +120,10 @@ const MainGallery = (props) => {
   />);
 
   return (<Grid container>
+    {images.map(renderImage)}
     {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(error => renderErrorMessage(error.message))}
-    {renderUploadInput()}
-    {images.map(renderImage)}
   </Grid>);
 };
 
-export default Remount(MainGallery);
+export default Remount(GalleryImages);

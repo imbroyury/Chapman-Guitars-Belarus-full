@@ -13,14 +13,15 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MainGallery from './views/MainGallery';
+import GalleryImages from './views/GalleryImages';
+import AddGalleryImage from './views/AddGalleryImage';
 import Artists from './views/Artists';
 import AddArtist from './views/AddArtist';
 import Login from './views/Login';
 import Register from './views/Register';
 import GuitarSeries from './views/GuitarSeries';
 import AddGuitarSeries from './views/AddGuitarSeries';
-import AuthService from './AuthService';
+// import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
 
@@ -51,9 +52,14 @@ const routes = {
   ],
   auth: [
     {
-      View: MainGallery,
-      path: '/gallery',
-      linkLabel: 'Gallery',
+      View: GalleryImages,
+      path: '/gallery-images',
+      linkLabel: 'Gallery images',
+    },
+    {
+      View: AddGalleryImage,
+      path: '/add-gallery-image',
+      linkLabel: 'Add gallery image',
     },
     {
       View: Artists,
