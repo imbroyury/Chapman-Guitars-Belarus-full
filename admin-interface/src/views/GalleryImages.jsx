@@ -94,7 +94,7 @@ const GalleryImages = (props) => {
     <CardContent>
       <Typography>{`Order: ${image.order}`}</Typography>
     </CardContent>
-    <img src={getImageUrl(image.Image.name)} className={classes.img} />
+    <img alt='' src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>
       <Button
         variant="contained"
@@ -117,7 +117,7 @@ const GalleryImages = (props) => {
         onChange={editImageProperty(image.id)}
       />
     </CardContent>
-    <img src={getImageUrl(image.Image.name)} className={classes.img} />
+    <img alt='' src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>
       <Button
         variant="contained"

@@ -7,6 +7,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import {
+  Divider,
   Drawer,
   List,
   ListItem,
@@ -41,19 +42,19 @@ const useStyles = makeStyles({
 
 const routes = {
   preAuth: [
-    {
+    [{
       View: Login,
       path: '/login',
       linkLabel: 'Log in',
-    },
-    {
+    }],
+    [{
       View: Register,
       path: '/register',
       linkLabel: 'Register',
-    },
+    }],
   ],
   auth: [
-    {
+    [{
       View: GalleryImages,
       path: '/gallery-images',
       linkLabel: 'Gallery Images',
@@ -62,8 +63,8 @@ const routes = {
       View: AddGalleryImage,
       path: '/add-gallery-image',
       linkLabel: 'Add Gallery Image',
-    },
-    {
+    }],
+    [{
       View: Artists,
       path: '/artists',
       linkLabel: 'Artists',
@@ -72,8 +73,8 @@ const routes = {
       View: AddArtist,
       path: '/add-artist',
       linkLabel: 'Add artist',
-    },
-    {
+    }],
+    [{
       View: GuitarSeries,
       path: '/guitar-series',
       linkLabel: 'Guitar Series'
@@ -82,16 +83,16 @@ const routes = {
       View: AddGuitarSeries,
       path: '/add-guitar-series',
       linkLabel: 'Add Guitar Series'
-    },
-    {
+    }],
+    [{
       View: Guitars,
       path: '/guitars',
       linkLabel: 'Guitars'
-    },
-    {
+    }],
+    [{
       View: AddGuitarColor,
       path: '/add-guitar-color/:guitarId',
-    }
+    }]
   ],
 };
 
@@ -110,6 +111,28 @@ const Root = () => {
   //   }
   // }, [isUserLoggedIn])
 
+  const renderLinkToRoute = route => {
+    const { linkLabel, path } = route;
+    // don't render link if there is no link label
+    return linkLabel
+      ? (<ListItem button component={NavLink} to={path} key={path} activeClassName="Mui-selected">
+        <ListItemText>{linkLabel}</ListItemText>
+      </ListItem>)
+      : null;
+  };
+
+  const renderLinkToRouteList = (linkList, index) =>
+    <React.Fragment key={index}>
+      {linkList.map(renderLinkToRoute)}
+      <Divider />
+    </React.Fragment>;
+
+  const renderRoute = route => (
+    <Route path={route.path} key={route.path}>
+      <route.View isUserLoggedIn={isUserLoggedIn} loginUser={loginUser} />
+    </Route>
+  );
+
   return (<Router>
     <Drawer
       variant="permanent"
@@ -118,28 +141,12 @@ const Root = () => {
       classes={{paper: classes.drawerPaper}}
     >
       <List>
-        {
-          (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => {
-            const { linkLabel, path } = route;
-            // don't render link if there is no link label
-            return linkLabel ? (
-              <ListItem button component={NavLink} to={path} key={path} activeClassName="Mui-selected">
-                <ListItemText>{linkLabel}</ListItemText>
-              </ListItem>
-            ) : null;
-          })
-        }
+        {(isUserLoggedIn ? routes.auth : routes.preAuth).map(renderLinkToRouteList)}
       </List>
     </Drawer>
     <main className={classes.view}>
       <Switch>
-        {
-          [...routes.auth, ...routes.preAuth].map(route => (
-            <Route path={route.path} key={route.path}>
-              <route.View isUserLoggedIn={isUserLoggedIn} loginUser={loginUser} />
-            </Route>
-          ))
-        }
+        {[...routes.auth, ...routes.preAuth].flat().map(renderRoute)}
         <Route path="*">
           404
         </Route>

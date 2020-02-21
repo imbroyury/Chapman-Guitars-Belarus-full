@@ -12,6 +12,8 @@ import {
   Button,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
@@ -23,6 +25,9 @@ import getImageUrl from '../helpers/getImageUrl';
 const useStyles = makeStyles({
   card: {
     margin: '1rem',
+  },
+  textField: {
+    width: '18rem'
   },
   colorCard: {
     margin: '1rem',
@@ -136,13 +141,13 @@ const Guitars = (props) => {
     const guitar = guitarColor.guitarImage.name;
     const tab = guitarColor.tabImage.name;
     const dot = guitarColor.dotImage.name;
-    return (<Card key={guitar} className={classes.colorCard}>
+    return (<Card key={guitar} className={classes.colorCard} raised>
       <Grid>
-        <img src={getImageUrl(tab)} className={classes.tabImage} />
-        <img src={getImageUrl(dot)} className={classes.dotImage} />
+        <img alt='' src={getImageUrl(tab)} className={classes.tabImage} />
+        <img alt='' src={getImageUrl(dot)} className={classes.dotImage} />
       </Grid>
       <Grid>
-        <img src={getImageUrl(guitar)} className={classes.guitarImg} />
+        <img alt='' src={getImageUrl(guitar)} className={classes.guitarImg} />
       </Grid>
     </Card>);
   };
@@ -157,27 +162,36 @@ const Guitars = (props) => {
         value={guitar[property.name]}
         type={property.type}
         onChange={editGuitarProperty(guitar.id)}
+        className={classes.textField}
       />
     </Grid>;
 
   const renderEditMode = (guitar) => {
     const currentSeries = series.find(series => series.id === guitar.seriesId);
 
-    const renderSeriesSelect = () => <Select
-      name="seriesId"
-      value={currentSeries.id}
-      onChange={editGuitarProperty(guitar.id)}
-    >
-      {series.map(
-        currentSeries =>
-          <MenuItem
-            value={currentSeries.id}
-            key={currentSeries.id}
-          >
-            {currentSeries.name}
-          </MenuItem>
-      )}
-    </Select>;
+    const renderSeriesSelect = () => {
+      const labelId = `select-${guitar.id}`;
+
+      return (<FormControl className={classes.formControl}>
+        <InputLabel id={labelId}>Series</InputLabel>
+        <Select
+          name="seriesId"
+          value={currentSeries.id}
+          onChange={editGuitarProperty(guitar.id)}
+          labelId={labelId}
+        >
+          {series.map(
+            currentSeries =>
+              <MenuItem
+                value={currentSeries.id}
+                key={currentSeries.id}
+              >
+                {currentSeries.name}
+              </MenuItem>
+          )}
+        </Select>
+      </FormControl>);
+    };
 
     return (<Card className={classes.card} key={guitar.id}>
       <CardContent>

@@ -111,7 +111,7 @@ const Artists = (props) => {
         onChange={handleEditArtistDescription(artist.id)}
         readOnly={isInteractionDisabled}
       />
-      <img src={getImageUrl(artist.photo.name)} className={classes.img} />
+      <img alt='' src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
       <Button
@@ -138,7 +138,7 @@ const Artists = (props) => {
       <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
       <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}} className={classes.descriptonHTML}></div>
-      <img src={getImageUrl(artist.photo.name)} className={classes.img} />
+      <img alt='' src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
       <Button
