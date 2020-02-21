@@ -21,11 +21,25 @@ import getImageUrl from '../helpers/getImageUrl';
 
 const useStyles = makeStyles({
   card: {
-    margin: '10px',
+    margin: '1rem',
   },
-  img: {
-    maxWidth: '100px',
+  colorCard: {
+    margin: '1rem',
+    padding: '0.5rem',
+    maxWidth: '9rem',
   },
+  guitarImg: {
+    maxWidth: '6rem',
+  },
+  tabImage: {
+    width: '5rem',
+    borderRadius: '1rem',
+  },
+  dotImage: {
+    width: '2rem',
+    height: '2rem',
+    borderRadius: '50%',
+  }
 });
 
 const properties = [
@@ -67,8 +81,6 @@ const Guitars = (props) => {
     const { data: guitarsGroupedBySeries } = await axios.get('/guitars');
     const guitars = guitarsGroupedBySeries.flatMap(series => series.Guitars);
     const series = guitarsGroupedBySeries.map(series => ({ id: series.id, name: series.name }));
-    console.log(guitars);
-    console.log(series);
     resetAfterFetch();
     setSeries(series);
     setInitialGuitars(guitars);
@@ -123,14 +135,18 @@ const Guitars = (props) => {
     const guitar = guitarColor.guitarImage.name;
     const tab = guitarColor.tabImage.name;
     const dot = guitarColor.dotImage.name;
-    return (<Grid key={guitar}>
-      <img src={getImageUrl(guitar)} className={classes.img} />
-      <img src={getImageUrl(tab)} className={classes.img} />
-      <img src={getImageUrl(dot)} className={classes.img} />
-    </Grid>);
+    return (<Card key={guitar} className={classes.colorCard}>
+      <Grid>
+        <img src={getImageUrl(tab)} className={classes.tabImage} />
+        <img src={getImageUrl(dot)} className={classes.dotImage} />
+      </Grid>
+      <Grid>
+        <img src={getImageUrl(guitar)} className={classes.guitarImg} />
+      </Grid>
+    </Card>);
   };
 
-  const renderGuitarColors = (guitarColors) => guitarColors.map(renderGuitarColor);
+  const renderGuitarColors = (guitarColors) => <Grid container>{guitarColors.map(renderGuitarColor)}</Grid>;
 
   const renderPropertyEditMode = (guitar, property) =>
     <Grid container key={property.name}>
