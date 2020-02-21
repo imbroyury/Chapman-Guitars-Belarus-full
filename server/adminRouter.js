@@ -146,7 +146,7 @@ router.delete('/guitar-series', async (req, res) => {
 
 router.get('/guitars', async (req, res) => {
   try {
-    const guitars = await DBService.getAllGuitars();
+    const guitars = await DBService.getAllGuitarsGroupedBySeries();
     res.send(guitars);
   } catch (e) {
     console.log(e);

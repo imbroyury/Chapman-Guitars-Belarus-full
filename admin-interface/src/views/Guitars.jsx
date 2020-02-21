@@ -10,6 +10,8 @@ import {
   CardContent,
   CardActions,
   Button,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../HOC/Remount';
@@ -55,21 +57,18 @@ const Guitars = (props) => {
   ] = useEditableCollection();
 
   const [series, setSeries] = useState([]);
-  console.log(series);
-  const guitarsRequestState = useAsync(async () => {
-    if (!shouldFetch) return;
-    const { data: guitars } = await axios.get('/guitars');
-    resetAfterFetch();
-    setInitialGuitars(guitars);
-    return guitars;
-  }, [shouldFetch]);
 
-  const seriesRequestState = useAsync(async () => {
+  const guitarsGroupedBySeriesRequestState = useAsync(async () => {
     if (!shouldFetch) return;
-    const { data: series } = await axios.get('/all-guitar-series');
+    const { data: guitarsGroupedBySeries } = await axios.get('/guitars');
+    const guitars = guitarsGroupedBySeries.flatMap(series => series.Guitars);
+    const series = guitarsGroupedBySeries.map(series => ({ id: series.id, name: series.name }));
+    console.log(guitars);
+    console.log(series);
     resetAfterFetch();
     setSeries(series);
-    return series;
+    setInitialGuitars(guitars);
+    return guitarsGroupedBySeries;
   }, [shouldFetch]);
 
   const [saveGuitarState, saveGuitar] = useAsyncFn(async (id) => {
@@ -101,8 +100,7 @@ const Guitars = (props) => {
   };
 
   const requestStates = [
-    seriesRequestState,
-    guitarsRequestState,
+    guitarsGroupedBySeriesRequestState,
     saveGuitarState,
     deleteGuitarState,
   ];
@@ -134,49 +132,76 @@ const Guitars = (props) => {
       />
     </Grid>;
 
-  const renderEditMode = (guitar) => (<Card className={classes.card} key={guitar.id}>
-    <CardContent>
-      {properties.map(property => renderPropertyEditMode(guitar, property))}
-      <Typography>Colors: </Typography>
-    </CardContent>
-    <CardActions>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleSaveGuitar(guitar.id)}
-        disabled={isInteractionDisabled}
-      >
-        Save
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => deleteGuitar(guitar.id)}
-        disabled={isInteractionDisabled}
-      >
-        Delete
-      </Button>
-    </CardActions>
-  </Card>);
+  const renderEditMode = (guitar) => {
+    const currentSeries = series.find(series => series.id === guitar.seriesId);
+
+    const renderSeriesSelect = () => <Select
+      name="seriesId"
+      value={currentSeries.id}
+      onChange={editGuitarProperty(guitar.id)}
+    >
+      {series.map(
+        currentSeries =>
+          <MenuItem
+            value={currentSeries.id}
+            key={currentSeries.id}
+          >
+            {currentSeries.name}
+          </MenuItem>
+      )}
+    </Select>;
+
+    return (<Card className={classes.card} key={guitar.id}>
+      <CardContent>
+        {properties.map(property => renderPropertyEditMode(guitar, property))}
+        {renderSeriesSelect()}
+        <Typography>Colors: </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleSaveGuitar(guitar.id)}
+          disabled={isInteractionDisabled}
+        >
+          Save
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => deleteGuitar(guitar.id)}
+          disabled={isInteractionDisabled}
+        >
+          Delete
+        </Button>
+      </CardActions>
+    </Card>);
+  };
 
   const renderPropertyDisplayMode = (guitar, property) =>
     <Typography key={property.name}>{`${property.label}: ${guitar[property.name]}`}</Typography>;
 
-  const renderDisplayMode = (guitar) => (<Card className={classes.card} key={guitar.id}>
-    <CardContent>
-      {properties.map(property => renderPropertyDisplayMode(guitar, property))}
-      <Typography>Colors: </Typography>
-    </CardContent>
-    <CardActions>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setGuitarEditModeOn(guitar.id)} disabled={isInteractionDisabled}
-      >
-        Edit
-      </Button>
-    </CardActions>
-  </Card>);
+  const renderDisplayMode = (guitar) => {
+    const currentSeries = series.find(series => series.id === guitar.seriesId);
+
+    return (<Card className={classes.card} key={guitar.id}>
+      <CardContent>
+        {properties.map(property => renderPropertyDisplayMode(guitar, property))}
+        <Typography>{`Series: ${currentSeries.name}`}</Typography>
+        <Typography>Colors: </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setGuitarEditModeOn(guitar.id)} disabled={isInteractionDisabled}
+        >
+          Edit
+        </Button>
+      </CardActions>
+    </Card>);
+  };
+
 
   const renderGuitar = (guitar) => guitar.isEditMode ?
     renderEditMode(guitar.edited) :
