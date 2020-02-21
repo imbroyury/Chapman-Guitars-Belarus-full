@@ -17,10 +17,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../HOC/Remount';
 import useEditableCollection from '../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar } from '../components';
+import getImageUrl from '../helpers/getImageUrl';
 
 const useStyles = makeStyles({
   card: {
     margin: '10px',
+  },
+  img: {
+    maxWidth: '100px',
   },
 });
 
@@ -115,11 +119,18 @@ const Guitars = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const renderGuitarColor = guitarColor => (<Card className={classes.card} key={guitarColor.id}>
-    <CardContent>
-      <Typography>{`Id: ${guitarColor.id}`}</Typography>
-    </CardContent>
-  </Card>);
+  const renderGuitarColor = guitarColor => {
+    const guitar = guitarColor.guitarImage.name;
+    const tab = guitarColor.tabImage.name;
+    const dot = guitarColor.dotImage.name;
+    return (<Grid key={guitar}>
+      <img src={getImageUrl(guitar)} className={classes.img} />
+      <img src={getImageUrl(tab)} className={classes.img} />
+      <img src={getImageUrl(dot)} className={classes.img} />
+    </Grid>);
+  };
+
+  const renderGuitarColors = (guitarColors) => guitarColors.map(renderGuitarColor);
 
   const renderPropertyEditMode = (guitar, property) =>
     <Grid container key={property.name}>
@@ -156,6 +167,7 @@ const Guitars = (props) => {
         {properties.map(property => renderPropertyEditMode(guitar, property))}
         {renderSeriesSelect()}
         <Typography>Colors: </Typography>
+        {renderGuitarColors(guitar.GuitarColors)}
       </CardContent>
       <CardActions>
         <Button
@@ -190,6 +202,7 @@ const Guitars = (props) => {
         <Typography>{`Series: ${currentSeries.name}`}</Typography>
         <Typography>Colors: </Typography>
       </CardContent>
+      {renderGuitarColors(guitar.GuitarColors)}
       <CardActions>
         <Button
           variant="contained"

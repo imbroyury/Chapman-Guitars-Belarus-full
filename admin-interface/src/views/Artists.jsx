@@ -12,12 +12,12 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { HTTP_URL } from '../shared/hosts.js';
 import { Remount } from '../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import useEditableCollection from '../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar } from '../components';
+import getImageUrl from '../helpers/getImageUrl.js';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -111,7 +111,7 @@ const Artists = (props) => {
         onChange={handleEditArtistDescription(artist.id)}
         readOnly={isInteractionDisabled}
       />
-      <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
+      <img src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
       <Button
@@ -138,7 +138,7 @@ const Artists = (props) => {
       <Typography>{`Order: ${artist.order}`}</Typography>
       <Typography>{`Name: ${artist.name}`}</Typography>
       <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}} className={classes.descriptonHTML}></div>
-      <img src={`${HTTP_URL}/${artist.photo.name}`} className={classes.img} />
+      <img src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
       <Button

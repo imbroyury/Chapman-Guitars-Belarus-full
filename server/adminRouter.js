@@ -17,7 +17,6 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-
 router.post('/login', async (req, res) => {
   res.status(500).send();
 });

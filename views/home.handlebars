@@ -3,7 +3,8 @@
     {{>header}}
     <section class="main-section">
         {{#each images}}
-        <div class="image-item {{#unless @index}}current-image{{/unless}}" style="background-image: url({{this.src}})">
+        <div class="image-item {{#unless @index}}current-image{{/unless}}"
+            style="background-image: url(/uploads/{{this.src}})">
         </div>
         {{/each}}
         <div class="main-page-message">

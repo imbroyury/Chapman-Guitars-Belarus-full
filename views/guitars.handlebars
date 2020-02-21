@@ -16,13 +16,14 @@
                 </a>
                 <div class="circle-wrap">
                     {{#each this.colors}}
-                    <img class="color-circle {{#unless @index}}current-color-circle{{/unless}}" src="/{{this.dotImage}}"
-                        alt="color-ico" data-circle-tag="{{@index}}">
+                    <img class="color-circle {{#unless @index}}current-color-circle{{/unless}}"
+                        src="/uploads/{{this.dotImage}}" alt="color-ico" data-circle-tag="{{@index}}">
                     {{/each}}
                 </div>
                 {{#each this.colors}}
-                <img class="guitar-image {{#unless @index}}current-guitar-image{{/unless}}" src="/{{this.guitarImage}}"
-                    alt="{{../this.name}}-{{@index}}" data-guitar-image="{{../this.name}}-{{@index}}">
+                <img class="guitar-image {{#unless @index}}current-guitar-image{{/unless}}"
+                    src="/uploads/{{this.guitarImage}}" alt="{{../this.name}}-{{@index}}"
+                    data-guitar-image="{{../this.name}}-{{@index}}">
                 {{/each}}
             </div>
             {{/each}}

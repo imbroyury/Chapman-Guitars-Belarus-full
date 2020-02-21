@@ -12,10 +12,10 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { HTTP_URL } from '../shared/hosts.js';
 import { Remount } from '../HOC/Remount';
 import { ErrorSnackbar, Spinner } from '../components/index.js';
 import useEditableCollection from '../hooks/useEditableCollection.js';
+import getImageUrl from '../helpers/getImageUrl.js';
 
 const useStyles = makeStyles({
   card: {
@@ -94,7 +94,7 @@ const GalleryImages = (props) => {
     <CardContent>
       <Typography>{`Order: ${image.order}`}</Typography>
     </CardContent>
-    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img} />
+    <img src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>
       <Button
         variant="contained"
@@ -117,7 +117,7 @@ const GalleryImages = (props) => {
         onChange={editImageProperty(image.id)}
       />
     </CardContent>
-    <img src={`${HTTP_URL}/${image.Image.name}`} className={classes.img} />
+    <img src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>
       <Button
         variant="contained"
