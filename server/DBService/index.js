@@ -287,3 +287,14 @@ export const editGuitarSeries = async (id, name, uri, order) => {
   guitarSeries.order = order;
   await guitarSeries.save();
 };
+
+export const putGuitarColor = async (guitarId, order, name, tabImageId, dotImageId, guitarImageId) => {
+  await GuitarColor.create({
+    guitarId,
+    order,
+    name,
+    tabImageId,
+    dotImageId,
+    guitarImageId,
+  });
+};

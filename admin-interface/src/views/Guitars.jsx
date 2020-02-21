@@ -14,6 +14,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 import { Remount } from '../HOC/Remount';
 import useEditableCollection from '../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar } from '../components';
@@ -201,6 +202,15 @@ const Guitars = (props) => {
           disabled={isInteractionDisabled}
         >
           Delete
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          component={NavLink}
+          to={`/add-guitar-color/${guitar.id}`}
+          disabled={isInteractionDisabled}
+        >
+          Add color
         </Button>
       </CardActions>
     </Card>);

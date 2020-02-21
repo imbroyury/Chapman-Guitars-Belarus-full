@@ -22,6 +22,7 @@ import Register from './views/Register';
 import GuitarSeries from './views/GuitarSeries';
 import AddGuitarSeries from './views/AddGuitarSeries';
 import Guitars from './views/Guitars';
+import AddGuitarColor from './views/AddGuitarColor';
 // import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
@@ -87,6 +88,10 @@ const routes = {
       path: '/guitars',
       linkLabel: 'Guitars'
     },
+    {
+      View: AddGuitarColor,
+      path: '/add-guitar-color/:guitarId',
+    }
   ],
 };
 
@@ -114,11 +119,15 @@ const Root = () => {
     >
       <List>
         {
-          (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => (
-            <ListItem button component={NavLink} to={route.path} key={route.path} activeClassName="Mui-selected">
-              <ListItemText>{route.linkLabel}</ListItemText>
-            </ListItem>
-          ))
+          (isUserLoggedIn ? routes.auth : routes.preAuth).map(route => {
+            const { linkLabel, path } = route;
+            // don't render link if there is no link label
+            return linkLabel ? (
+              <ListItem button component={NavLink} to={path} key={path} activeClassName="Mui-selected">
+                <ListItemText>{linkLabel}</ListItemText>
+              </ListItem>
+            ) : null;
+          })
         }
       </List>
     </Drawer>
