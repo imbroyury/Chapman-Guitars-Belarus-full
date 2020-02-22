@@ -5,22 +5,18 @@ import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
   Typography,
-  TextField,
   Card,
   CardContent,
   CardActions,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { Remount } from '../HOC/Remount';
-import useEditableCollection from '../hooks/useEditableCollection.js';
-import { Spinner, ErrorSnackbar } from '../components';
-import getImageUrl from '../helpers/getImageUrl';
+import { Remount } from '../../HOC/Remount';
+import useEditableCollection from '../../hooks/useEditableCollection.js';
+import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty, LabelledSelect } from '../../components';
+import getImageUrl from '../../helpers/getImageUrl';
+import { mainProperties, additionalProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -48,22 +44,6 @@ const useStyles = makeStyles({
   }
 });
 
-const properties = [
-  { label: 'Name', name: 'name', type: 'string' },
-  { label: 'Uri', name: 'uri', type: 'string' },
-  { label: 'Order', name: 'order', type: 'number' },
-  { label: 'Tuners', name: 'tuners', type: 'string' },
-  { label: 'Neck', name: 'neck', type: 'string' },
-  { label: 'Fretboard', name: 'fretboard', type: 'string' },
-  { label: 'Frets', name: 'frets', type: 'string' },
-  { label: 'Scale length', name: 'scaleLength', type: 'number' },
-  { label: 'Body', name: 'body', type: 'string' },
-  { label: 'Neck pickup', name: 'neckPickup', type: 'string' },
-  { label: 'Bridge pickup', name: 'bridgePickup', type: 'string' },
-  { label: 'Bridge', name: 'bridge', type: 'string' },
-  { label: 'Weight, g', name: 'weight', type: 'number' },
-];
-
 const Guitars = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
@@ -78,6 +58,7 @@ const Guitars = (props) => {
     setGuitarEditModeOff,
     editGuitarProperty,
     guitars,
+    getEditedGuitarPropertiesPayload,
   ] = useEditableCollection();
 
   const [series, setSeries] = useState([]);
@@ -94,14 +75,15 @@ const Guitars = (props) => {
   }, [shouldFetch]);
 
   const [saveGuitarState, saveGuitar] = useAsyncFn(async (id) => {
-    const guitar = guitars.find(series => series.id === id).edited;
-    const editedProperties = properties.reduce((acc, property) => {
-      acc[property.name] = guitar[property.name];
-      return acc;
-    }, {});
+    const propertiesPayload = getEditedGuitarPropertiesPayload(
+      id,
+      mainProperties,
+      additionalProperties,
+    );
+
     const { data: saveResult } = await axios.post(
       '/guitar',
-      { id, ...editedProperties, seriesId: guitar.seriesId },
+      { id, ...propertiesPayload },
     );
     scheduleRefetch();
     return saveResult;
@@ -155,47 +137,30 @@ const Guitars = (props) => {
   const renderGuitarColors = (guitarColors) => <Grid container>{guitarColors.map(renderGuitarColor)}</Grid>;
 
   const renderPropertyEditMode = (guitar, property) =>
-    <Grid container key={property.name}>
-      <TextField
-        label={property.label}
-        name={property.name}
-        value={guitar[property.name]}
-        type={property.type}
-        onChange={editGuitarProperty(guitar.id)}
-        className={classes.textField}
-      />
-    </Grid>;
+    <EditProperty
+      key={property.name}
+      item={guitar}
+      property={property}
+      onChange={editGuitarProperty(guitar.id)}
+      inputClassName={classes.textField}
+    />;
 
   const renderEditMode = (guitar) => {
     const currentSeries = series.find(series => series.id === guitar.seriesId);
 
     const renderSeriesSelect = () => {
-      const labelId = `select-${guitar.id}`;
-
-      return (<FormControl className={classes.formControl}>
-        <InputLabel id={labelId}>Series</InputLabel>
-        <Select
-          name="seriesId"
-          value={currentSeries.id}
-          onChange={editGuitarProperty(guitar.id)}
-          labelId={labelId}
-        >
-          {series.map(
-            currentSeries =>
-              <MenuItem
-                value={currentSeries.id}
-                key={currentSeries.id}
-              >
-                {currentSeries.name}
-              </MenuItem>
-          )}
-        </Select>
-      </FormControl>);
+      return (<LabelledSelect
+        options={series}
+        name="seriesId"
+        label="Series"
+        value={currentSeries.id}
+        onChange={editGuitarProperty(guitar.id)}
+        className={classes.input}
+      />);
     };
-
     return (<Card className={classes.card} key={guitar.id}>
       <CardContent>
-        {properties.map(property => renderPropertyEditMode(guitar, property))}
+        {mainProperties.map(property => renderPropertyEditMode(guitar, property))}
         {renderSeriesSelect()}
         <Typography>Colors: </Typography>
         {renderGuitarColors(guitar.GuitarColors)}
@@ -231,14 +196,18 @@ const Guitars = (props) => {
   };
 
   const renderPropertyDisplayMode = (guitar, property) =>
-    <Typography key={property.name}>{`${property.label}: ${guitar[property.name]}`}</Typography>;
+    <DisplayProperty
+      key={property.name}
+      item={guitar}
+      property={property}
+    />;
 
   const renderDisplayMode = (guitar) => {
     const currentSeries = series.find(series => series.id === guitar.seriesId);
 
     return (<Card className={classes.card} key={guitar.id}>
       <CardContent>
-        {properties.map(property => renderPropertyDisplayMode(guitar, property))}
+        {mainProperties.map(property => renderPropertyDisplayMode(guitar, property))}
         <Typography>{`Series: ${currentSeries.name}`}</Typography>
         <Typography>Colors: </Typography>
       </CardContent>

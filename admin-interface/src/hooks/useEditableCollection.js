@@ -57,12 +57,23 @@ const useEditableCollection = () => {
     setEditedItemState(id, afterEdit);
   };
 
+  const getEditedItemPropertiesPayload = (id, mainProperties, additionalProperties = []) => {
+    const properties = [...mainProperties, ...additionalProperties];
+    const item = collection.find(item => item.id === id);
+    const { edited } = item;
+    return properties.reduce((acc, property) => {
+      acc[property.name] = edited[property.name];
+      return acc;
+    }, {});
+  };
+
   return [
     setInitialCollection,
     setItemEditModeOn,
     setItemEditModeOff,
     editItemProperty,
     collection,
+    getEditedItemPropertiesPayload,
   ];
 };
 

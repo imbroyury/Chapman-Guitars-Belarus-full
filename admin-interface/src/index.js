@@ -16,13 +16,14 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import GalleryImages from './views/GalleryImages';
 import AddGalleryImage from './views/AddGalleryImage';
-import Artists from './views/Artists';
-import AddArtist from './views/AddArtist';
+import Artists from './views/Artists/Artists';
+import AddArtist from './views/Artists/AddArtist';
 import Login from './views/Login';
 import Register from './views/Register';
 import GuitarSeries from './views/GuitarSeries';
 import AddGuitarSeries from './views/AddGuitarSeries';
-import Guitars from './views/Guitars';
+import Guitars from './views/Guitars/Guitars';
+import AddGuitar from './views/Guitars/AddGuitar';
 import AddGuitarColor from './views/AddGuitarColor';
 // import AuthService from './AuthService';
 
@@ -88,6 +89,11 @@ const routes = {
       View: Guitars,
       path: '/guitars',
       linkLabel: 'Guitars'
+    },
+    {
+      View: AddGuitar,
+      path: '/add-guitar',
+      linkLabel: 'Add Guitar'
     }],
     [{
       View: AddGuitarColor,

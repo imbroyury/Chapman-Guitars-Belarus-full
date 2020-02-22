@@ -5,19 +5,19 @@ import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
   Typography,
-  TextField,
   Card,
   CardContent,
   CardActions,
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Remount } from '../HOC/Remount';
+import { Remount } from '../../HOC/Remount';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import useEditableCollection from '../hooks/useEditableCollection.js';
-import { Spinner, ErrorSnackbar } from '../components';
-import getImageUrl from '../helpers/getImageUrl.js';
+import useEditableCollection from '../../hooks/useEditableCollection.js';
+import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
+import getImageUrl from '../../helpers/getImageUrl.js';
+import { mainProperties, additionalProperties } from './properties';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -46,6 +46,7 @@ const Artists = (props) => {
     setArtistEditModeOff,
     editArtistProperty,
     artists,
+    getEditedArtistPropertiesPayload,
   ] = useEditableCollection();
 
   const handleEditArtistDescription = (id) => (content) => {
@@ -63,10 +64,14 @@ const Artists = (props) => {
   }, [shouldFetch]);
 
   const [saveArtistState, saveArtist] = useAsyncFn(async (id) => {
-    const { order, name, description } = artists.find(artist => artist.id === id).edited;
+    const propertiesPayload = getEditedArtistPropertiesPayload(
+      id,
+      mainProperties,
+      additionalProperties,
+    );
     const { data: saveResult } = await axios.post(
       '/artist',
-      { id, order, name, description },
+      { id, ...propertiesPayload },
     );
     scheduleRefetch();
     return saveResult;
@@ -102,10 +107,17 @@ const Artists = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
+  const renderPropertyEditMode = (artist, property) =>
+    <EditProperty
+      key={property.name}
+      item={artist}
+      property={property}
+      onChange={editArtistProperty(artist.id)}
+    />;
+
   const renderEditMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Grid container><TextField label='Order' name="order" type="number" value={artist.order} onChange={editArtistProperty(artist.id)}/></Grid>
-      <Grid container><TextField label='Name' name="name" value={artist.name} onChange={editArtistProperty(artist.id)}/></Grid>
+      {mainProperties.map(property => renderPropertyEditMode(artist, property))}
       <ReactQuill
         value={artist.description}
         onChange={handleEditArtistDescription(artist.id)}
@@ -133,10 +145,16 @@ const Artists = (props) => {
     </CardActions>
   </Card>);
 
+  const renderPropertyDisplayMode = (artist, property) =>
+    <DisplayProperty
+      key={property.name}
+      item={artist}
+      property={property}
+    />;
+
   const renderDisplayMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
-      <Typography>{`Order: ${artist.order}`}</Typography>
-      <Typography>{`Name: ${artist.name}`}</Typography>
+      {mainProperties.map(property => renderPropertyDisplayMode(artist, property))}
       <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}} className={classes.descriptonHTML}></div>
       <img alt='' src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
