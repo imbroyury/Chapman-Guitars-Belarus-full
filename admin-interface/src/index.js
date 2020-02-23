@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   NavLink,
+  Redirect,
 } from 'react-router-dom';
 import {
   Divider,
@@ -14,17 +15,8 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import GalleryImages from './views/GalleryImages/GalleryImages';
-import AddGalleryImage from './views/GalleryImages/AddGalleryImage';
-import Artists from './views/Artists/Artists';
-import AddArtist from './views/Artists/AddArtist';
-import Login from './views/Login';
-import Register from './views/Register';
-import GuitarSeries from './views/GuitarSeries/GuitarSeries';
-import AddGuitarSeries from './views/GuitarSeries/AddGuitarSeries';
-import Guitars from './views/Guitars/Guitars';
-import AddGuitar from './views/Guitars/AddGuitar';
-import AddGuitarColor from './views/GuitarColor/AddGuitarColor';
+import { routes } from './routes';
+import { ProvideAuth, useAuth } from './services/useAuth';
 // import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
@@ -41,81 +33,36 @@ const useStyles = makeStyles({
   },
 });
 
-const routes = {
-  preAuth: [
-    [{
-      View: Login,
-      path: '/login',
-      linkLabel: 'Log in',
-    }],
-    [{
-      View: Register,
-      path: '/register',
-      linkLabel: 'Register',
-    }],
-  ],
-  auth: [
-    [{
-      View: GalleryImages,
-      path: '/gallery-images',
-      linkLabel: 'Gallery Images',
-    },
-    {
-      View: AddGalleryImage,
-      path: '/add-gallery-image',
-      linkLabel: 'Add Gallery Image',
-    }],
-    [{
-      View: Artists,
-      path: '/artists',
-      linkLabel: 'Artists',
-    },
-    {
-      View: AddArtist,
-      path: '/add-artist',
-      linkLabel: 'Add artist',
-    }],
-    [{
-      View: GuitarSeries,
-      path: '/guitar-series',
-      linkLabel: 'Guitar Series'
-    },
-    {
-      View: AddGuitarSeries,
-      path: '/add-guitar-series',
-      linkLabel: 'Add Guitar Series'
-    }],
-    [{
-      View: Guitars,
-      path: '/guitars',
-      linkLabel: 'Guitars'
-    },
-    {
-      View: AddGuitar,
-      path: '/add-guitar',
-      linkLabel: 'Add Guitar'
-    }],
-    [{
-      View: AddGuitarColor,
-      path: '/add-guitar-color/:guitarId',
-    }]
-  ],
-};
+const PrivateRoute = ({ children, ...rest }) => {
+  // Get auth state and re-render anytime it changes
+  const auth = useAuth();
+  console.log('auth from PrivateRoute', auth);
+  const renderProp = () => auth.user.isAuthenticated
+    ? children
+    : (<Redirect
+      to={{
+        pathname: '/login',
+      }}
+    />);
 
-// const PAGE_TITLE = 'FileStorage';
+  return (
+    <Route
+      {...rest}
+      render={renderProp}
+    />
+  );
+};
 
 const Root = () => {
   const classes = useStyles();
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
-  const loginUser = () => setIsUserLoggedIn(true);
 
-  // useEffect(() => {
-  //   if (isUserLoggedIn) {
-  //     document.title = PAGE_TITLE + ' - ' + AuthService.getAuthData().login;
-  //   } else {
-  //     document.title = PAGE_TITLE;
-  //   }
-  // }, [isUserLoggedIn])
+  // Get auth state and re-render anytime it changes
+  const auth = useAuth();
+  useEffect(() => {
+    auth.checkToken();
+  }, []); // eslint-disable-line
+
+  console.log('auth from Root', auth);
 
   const renderLinkToRoute = route => {
     const { linkLabel, path } = route;
@@ -133,32 +80,42 @@ const Root = () => {
       <Divider />
     </React.Fragment>;
 
-  const renderRoute = route => (
+  const renderPreAuthRoute = route => (
     <Route path={route.path} key={route.path}>
-      <route.View isUserLoggedIn={isUserLoggedIn} loginUser={loginUser} />
+      <route.View />
     </Route>
   );
 
-  return (<Router>
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      className={classes.drawer}
-      classes={{paper: classes.drawerPaper}}
-    >
-      <List>
-        {(isUserLoggedIn ? routes.auth : routes.preAuth).map(renderLinkToRouteList)}
-      </List>
-    </Drawer>
-    <main className={classes.view}>
-      <Switch>
-        {[...routes.auth, ...routes.preAuth].flat().map(renderRoute)}
-        <Route path="*">
+  const renderRoute = route => (
+    <PrivateRoute path={route.path} key={route.path}>
+      <route.View />
+    </PrivateRoute>
+  );
+
+  return (
+    <ProvideAuth>
+      <Router>
+        <Drawer
+          variant="permanent"
+          anchor="left"
+          className={classes.drawer}
+          classes={{paper: classes.drawerPaper}}
+        >
+          <List>
+            {(auth.user.isAuthenticated ? routes.auth : routes.preAuth).map(renderLinkToRouteList)}
+          </List>
+        </Drawer>
+        <main className={classes.view}>
+          <Switch>
+            {routes.preAuth.flat().map(renderPreAuthRoute)}
+            {routes.auth.flat().map(renderRoute)}
+            <Route path="*">
           404
-        </Route>
-      </Switch>
-    </main>
-  </Router>);
+            </Route>
+          </Switch>
+        </main>
+      </Router>
+    </ProvideAuth>);
 };
 
-ReactDOM.render(<Root />, document.getElementById('root'));
+ReactDOM.render(<ProvideAuth><Root /></ProvideAuth>, document.getElementById('root'));

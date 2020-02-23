@@ -12,5 +12,5 @@ const getUrl = (protocol, host, port) => `${protocol}://${host}:${port}`;
 const getHTTPUrl = (host) => getUrl(HTTP_PROTOCOL, host, HTTP_PORT);
 
 export const HTTP_URL = isDevEnv
-    ? getHTTPUrl(LOCAL_HOST)
-    : getHTTPUrl(REMOTE_HOST);
+  ? getHTTPUrl(LOCAL_HOST)
+  : getHTTPUrl(REMOTE_HOST);

@@ -6,14 +6,12 @@ import {
   guitarSeriesRouter,
   guitarRouter,
   guitarColorRouter,
+  authRouter,
 } from './routers';
 
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
-  res.status(500).send();
-});
-
+router.use('/', authRouter);
 router.use('/', artistRouter);
 router.use('/', galleryImageRouter);
 router.use('/', guitarSeriesRouter);
