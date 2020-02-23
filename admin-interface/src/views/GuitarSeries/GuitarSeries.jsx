@@ -15,7 +15,8 @@ import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../../HOC/Remount';
 import useEditableCollection from '../../hooks/useEditableCollection.js';
-import { Spinner, ErrorSnackbar } from '../../components';
+import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
+import { mainProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -94,11 +95,19 @@ const GuitarSeries = (props) => {
     </CardContent>
   </Card>);
 
+
+  const renderPropertyEditMode = (guitarSeries, property) =>
+    <EditProperty
+      key={property.name}
+      item={guitarSeries}
+      property={property}
+      onChange={editSeriesProperty(guitarSeries.id)}
+      disabled={isInteractionDisabled}
+    />;
+
   const renderEditMode = (series) => (<Card className={classes.card} key={series.id}>
     <CardContent>
-      <Grid container><TextField label='Name' name="name" value={series.name} onChange={editSeriesProperty(series.id)}/></Grid>
-      <Grid container><TextField label='Uri' name="uri" value={series.uri} onChange={editSeriesProperty(series.id)}/></Grid>
-      <Grid container><TextField label='Order' name="order" type="number" value={series.order} onChange={editSeriesProperty(series.id)}/></Grid>
+      {mainProperties.map(property => renderPropertyEditMode(series, property))}
       <Typography>Guitars: </Typography>
       {series.Guitars.map(renderGuitar)}
       <Alert variant="outlined" severity="warning">
@@ -125,11 +134,17 @@ const GuitarSeries = (props) => {
     </CardActions>
   </Card>);
 
+
+  const renderPropertyDisplayMode = (series, property) =>
+    <DisplayProperty
+      key={property.name}
+      item={series}
+      property={property}
+    />;
+
   const renderDisplayMode = (series) => (<Card className={classes.card} key={series.id}>
     <CardContent>
-      <Typography>{`Name: ${series.name}`}</Typography>
-      <Typography>{`Uri: ${series.uri}`}</Typography>
-      <Typography>{`Order: ${series.order}`}</Typography>
+      {mainProperties.map(property => renderPropertyDisplayMode(series, property))}
       <Typography>Guitars: </Typography>
       {series.Guitars.map(renderGuitar)}
     </CardContent>
@@ -137,7 +152,8 @@ const GuitarSeries = (props) => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setSeriesEditModeOn(series.id)} disabled={isInteractionDisabled}
+        onClick={() => setSeriesEditModeOn(series.id)}
+        disabled={isInteractionDisabled}
       >
         Edit
       </Button>

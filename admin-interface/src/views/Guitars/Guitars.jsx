@@ -143,6 +143,7 @@ const Guitars = (props) => {
       property={property}
       onChange={editGuitarProperty(guitar.id)}
       inputClassName={classes.textField}
+      disabled={isInteractionDisabled}
     />;
 
   const renderEditMode = (guitar) => {
