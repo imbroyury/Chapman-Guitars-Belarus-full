@@ -141,18 +141,19 @@ const GalleryImages = (props) => {
     renderEditMode(image.edited) :
     renderDisplayMode(image.initial);
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Reload'
-    actionHandler={reloadHandler}
-  />);
+  const renderErrorMessage = (error) =>
+    (<ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Reload'
+      actionHandler={reloadHandler}
+    />);
 
   return (<Grid container>
     {images.map(renderImage)}
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
   </Grid>);
 };
 

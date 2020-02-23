@@ -64,11 +64,11 @@ const AddGuitar = () => {
 
   const isAddDisabled = isInteractionDisabled || !isGuitarValid;
 
-  const renderErrorMessage = (errorMessage) =>
+  const renderErrorMessage = (error) =>
     <ErrorSnackbar
       open
-      errorMessage={errorMessage}
-      key={errorMessage}
+      errorMessage={error.message}
+      key={error.message}
       actionLabel='Retry'
       actionHandler={addGuitar}
     />;
@@ -115,7 +115,7 @@ const AddGuitar = () => {
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {renderAddGuitarForm()}
     {shouldRedirect && <Redirect to="/guitars" />}
   </Grid>);

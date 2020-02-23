@@ -70,11 +70,11 @@ const AddArtist = () => {
       fileList={fileList}
     />;
 
-  const renderErrorMessage = (errorMessage) =>
+  const renderErrorMessage = (error) =>
     <ErrorSnackbar
       open
-      errorMessage={errorMessage}
-      key={errorMessage}
+      errorMessage={error.message}
+      key={error.message}
       actionLabel='Retry'
       actionHandler={addArtist}
     />;
@@ -106,7 +106,7 @@ const AddArtist = () => {
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {renderAddArtistForm()}
     {shouldRedirect && <Redirect to="/artists" />}
   </Grid>);

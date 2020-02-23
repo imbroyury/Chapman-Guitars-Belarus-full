@@ -230,17 +230,18 @@ const Guitars = (props) => {
     renderEditMode(guitar.edited) :
     renderDisplayMode(guitar.initial);
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Reload'
-    actionHandler={reloadHandler}
-  />);
+  const renderErrorMessage = (error) =>
+    <ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Reload'
+      actionHandler={reloadHandler}
+    />;
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {guitars.map(renderGuitar)}
   </Grid>);
 };

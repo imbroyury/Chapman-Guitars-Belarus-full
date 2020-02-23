@@ -162,17 +162,18 @@ const GuitarSeries = (props) => {
     renderEditMode(series.edited) :
     renderDisplayMode(series.initial);
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Reload'
-    actionHandler={reloadHandler}
-  />);
+  const renderErrorMessage = (error) =>
+    <ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Reload'
+      actionHandler={reloadHandler}
+    />;
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {series.map(renderSeries)}
   </Grid>);
 };

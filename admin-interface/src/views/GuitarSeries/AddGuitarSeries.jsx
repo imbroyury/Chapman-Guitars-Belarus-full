@@ -49,13 +49,14 @@ const AddGuitarSeries = () => {
 
   const isAddDisabled = isInteractionDisabled || !isSeriesValid;
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Retry'
-    actionHandler={addSeries}
-  />);
+  const renderErrorMessage = (error) =>
+    (<ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Retry'
+      actionHandler={addSeries}
+    />);
 
   const renderPropertyEditMode = (property) =>
     <EditProperty
@@ -84,7 +85,7 @@ const AddGuitarSeries = () => {
 
   return (<Grid container>
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {renderAddSeriesForm()}
     {shouldRedirect && <Redirect to="/guitar-series" />}
   </Grid>);

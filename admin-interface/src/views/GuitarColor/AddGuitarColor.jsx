@@ -135,18 +135,19 @@ const AddGuitarColor = () => {
     </CardActions>
   </Card>;
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Retry'
-    actionHandler={addColor}
-  />);
+  const renderErrorMessage = (error) =>
+    (<ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Retry'
+      actionHandler={addColor}
+    />);
 
   return (<Grid container>
     {renderAddImageForm()}
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {shouldRedirect && <Redirect to="/guitars" />}
   </Grid>);
 };

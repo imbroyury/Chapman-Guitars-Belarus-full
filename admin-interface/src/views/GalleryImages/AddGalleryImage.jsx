@@ -86,18 +86,19 @@ const AddGalleryImage = () => {
     </CardActions>
   </Card>;
 
-  const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
-    open
-    errorMessage={errorMessage}
-    key={errorMessage}
-    actionLabel='Retry'
-    actionHandler={uploadImage}
-  />);
+  const renderErrorMessage = (error) =>
+    <ErrorSnackbar
+      open
+      errorMessage={error.message}
+      key={error.message}
+      actionLabel='Retry'
+      actionHandler={uploadImage}
+    />;
 
   return (<Grid container>
     {renderAddImageForm()}
     {<Spinner open={isSomeRequestInProgress} />}
-    {requestErrors.map(error => renderErrorMessage(error.message))}
+    {requestErrors.map(renderErrorMessage)}
     {shouldRedirect && <Redirect to="/gallery-images" />}
   </Grid>);
 };
