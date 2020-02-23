@@ -65,6 +65,8 @@ const Login = () => {
         value={inputs[inputType.login]}
         onChange={handleInputChange}
         disabled={isInputDisabled}
+        error={inputErrors[inputType.login]}
+        helperText={inputConfig[inputType.login].message}
       />
     </Grid>
     <Grid container>
