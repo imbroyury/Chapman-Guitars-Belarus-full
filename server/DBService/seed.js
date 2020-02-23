@@ -104,11 +104,13 @@ export default async () => {
   await Artist.bulkCreate([{
     name: 'Rob Chapman',
     order: 1,
+    uri: 'rob-chapman',
     description: 'Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje, обозреватель для магазина Andertons Music.',
     photoId: images[4][0].id,
   }, {
     name: 'Rabea Massaad',
     order: 2,
+    uri: 'rabea-massaad',
     description: 'Рабеа - гитарист групп Dorje (#1 в рок чарте Великобритании в 2015 году) и Toska (#1 в мировом чартеBandcamp). Занимался музыкой с детских лет - в 8 лет он сел за барабанную установку, а в 15 взялся за гитару.Участвовал в разработке многих гитар Chapman.',
     photoId: images[4][1].id
   }]);

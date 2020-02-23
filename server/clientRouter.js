@@ -52,7 +52,7 @@ router.get('/guitars', async (req, res) => {
   res.render('guitars', { guitarSeries: vm, ...getActiveMenuItemConfig('guitars') });
 });
 
-router.get('/guitars/:series/:model', async (req, res) => {
+router.get('/guitars/:model', async (req, res) => {
   const { model } = req.params;
   const guitar = await DBService.getGuitarByUri(model);
 
@@ -62,14 +62,27 @@ router.get('/guitars/:series/:model', async (req, res) => {
   res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });
 });
 
+const mapArtistToViewModel = artist => ({
+  name: artist.name,
+  description: artist.description,
+  uri: artist.uri,
+  photo: artist.photo.name,
+});
+
 router.get('/artists', async (req, res) => {
   const artists = await DBService.getAllArtists();
-  const vm = artists.map(artist => ({
-    name: artist.name,
-    description: artist.description,
-    photo: artist.photo.name,
-  }));
+  const vm = artists.map(mapArtistToViewModel);
   res.render('artists', { artists: vm, ...getActiveMenuItemConfig('artists') });
+});
+
+router.get('/artists/:artist', async (req, res) => {
+  const { artist } = req.params;
+  const a = await DBService.getArtistByUri(artist);
+
+  if (a === null) return res.render('404');
+
+  const vm = mapArtistToViewModel(a);
+  res.render('artist', { artist: vm, ...getActiveMenuItemConfig('artists') });
 });
 
 router.get('/purchase', async (req, res) => {

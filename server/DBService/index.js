@@ -222,10 +222,19 @@ export const getArtist = async (id) => {
   return artist;
 };
 
-export const putArtist = async (order, name, description, photoId) => {
+export const getArtistByUri = async (uri) => {
+  const artist = await Artist.findOne({
+    where: { uri },
+    include: [{ model: Image, as: 'photo' }],
+  });
+  return artist;
+};
+
+export const putArtist = async (order, name, uri, description, photoId) => {
   await Artist.create({
     order,
     name,
+    uri,
     description,
     photoId,
   });
@@ -239,10 +248,11 @@ export const deleteArtist = async (id) => {
   });
 };
 
-export const editArtist = async (id, order, name, description) => {
+export const editArtist = async (id, order, name, uri, description) => {
   const artist = await getArtist(id);
   artist.order = order;
   artist.name = name;
+  artist.uri = uri;
   artist.description = description;
   await artist.save();
 };

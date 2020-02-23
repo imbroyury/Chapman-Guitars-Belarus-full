@@ -6,12 +6,9 @@
         {{#each artists}}
         <div class="artist-section">
             <div class="artist-name">
-                <h2>{{this.name}}</h2>
+                <a href="artists/{{this.uri}}" class="artist-name-link">{{this.name}}</a>
             </div>
             <img class="artist-photo" src="/uploads/{{this.photo}}" alt="{{this.name}}">
-            <div class="artist-description">
-                {{{this.description}}}
-            </div>
         </div>
         {{/each}}
     </section>

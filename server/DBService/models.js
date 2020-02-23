@@ -208,6 +208,11 @@ Artist.init({
     allowNull: false,
     unique: true,
   },
+  uri: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
   description: {
     type: DataTypes.TEXT,
   },

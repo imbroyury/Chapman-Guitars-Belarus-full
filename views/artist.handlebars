@@ -1,0 +1,14 @@
+<div class="grid-page-wrap artist-page">
+    {{>header}}
+    <section class="main-section">
+        <h1 class="section-header">{{artist.name}}</h1>
+        <div class="artist-section">
+            <img class="artist-photo" src="/uploads/{{artist.photo}}" alt="{{artist.name}}">
+            <div class="artist-description">
+                {{{artist.description}}}
+            </div>
+        </div>
+    </section>
+    {{>menu activeMenuItem}}
+    {{>footer}}
+</div>

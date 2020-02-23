@@ -5,7 +5,6 @@ import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
   Typography,
-  TextField,
   Card,
   CardContent,
   CardActions,
@@ -94,7 +93,6 @@ const GuitarSeries = (props) => {
       <Typography>{`Name: ${guitar.name}`}</Typography>
     </CardContent>
   </Card>);
-
 
   const renderPropertyEditMode = (guitarSeries, property) =>
     <EditProperty
