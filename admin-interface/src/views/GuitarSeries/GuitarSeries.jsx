@@ -13,9 +13,9 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import { Remount } from '../HOC/Remount';
-import useEditableCollection from '../hooks/useEditableCollection.js';
-import { Spinner, ErrorSnackbar } from '../components';
+import { Remount } from '../../HOC/Remount';
+import useEditableCollection from '../../hooks/useEditableCollection.js';
+import { Spinner, ErrorSnackbar } from '../../components';
 
 const useStyles = makeStyles({
   card: {

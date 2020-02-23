@@ -14,17 +14,17 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import GalleryImages from './views/GalleryImages';
-import AddGalleryImage from './views/AddGalleryImage';
+import GalleryImages from './views/GalleryImages/GalleryImages';
+import AddGalleryImage from './views/GalleryImages/AddGalleryImage';
 import Artists from './views/Artists/Artists';
 import AddArtist from './views/Artists/AddArtist';
 import Login from './views/Login';
 import Register from './views/Register';
-import GuitarSeries from './views/GuitarSeries';
-import AddGuitarSeries from './views/AddGuitarSeries';
+import GuitarSeries from './views/GuitarSeries/GuitarSeries';
+import AddGuitarSeries from './views/GuitarSeries/AddGuitarSeries';
 import Guitars from './views/Guitars/Guitars';
 import AddGuitar from './views/Guitars/AddGuitar';
-import AddGuitarColor from './views/AddGuitarColor';
+import AddGuitarColor from './views/GuitarColor/AddGuitarColor';
 // import AuthService from './AuthService';
 
 const drawerWidth = '10rem';

@@ -10,9 +10,9 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Remount } from '../HOC/Remount';
+import { Remount } from '../../HOC/Remount';
 import { Redirect } from 'react-router-dom';
-import { ErrorSnackbar, Spinner, FileInput } from '../components/index.js';
+import { ErrorSnackbar, Spinner, FileInput } from '../../components/index.js';
 
 const useStyles = makeStyles({
   card: {

@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
+import useEditableCollection from '../../hooks/useEditableCollection.js';
 import {
   Grid,
-  Typography,
   Card,
   CardContent,
   CardActions,
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Remount } from '../../HOC/Remount';
-import useEditableCollection from '../../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
+import { Remount } from '../../HOC/Remount';
 import getImageUrl from '../../helpers/getImageUrl.js';
 import { mainProperties } from './properties';
 

@@ -12,10 +12,10 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Remount } from '../HOC/Remount';
-import { ErrorSnackbar, Spinner } from '../components/index.js';
-import useEditableCollection from '../hooks/useEditableCollection.js';
-import getImageUrl from '../helpers/getImageUrl.js';
+import { Remount } from '../../HOC/Remount';
+import { ErrorSnackbar, Spinner } from '../../components/index.js';
+import useEditableCollection from '../../hooks/useEditableCollection.js';
+import getImageUrl from '../../helpers/getImageUrl.js';
 
 const useStyles = makeStyles({
   card: {

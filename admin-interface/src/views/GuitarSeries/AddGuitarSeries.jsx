@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  TextField,
   Card,
   CardContent,
   CardActions,
@@ -11,8 +10,9 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
-import 'react-quill/dist/quill.snow.css';
-import { Spinner, ErrorSnackbar } from '../components';
+import { Spinner, ErrorSnackbar, EditProperty } from '../../components';
+import useItemFormState from '../../hooks/useItemFormState';
+import { mainProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -24,27 +24,12 @@ const AddGuitarSeries = () => {
   const classes = useStyles();
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [series, setSeries] = useState({
-    name: '',
-    uri: '',
-    order: 0,
-  });
-
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setSeries({
-      ...series,
-      [name]: value,
-    });
-  };
+  const [series, handleChangeProperty, isSeriesValid] = useItemFormState(mainProperties);
 
   const [addSeriesState, addSeries] = useAsyncFn(async () => {
-    const formData = new FormData();
-    const { name, uri, order } = series;
     const { data: uploadResult } = await axios.put(
       '/guitar-series',
-      { name, uri, order },
-      formData,
+      series,
     );
     setShouldRedirect(true);
     return uploadResult;
@@ -62,8 +47,7 @@ const AddGuitarSeries = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress;
 
-  const isAddDisabled = isInteractionDisabled ||
-    [series.name, series.uri, series.order].some(value => value === '');
+  const isAddDisabled = isInteractionDisabled || !isSeriesValid;
 
   const renderErrorMessage = (errorMessage) => (<ErrorSnackbar
     open
@@ -73,11 +57,18 @@ const AddGuitarSeries = () => {
     actionHandler={addSeries}
   />);
 
+  const renderPropertyEditMode = (property) =>
+    <EditProperty
+      key={property.name}
+      item={series}
+      property={property}
+      onChange={handleChangeProperty}
+      inputClassName={classes.input}
+    />;
+
   const renderAddSeriesForm = () => <Card className={classes.card}>
     <CardContent>
-      <Grid container><TextField label='Name' name="name" value={series.name} onChange={handleChangeInput}/></Grid>
-      <Grid container><TextField label='Uri' name="uri" value={series.uri} onChange={handleChangeInput}/></Grid>
-      <Grid container><TextField label='Order' name="order" type="number" value={series.order} onChange={handleChangeInput}/></Grid>
+      {mainProperties.map(renderPropertyEditMode)}
     </CardContent>
     <CardActions>
       <Button

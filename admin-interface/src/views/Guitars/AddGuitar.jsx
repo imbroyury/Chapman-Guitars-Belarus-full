@@ -62,8 +62,7 @@ const AddGuitar = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress;
 
-  const isAddDisabled = isInteractionDisabled ||
-    !isGuitarValid;
+  const isAddDisabled = isInteractionDisabled || !isGuitarValid;
 
   const renderErrorMessage = (errorMessage) =>
     <ErrorSnackbar
