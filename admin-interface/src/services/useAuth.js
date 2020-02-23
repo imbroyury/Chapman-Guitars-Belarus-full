@@ -6,6 +6,7 @@ const authContext = createContext();
 // Provider component that wraps app and makes auth object available to any child component that calls useAuth().
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
+  console.log('from ProvideAuth', auth);
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
@@ -19,11 +20,14 @@ function useProvideAuth() {
   const [user, setUser] = useState(userAuthService.user);
   const [authRequest, setAuthRequest] = useState(userAuthService.authRequest);
 
+  console.log('user from useProvideAuth hook', user);
+  console.log('authRequest from useProvideAuth hook', authRequest);
+
   useEffect(() => {
-    userAuthService.onChange(( { user, authRequest }) => {
+    userAuthService.onChange(({ user, authRequest }) => {
       setUser(user);
       setAuthRequest(authRequest);
-      console.log('notified with', user, authRequest);
+      console.log('notified with', user, JSON.stringify(authRequest));
     });
   }, []);
 
@@ -39,7 +43,6 @@ function useProvideAuth() {
     return userAuthService.checkToken();
   };
 
-  console.log('user froom useAuth hook', user);
 
   // Return the user object and auth methods
   return {

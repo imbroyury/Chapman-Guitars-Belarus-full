@@ -85,6 +85,7 @@ class UserAuthService {
       user: this.user,
       authRequestState: this.authRequest,
     }));
+    console.log('subs', this._subs);
     this._subs.forEach(sub => sub({
       user: this._user,
       authRequest: this._authRequest.clone(),

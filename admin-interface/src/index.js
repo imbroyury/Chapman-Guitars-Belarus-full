@@ -101,7 +101,7 @@ const Root = () => {
   );
 
   return (
-    <ProvideAuth>
+    <>
       <Router>
         <Drawer
           variant="permanent"
@@ -125,7 +125,7 @@ const Root = () => {
       </Router>
       {<Spinner open={auth.authRequest.isRunning} />}
       {auth.authRequest.isError && renderAuthError(auth.authRequest.error)}
-    </ProvideAuth>);
+    </>);
 };
 
 ReactDOM.render(<ProvideAuth><Root /></ProvideAuth>, document.getElementById('root'));

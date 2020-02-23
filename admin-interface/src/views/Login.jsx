@@ -14,7 +14,8 @@ import { useLocation } from 'react-use';
 
 const useStyles = makeStyles({
   card: {
-    margin: '10px',
+    margin: '1rem',
+    padding: '1rem'
   },
 });
 

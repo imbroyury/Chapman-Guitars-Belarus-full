@@ -27,6 +27,7 @@ router.post('/logout', async (req, res) => {
 });
 
 router.post('/check-token', async (req, res) => {
+  await new Promise(resolve => setTimeout(resolve,2000));
   const { login, token } = req.body;
   if (login == ADMIN_USER && token === TOKEN) {
     return res.status(200).send('Authenticated');
