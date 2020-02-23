@@ -46,8 +46,7 @@ const useEditableCollection = () => {
     })));
   };
 
-  const editItemProperty = (id) => (e) => {
-    const { name, value } = e.target;
+  const editItemProperty = (id) => (name, value) => {
     const item = collection.find(item => item.id === id);
     const { edited } = item;
     const afterEdit = {

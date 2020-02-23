@@ -9,8 +9,7 @@ const useItemFormState = (mainProperties, additionalProperties = []) => {
 
   const [itemState, setItemState] = useState(seedState);
 
-  const handleChangeProperty = (e) => {
-    const { name, value } = e.target;
+  const handleChangeProperty = (name, value) => {
     setItemState({
       ...itemState,
       [name]: value,
@@ -21,6 +20,7 @@ const useItemFormState = (mainProperties, additionalProperties = []) => {
     .every(property => {
       const value = itemState[property.name];
       if (property.type === 'string') return value !== '';
+      if (property.type === 'html') return value !== '';
       if (property.type === 'select') return value !== '';
       if (property.type === 'number') return true;
       return true;

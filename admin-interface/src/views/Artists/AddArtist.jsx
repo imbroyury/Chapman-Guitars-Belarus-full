@@ -11,10 +11,8 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { Spinner, ErrorSnackbar, FileInput, EditProperty } from '../../components';
-import { mainProperties, additionalProperties } from './properties';
+import { mainProperties } from './properties';
 import useItemFormState from '../../hooks/useItemFormState';
 
 const useStyles = makeStyles({
@@ -27,21 +25,15 @@ const AddArtist = () => {
   const classes = useStyles();
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [artist, handleChangeProperty, isArtistValid] = useItemFormState(mainProperties, additionalProperties);
+  const [artist, handleChangeProperty, isArtistValid] = useItemFormState(mainProperties);
 
   const [fileList, setFileList] = useState(null);
   const handleChangeFileList = (e) => setFileList(e.target.files);
 
-  const handleChangeDescription = (content) => {
-    // emulate event interface not to duplicate code in handleEditArtistInput
-    const e = { target: { name: 'description', value: content } };
-    handleChangeProperty(e);
-  };
-
   const [addArtistState, addArtist] = useAsyncFn(async () => {
     const formData = new FormData();
     formData.append('photo', fileList[0]);
-    [...mainProperties, ...additionalProperties]
+    [...mainProperties]
       .map(prop => prop.name)
       .forEach(prop => formData.append(prop, artist[prop]));
 
@@ -99,10 +91,6 @@ const AddArtist = () => {
     <CardContent>
       {renderUploadInput()}
       {mainProperties.map(renderPropertyEditMode)}
-      <ReactQuill
-        value={artist.description}
-        onChange={handleChangeDescription}
-      />
     </CardContent>
     <CardActions>
       <Button

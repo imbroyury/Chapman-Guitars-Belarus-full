@@ -75,7 +75,10 @@ const AddGuitarColor = () => {
 
   const [addColorState, addColor] = useAsyncFn(async () => {
     const formData = new FormData();
-    images.forEach(image => formData.append(image.name, imageFileLists.find(ifl => ifl.name === image.name).fileList[0]));
+    images.forEach(image => formData.append(
+      image.name,
+      imageFileLists.find(ifl => ifl.name === image.name).fileList[0]
+    ));
     formData.append('order', guitarColor.order);
     formData.append('name', guitarColor.name);
     formData.append('guitarId', guitarId);

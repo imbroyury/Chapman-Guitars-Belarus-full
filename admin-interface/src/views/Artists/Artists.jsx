@@ -12,14 +12,12 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../../HOC/Remount';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import useEditableCollection from '../../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
 import getImageUrl from '../../helpers/getImageUrl.js';
-import { mainProperties, additionalProperties } from './properties';
+import { mainProperties } from './properties';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   card: {
     margin: '10px',
     width: '100%',
@@ -27,10 +25,7 @@ const useStyles = makeStyles(theme => ({
   img: {
     maxWidth: '300px',
   },
-  descriptonHTML: {
-    fontFamily: theme.typography.fontFamily
-  }
-}));
+});
 
 const Artists = (props) => {
   const reloadHandler = props.remount;
@@ -49,12 +44,6 @@ const Artists = (props) => {
     getEditedArtistPropertiesPayload,
   ] = useEditableCollection();
 
-  const handleEditArtistDescription = (id) => (content) => {
-    // emulate event interface not to duplicate code in handleEditArtistInput
-    const e = { target: { name: 'description', value: content } };
-    editArtistProperty(id)(e);
-  };
-
   const artistsRequestState = useAsync(async () => {
     if (!shouldFetch) return;
     const { data: artists } = await axios.get('/artists');
@@ -67,7 +56,6 @@ const Artists = (props) => {
     const propertiesPayload = getEditedArtistPropertiesPayload(
       id,
       mainProperties,
-      additionalProperties,
     );
     const { data: saveResult } = await axios.post(
       '/artist',
@@ -113,16 +101,12 @@ const Artists = (props) => {
       item={artist}
       property={property}
       onChange={editArtistProperty(artist.id)}
+      disabled={isInteractionDisabled}
     />;
 
   const renderEditMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
       {mainProperties.map(property => renderPropertyEditMode(artist, property))}
-      <ReactQuill
-        value={artist.description}
-        onChange={handleEditArtistDescription(artist.id)}
-        readOnly={isInteractionDisabled}
-      />
       <img alt='' src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
@@ -155,7 +139,6 @@ const Artists = (props) => {
   const renderDisplayMode = (artist) => (<Card className={classes.card} key={artist.id}>
     <CardContent>
       {mainProperties.map(property => renderPropertyDisplayMode(artist, property))}
-      <Typography>Description:</Typography><div dangerouslySetInnerHTML={{ __html: artist.description}} className={classes.descriptonHTML}></div>
       <img alt='' src={getImageUrl(artist.photo.name)} className={classes.img} />
     </CardContent>
     <CardActions>
