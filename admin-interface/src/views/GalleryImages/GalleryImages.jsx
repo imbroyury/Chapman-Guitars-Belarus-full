@@ -4,8 +4,6 @@ import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
-  Typography,
-  TextField,
   Card,
   CardContent,
   CardActions,
@@ -13,9 +11,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../../HOC/Remount';
-import { ErrorSnackbar, Spinner } from '../../components/index.js';
+import { ErrorSnackbar, Spinner, EditProperty, DisplayProperty } from '../../components/index.js';
 import useEditableCollection from '../../hooks/useEditableCollection.js';
 import getImageUrl from '../../helpers/getImageUrl.js';
+import { mainProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -40,6 +39,7 @@ const GalleryImages = (props) => {
     setImageEditModeOff,
     editImageProperty,
     images,
+    getEditedImagePropertiesPayload,
   ] = useEditableCollection();
 
   const imagesRequestState = useAsync(async () => {
@@ -60,10 +60,13 @@ const GalleryImages = (props) => {
   }, []);
 
   const [saveImageState, saveImage] = useAsyncFn(async (id) => {
-    const { order } = images.find(image => image.id === id).edited;
+    const propertiesPayload = getEditedImagePropertiesPayload(
+      id,
+      mainProperties,
+    );
     const { data: changeResult } = await axios.post(
       '/gallery-image',
-      { id, order },
+      { id, ...propertiesPayload },
     );
     scheduleRefetch();
     return changeResult;
@@ -90,9 +93,16 @@ const GalleryImages = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
+  const renderPropertyDisplayMode = (image, property) =>
+    <DisplayProperty
+      key={property.name}
+      item={image}
+      property={property}
+    />;
+
   const renderDisplayMode = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
-      <Typography>{`Order: ${image.order}`}</Typography>
+      {mainProperties.map(property => renderPropertyDisplayMode(image, property))}
     </CardContent>
     <img alt='' src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>
@@ -106,16 +116,18 @@ const GalleryImages = (props) => {
     </CardActions>
   </Card>);
 
+  const renderPropertyEditMode = (image, property) =>
+    <EditProperty
+      key={property.name}
+      item={image}
+      property={property}
+      onChange={editImageProperty(image.id)}
+      disabled={isInteractionDisabled}
+    />;
+
   const renderEditMode = (image) => (<Card className={classes.card} key={image.id}>
     <CardContent>
-      <TextField
-        label="Order"
-        defaultValue={image.order}
-        name="order"
-        type="number"
-        disabled={isInteractionDisabled}
-        onChange={editImageProperty(image.id)}
-      />
+      {mainProperties.map(property => renderPropertyEditMode(image, property))}
     </CardContent>
     <img alt='' src={getImageUrl(image.Image.name)} className={classes.img} />
     <CardActions>

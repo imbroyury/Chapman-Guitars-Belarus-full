@@ -4,4 +4,3 @@ export const mainProperties = [
   { label: 'Uri', name: 'uri', type: 'string', initial: '' },
   { name: 'description', type: 'html', initial: '' }
 ];
-

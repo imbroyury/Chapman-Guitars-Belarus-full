@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  TextField,
   Card,
   CardContent,
   CardActions,
@@ -12,7 +11,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../../HOC/Remount';
 import { Redirect } from 'react-router-dom';
-import { ErrorSnackbar, Spinner, FileInput } from '../../components/index.js';
+import { ErrorSnackbar, Spinner, FileInput, EditProperty } from '../../components/index.js';
+import useItemFormState from '../../hooks/useItemFormState';
+import { mainProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -29,20 +30,22 @@ const AddGalleryImage = () => {
   const [fileList, setFileList] = useState(null);
   const handleChangeFileList = (e) => setFileList(e.target.files);
 
-  const [order, setOrder] = useState(0);
-  const handleChangeOrder = (e) => setOrder(e.target.value);
+  const [image, handleChangeProperty, isImageValid] = useItemFormState(mainProperties);
 
   const [uploadImageState, uploadImage] = useAsyncFn(async () => {
     const formData = new FormData();
     formData.append('image', fileList[0]);
-    formData.append('order', order);
+    mainProperties
+      .map(prop => prop.name)
+      .forEach(prop => formData.append(prop, image[prop]));
+
     const { data: uploadResult } = await axios.put(
       '/gallery-image',
       formData,
     );
     setShouldRedirect(true);
     return uploadResult;
-  }, [fileList, order]);
+  }, [fileList, image]);
 
 
   const requestStates = [
@@ -59,7 +62,9 @@ const AddGalleryImage = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const isUploadDisabled = (fileList === null || fileList.length === 0) || isInteractionDisabled;
+  const isUploadDisabled = (fileList === null || fileList.length === 0) ||
+    isInteractionDisabled ||
+    !isImageValid;
 
   const renderUploadInput = () =>
     <FileInput
@@ -69,10 +74,18 @@ const AddGalleryImage = () => {
       fileList={fileList}
     />;
 
+  const renderPropertyEditMode = (property) =>
+    <EditProperty
+      key={property.name}
+      item={image}
+      property={property}
+      onChange={handleChangeProperty}
+    />;
+
   const renderAddImageForm = () => <Card className={classes.card}>
     <CardContent>
       {renderUploadInput()}
-      <Grid container><TextField label='Order' name="order" type="number" value={order} onChange={handleChangeOrder} /></Grid>
+      {mainProperties.map(renderPropertyEditMode)}
     </CardContent>
     <CardActions>
       <Button

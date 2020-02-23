@@ -33,7 +33,7 @@ const AddArtist = () => {
   const [addArtistState, addArtist] = useAsyncFn(async () => {
     const formData = new FormData();
     formData.append('photo', fileList[0]);
-    [...mainProperties]
+    mainProperties
       .map(prop => prop.name)
       .forEach(prop => formData.append(prop, artist[prop]));
 
