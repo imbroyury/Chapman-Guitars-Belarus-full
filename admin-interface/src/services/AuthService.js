@@ -54,7 +54,7 @@ class UserAuthService {
       isAuthenticated: false,
       login: null,
     };
-    this._authRequestState = new RequestState();
+    this._authRequest = new RequestState();
     this._subs = [];
   }
 
@@ -63,7 +63,7 @@ class UserAuthService {
   }
 
   get authRequest() {
-    return this._authRequestState;
+    return this._authRequest;
   }
 
   _unauthenticateUser() {
@@ -86,8 +86,8 @@ class UserAuthService {
       authRequestState: this.authRequest,
     }));
     this._subs.forEach(sub => sub({
-      user: this.user,
-      authRequest: this.authRequest.clone(),
+      user: this._user,
+      authRequest: this._authRequest.clone(),
     }));
   }
 
@@ -98,7 +98,7 @@ class UserAuthService {
   }
 
   async login(login, password) {
-    this._authRequestState.setRunning();
+    this._authRequest.setRunning();
     this._notifySubscribers();
     try {
       const { data } = await axios.post(
@@ -107,11 +107,11 @@ class UserAuthService {
       );
       console.log(data);
       saveAuthData(login, data.token);
-      this._authRequestState.setDone();
+      this._authRequest.setDone();
       this._authenticateUser(login);
     } catch(e) {
       console.log(e);
-      this._authRequestState.setError(e);
+      this._authRequest.setError(e);
       this._unauthenticateUser();
     }
     this._notifySubscribers();
@@ -120,14 +120,14 @@ class UserAuthService {
   async logout() {
     const authData = getAuthData();
     const { login, token } = authData;
-    this._authRequestState.setRunning();
+    this._authRequest.setRunning();
     this._notifySubscribers();
     try {
       await axios.post(
         '/logout',
         { login, token }
       );
-      this._authRequestState.setDone();
+      this._authRequest.setDone();
     } catch(e) {
       // do nothing
     }
@@ -140,7 +140,7 @@ class UserAuthService {
     if (authData === null) {
       this._unauthenticateUser();
     } else {
-      this._authRequestState.setRunning();
+      this._authRequest.setRunning();
       this._notifySubscribers();
       try {
         const { login, token } = authData;
@@ -149,18 +149,17 @@ class UserAuthService {
           { login, token }
         );
         console.log(data);
-        this._authRequestState.setDone();
+        this._authRequest.setDone();
         this._authenticateUser(login);
       } catch(e) {
         console.log(e);
-        this._authRequestState.setError(e);
+        this._authRequest.setError(e);
         this._unauthenticateUser();
       }
     }
     console.log('checkToken method of AuthService', this.user);
     this._notifySubscribers();
   }
-
 }
 
 export default new UserAuthService();
