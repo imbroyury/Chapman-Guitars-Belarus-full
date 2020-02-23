@@ -14,6 +14,7 @@ import { Redirect } from 'react-router-dom';
 import { Spinner, ErrorSnackbar, EditProperty, LabelledSelect } from '../../components';
 import { mainProperties, additionalProperties } from './properties';
 import useItemFormState from '../../hooks/useItemFormState';
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles({
   card: {
@@ -97,6 +98,9 @@ const AddGuitar = () => {
     <CardContent>
       {mainProperties.map(renderPropertyEditMode)}
       {renderSeriesSelect()}
+      <Alert variant="outlined" severity="info">
+        You can add a color later in Guitars section
+      </Alert>
     </CardContent>
     <CardActions>
       <Button
