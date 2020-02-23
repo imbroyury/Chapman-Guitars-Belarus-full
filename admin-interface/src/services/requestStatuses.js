@@ -1,5 +1,3 @@
-// TODO: remove
-
 export const requestStatuses = {
   uninitialized: 'uninitialized',
   running: 'running',

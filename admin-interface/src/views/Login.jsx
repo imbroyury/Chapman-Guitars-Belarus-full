@@ -9,8 +9,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { inputType, inputConfig } from '../shared/inputs';
 import { Redirect } from 'react-router-dom';
-import { useAuth } from '../services/useAuth';
 import { useLocation } from 'react-use';
+import { useSelector } from 'react-redux';
+import AuthService from '../services/AuthService';
 
 const useStyles = makeStyles({
   card: {
@@ -22,10 +23,9 @@ const useStyles = makeStyles({
 const Login = () => {
   const classes = useStyles();
   let location = useLocation();
-  const { from } = location.state.state || { from: { pathname: '/' } };
+  const { from } = (location.state && location.state.state) || { from: { pathname: '/' } };
 
-  const auth = useAuth();
-  console.log('auth from Login', auth);
+  const user = useSelector(state => state.user);
 
   const [inputs, setInputs] = useState({
     [inputType.login]: '',
@@ -85,16 +85,16 @@ const Login = () => {
     <Grid container>
       <Button
         variant="contained"
-        onClick={() => auth.login(inputs.login, inputs.password)}
+        onClick={() => AuthService.login(inputs.login, inputs.password)}
         color="primary"
         disabled={isLoginDisabled}
       >
-              Log in
+        Log in
       </Button>
     </Grid>
   </Card>);
 
-  return auth.user.isAuthenticated ?
+  return user.isAuthenticated ?
     redirectAfterLogin() :
     renderLoginForm();
 };
