@@ -25,7 +25,7 @@ const login = async (login, password) => {
     setUserAuthenticated(login);
   } catch(e) {
     console.log(e);
-    setAuthRequestError(e.response.data);
+    setAuthRequestError(e.response.data.errorMessage);
     setUserUnauthenticated();
   }
 };
@@ -64,7 +64,7 @@ const checkToken = async () => {
       setUserAuthenticated(login);
     } catch(e) {
       console.log(e);
-      setAuthRequestError(e.response.data);
+      setAuthRequestError(e.response.data.errorMessage);
       setUserUnauthenticated();
     }
   }

@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
     TOKEN = generateToken();
     res.status(200).send({ token: TOKEN });
   } else {
-    res.status(401).send(errors.invalidCredentials);
+    res.status(401).send({ errorMessage: errors.invalidCredentials });
   }
 });
 
@@ -32,9 +32,9 @@ router.post('/check-token', async (req, res) => {
   if (login == ADMIN_USER && token === TOKEN) {
     return res.status(200).send('Authenticated');
   } else {
-    return res.status(401).send(errors.sessionExpired);
+    return res.status(401).send({ errorMessage: errors.sessionExpired });
   }
-  return res.status(500).send(errors.somethingWentWrong);
+  return res.status(500).send({ errorMessage: errors.somethingWentWrong });
 });
 
 export default router;
