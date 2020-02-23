@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
-  TextField,
   Card,
   CardContent,
   CardActions,
@@ -12,7 +11,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Remount } from '../../HOC/Remount';
 import { Redirect, useParams } from 'react-router-dom';
-import { ErrorSnackbar, Spinner, FileInput } from '../../components/index.js';
+import { ErrorSnackbar, Spinner, FileInput, EditProperty } from '../../components/index.js';
+import useItemFormState from '../../hooks/useItemFormState';
+import useFileInputsState from '../../hooks/useFileInputsState';
+import { mainProperties, fileProperties } from './properties';
 
 const useStyles = makeStyles({
   card: {
@@ -20,67 +22,24 @@ const useStyles = makeStyles({
   },
 });
 
-const images = [
-  {
-    label: 'tab',
-    name: 'tabImage',
-  },
-  {
-    label: 'dot',
-    name: 'dotImage',
-  },
-  {
-    label: 'guitar',
-    name: 'guitarImage',
-  }
-];
-
 const AddGuitarColor = () => {
   const { guitarId } = useParams();
 
   const classes = useStyles();
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  const [imageFileLists, setImageFileLists] = useState(
-    images.map(image => ({ name: image.name, fileList: null }))
-  );
-
-  const [guitarColor, setGuitarColor] = useState({
-    order: 0,
-    name: '',
-  });
-
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setGuitarColor({
-      ...guitarColor,
-      [name]: value,
-    });
-  };
-
-  const handleChangeImageFileList = (name) => (e) => {
-    const arrayId = imageFileLists.findIndex(ifl => ifl.name === name);
-    const item = imageFileLists[arrayId];
-    const itemStateModel = {
-      name: item.name,
-      fileList: e.target.files,
-    };
-    const newFileList = [
-      ...imageFileLists.slice(0, arrayId),
-      itemStateModel,
-      ...imageFileLists.slice(arrayId + 1)
-    ];
-    setImageFileLists(newFileList);
-  };
+  const [imageFileLists, changeFileList] = useFileInputsState(fileProperties);
+  const [guitarColor, handleChangeProperty, isGutarColorValid] = useItemFormState(mainProperties);
 
   const [addColorState, addColor] = useAsyncFn(async () => {
     const formData = new FormData();
-    images.forEach(image => formData.append(
-      image.name,
-      imageFileLists.find(ifl => ifl.name === image.name).fileList[0]
+    fileProperties.forEach(file => formData.append(
+      file.name,
+      imageFileLists.find(ifl => ifl.name === file.name).fileList[0]
     ));
-    formData.append('order', guitarColor.order);
-    formData.append('name', guitarColor.name);
+    mainProperties
+      .map(prop => prop.name)
+      .forEach(prop => formData.append(prop, guitarColor[prop]));
     formData.append('guitarId', guitarId);
     const { data: uploadResult } = await axios.put(
       '/guitar-color',
@@ -105,23 +64,31 @@ const AddGuitarColor = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const isUploadDisabled = imageFileLists
-    .some(ifl => ifl.fileList === null || ifl.fileList === 0) || isInteractionDisabled;
+  const isUploadDisabled = imageFileLists.some(ifl => ifl.fileList === null || ifl.fileList === 0) ||
+    isInteractionDisabled ||
+    !isGutarColorValid;
 
   const renderUploadImageInputs = () =>
-    images.map(image => <FileInput
-      key={image.label}
-      label={`Select ${image.label} image to upload`}
-      onChange={handleChangeImageFileList(image.name)}
+    fileProperties.map(file => <FileInput
+      key={file.label}
+      label={`Select ${file.label} image to upload`}
+      onChange={changeFileList(file.name)}
       disabled={isInteractionDisabled}
-      fileList={imageFileLists.find(ifl => ifl.name === image.name).fileList}
+      fileList={imageFileLists.find(ifl => ifl.name === file.name).fileList}
     />);
+
+  const renderPropertyEditMode = (property) =>
+    <EditProperty
+      key={property.name}
+      item={guitarColor}
+      property={property}
+      onChange={handleChangeProperty}
+    />;
 
   const renderAddImageForm = () => <Card className={classes.card}>
     <CardContent>
       {renderUploadImageInputs()}
-      <Grid container><TextField label='Order' name="order" type="number" value={guitarColor.order} onChange={handleChangeInput} /></Grid>
-      <Grid container><TextField label='Name' name="name" type="string" value={guitarColor.name} onChange={handleChangeInput} /></Grid>
+      {mainProperties.map(renderPropertyEditMode)}
     </CardContent>
     <CardActions>
       <Button
