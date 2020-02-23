@@ -46,7 +46,6 @@ const ErrorSnackbar = (props) => {
         <span className={classes.snackbarMessage}>
           <ErrorIcon className={classes.snackbarIcon}/>
           {errorMessage}
-          {'.\nPlease try again later'}
         </span>
       }
       action={renderAction()}

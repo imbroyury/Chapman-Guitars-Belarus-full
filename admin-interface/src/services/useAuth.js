@@ -1,11 +1,9 @@
-// Hook (use-auth.js)
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import authService from './AuthService';
+import userAuthService from './AuthService';
 
 const authContext = createContext();
 
-// Provider component that wraps your app and makes auth object ...
-// ... available to any child component that calls useAuth().
+// Provider component that wraps app and makes auth object available to any child component that calls useAuth().
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
@@ -18,33 +16,27 @@ export const useAuth = () => {
 
 // Provider hook that creates auth object and handles state
 function useProvideAuth() {
-  const [user, setUser] = useState(authService.getUser());
+  const [user, setUser] = useState(userAuthService.user);
+  const [authRequest, setAuthRequest] = useState(userAuthService.authRequest);
 
   useEffect(() => {
-    authService.onAuthStateChange(user => {
+    userAuthService.onChange(( { user, authRequest }) => {
       setUser(user);
+      setAuthRequest(authRequest);
+      console.log('notified with', user, authRequest);
     });
   }, []);
 
   const login = (login, password) => {
-    return authService
-      .login(login, password)
-      .then(user => setUser(user));
+    return userAuthService.login(login, password);
   };
 
   const logout = () => {
-    return authService
-      .logout()
-      .then((user) => setUser(user));
+    return userAuthService.logout();
   };
 
   const checkToken = () => {
-    return authService
-      .checkToken()
-      .then((user) => {
-        console.log('user from checkToken', user);
-        setUser(user);
-      });
+    return userAuthService.checkToken();
   };
 
   console.log('user froom useAuth hook', user);
@@ -52,6 +44,7 @@ function useProvideAuth() {
   // Return the user object and auth methods
   return {
     user,
+    authRequest,
     login,
     logout,
     checkToken,

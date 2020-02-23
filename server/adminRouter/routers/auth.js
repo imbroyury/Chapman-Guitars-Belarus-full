@@ -1,4 +1,5 @@
 import express from 'express';
+import errors from '../../../admin-interface/src/shared/errors';
 
 const router = express.Router();
 
@@ -14,22 +15,25 @@ router.post('/login', async (req, res) => {
     TOKEN = generateToken();
     res.status(200).send({ token: TOKEN });
   } else {
-    res.status(401).send();
+    res.status(401).send(errors.invalidCredentials);
   }
 });
 
 router.post('/logout', async (req, res) => {
+  const { login, token } = req.body;
+  console.log(login, token);
   TOKEN = null;
-  res.status(200).send();
+  res.status(200).send('Logged out');
 });
 
 router.post('/check-token', async (req, res) => {
   const { login, token } = req.body;
   if (login == ADMIN_USER && token === TOKEN) {
-    res.status(200).send();
+    return res.status(200).send('Authenticated');
   } else {
-    res.status(401).send();
+    return res.status(401).send(errors.sessionExpired);
   }
+  return res.status(500).send(errors.somethingWentWrong);
 });
 
 export default router;

@@ -17,6 +17,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { routes } from './routes';
 import { ProvideAuth, useAuth } from './services/useAuth';
+import { Spinner, ErrorSnackbar } from './components';
 // import AuthService from './AuthService';
 
 const drawerWidth = '10rem';
@@ -33,15 +34,15 @@ const useStyles = makeStyles({
   },
 });
 
-const PrivateRoute = ({ children, ...rest }) => {
-  // Get auth state and re-render anytime it changes
+const PrivateRoute = ({ children, ...rest }) => { //eslint-disable-line
   const auth = useAuth();
   console.log('auth from PrivateRoute', auth);
-  const renderProp = () => auth.user.isAuthenticated
+  const renderProp = ({ location }) => auth.user.isAuthenticated //eslint-disable-line
     ? children
     : (<Redirect
       to={{
         pathname: '/login',
+        state: { from: location }
       }}
     />);
 
@@ -63,6 +64,13 @@ const Root = () => {
   }, []); // eslint-disable-line
 
   console.log('auth from Root', auth);
+
+  const renderAuthError = (error) =>
+    <ErrorSnackbar
+      open
+      errorMessage={error.response.data}
+      key={error.response.data}
+    />;
 
   const renderLinkToRoute = route => {
     const { linkLabel, path } = route;
@@ -110,11 +118,13 @@ const Root = () => {
             {routes.preAuth.flat().map(renderPreAuthRoute)}
             {routes.auth.flat().map(renderRoute)}
             <Route path="*">
-          404
+              404
             </Route>
           </Switch>
         </main>
       </Router>
+      {<Spinner open={auth.authRequest.isRunning} />}
+      {auth.authRequest.isError && renderAuthError(auth.authRequest.error)}
     </ProvideAuth>);
 };
 

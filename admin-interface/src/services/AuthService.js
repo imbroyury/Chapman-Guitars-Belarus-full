@@ -1,25 +1,105 @@
 import axios from 'axios';
+import { requestStatuses } from './requestStatuses';
 
 const AUTH_DATA = 'CHAPMAN_GUITARS_ADMIN_INTERFACE_AUTH_DATA';
 
 const saveAuthData = (login, token) => localStorage.setItem(AUTH_DATA, JSON.stringify({ login, token }));
 const getAuthData = () => JSON.parse(localStorage.getItem(AUTH_DATA));
 
-class AuthService {
+class RequestState {
+  constructor(state = requestStatuses.uninitialized, error = null) {
+    this._state = state;
+    this._error = error;
+  }
+
+  get error() {
+    return this._error;
+  }
+
+  get isRunning() {
+    return this._state === requestStatuses.running;
+  }
+
+  get isDone() {
+    return this._state === requestStatuses.done;
+  }
+
+  get isError() {
+    return this._state === requestStatuses.error;
+  }
+
+  setRunning() {
+    this._error = null;
+    this._state = requestStatuses.running;
+  }
+
+  setDone() {
+    this._error = null;
+    this._state = requestStatuses.done;
+  }
+
+  setError(error) {
+    this._error = error;
+    this._state = requestStatuses.error;
+  }
+
+  clone() {
+    return new RequestState(this._state, this._error);
+  }
+}
+
+class UserAuthService {
   constructor() {
     this._user = {
       isAuthenticated: false,
       login: null,
     };
-    this._requestState = null;
+    this._authRequestState = new RequestState();
     this._subs = [];
   }
 
-  getUser() {
+  get user() {
     return this._user;
   }
 
+  get authRequest() {
+    return this._authRequestState;
+  }
+
+  _unauthenticateUser() {
+    this._user = {
+      isAuthenticated: false,
+      login: null,
+    };
+  }
+
+  _authenticateUser(login) {
+    this._user = {
+      isAuthenticated: true,
+      login,
+    };
+  }
+
+  _notifySubscribers() {
+    console.log('will notify subs with: ', JSON.stringify({
+      user: this.user,
+      authRequestState: this.authRequest,
+    }));
+    this._subs.forEach(sub => sub({
+      user: this.user,
+      authRequest: this.authRequest.clone(),
+    }));
+  }
+
+  onChange(fn) {
+    if (typeof fn === 'function') {
+      this._subs.push(fn);
+    }
+  }
+
   async login(login, password) {
+    this._authRequestState.setRunning();
+    this._notifySubscribers();
     try {
       const { data } = await axios.post(
         '/login',
@@ -27,73 +107,60 @@ class AuthService {
       );
       console.log(data);
       saveAuthData(login, data.token);
-      this._user = {
-        isAuthenticated: true,
-        login,
-      };
+      this._authRequestState.setDone();
+      this._authenticateUser(login);
     } catch(e) {
       console.log(e);
-      this._user = {
-        isAuthenticated: false,
-        login: null
-      };
+      this._authRequestState.setError(e);
+      this._unauthenticateUser();
     }
-    this.notifySubscribers();
-    return this._user;
+    this._notifySubscribers();
   }
 
   async logout() {
-    this._user = {
-      isAuthenticated: false,
-      login: null
-    };
-    this.notifySubscribers();
-    return this._user;
+    const authData = getAuthData();
+    const { login, token } = authData;
+    this._authRequestState.setRunning();
+    this._notifySubscribers();
+    try {
+      await axios.post(
+        '/logout',
+        { login, token }
+      );
+      this._authRequestState.setDone();
+    } catch(e) {
+      // do nothing
+    }
+    this._unauthenticateUser();
+    this._notifySubscribers();
   }
 
   async checkToken() {
     const authData = getAuthData();
     if (authData === null) {
-      this._user = {
-        isAuthenticated: false,
-        login: null
-      };
+      this._unauthenticateUser();
     } else {
+      this._authRequestState.setRunning();
+      this._notifySubscribers();
       try {
+        const { login, token } = authData;
         const { data } = await axios.post(
           'check-token',
-          { loign: authData.login, token: authData.token }
+          { login, token }
         );
         console.log(data);
-        this._user = {
-          isAuthenticated: true,
-          login: authData.login,
-        };
+        this._authRequestState.setDone();
+        this._authenticateUser(login);
       } catch(e) {
         console.log(e);
-        this._user = {
-          isAuthenticated: false,
-          login: null
-        };
+        this._authRequestState.setError(e);
+        this._unauthenticateUser();
       }
     }
-    console.log('checkToken method of AuthService', this._user);
-    this.notifySubscribers();
-    return this._user;
+    console.log('checkToken method of AuthService', this.user);
+    this._notifySubscribers();
   }
 
-  async validateToken() {
-    return true;
-  }
-
-  notifySubscribers() {
-    console.log('will notify subs with: ', this._user);
-    this._subs.forEach(sub => sub(this._user));
-  }
-
-  onAuthStateChange(fn) {
-    this._subs.push(fn);
-  }
 }
 
-export default new AuthService();
+export default new UserAuthService();
