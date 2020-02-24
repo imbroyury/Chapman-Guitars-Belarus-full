@@ -47,39 +47,33 @@ const AuthProcess = () => {
   const authRequest = useAuthRequestSelector();
   const isAuthRequestRunning = authRequest.status === requestStatuses.running;
   const hasAuthRequestErred = authRequest.status === requestStatuses.error;
-
-  const renderAuthError = (error) =>
-    <ErrorSnackbar
-      open
-      errorMessage={error}
-      key={error}
-    />;
+  const error = authRequest.error || 'Something went wrong';
 
   return <>
-    {<Spinner open={isAuthRequestRunning} />}
-    {hasAuthRequestErred && renderAuthError(authRequest.error || 'Something went wrong')}
+    {<Spinner
+      open={isAuthRequestRunning} />}
+    {<ErrorSnackbar
+      open={hasAuthRequestErred}
+      errorMessage={error}
+    />}
   </>;
 };
 
 const Views = () => {
   const classes = useStyles();
 
-  const renderPublicRoute = route => (
-    <Route path={route.path} key={route.path}>
-      <route.View />
-    </Route>
-  );
-
-  const renderPrivateRoute = route => (
-    <PrivateRoute path={route.path} key={route.path}>
-      <route.View />
-    </PrivateRoute>
-  );
+  const getRouteRenderer = isPrivate => route => {
+    const RouteComponent = isPrivate ? PrivateRoute : Route;
+    const { View, path, exact } = route;
+    return <RouteComponent path={path} key={path} exact={exact}>
+      <View />
+    </RouteComponent>;
+  };
 
   return <main className={classes.view}>
     <Switch>
-      {routes.preAuth.flat().map(renderPublicRoute)}
-      {routes.auth.flat().map(renderPrivateRoute)}
+      {routes.preAuth.flat().map(getRouteRenderer(false))}
+      {routes.auth.flat().map(getRouteRenderer(true))}
     </Switch>
   </main>;
 };
