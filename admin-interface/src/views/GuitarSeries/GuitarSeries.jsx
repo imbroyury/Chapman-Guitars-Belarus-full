@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -16,6 +15,7 @@ import { Remount } from '../../HOC/Remount';
 import useEditableCollection from '../../hooks/useEditableCollection.js';
 import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
 import { mainProperties } from './properties';
+import { getRequest, postRequest, deleteRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -41,7 +41,7 @@ const GuitarSeries = (props) => {
 
   const seriesRequestState = useAsync(async () => {
     if (!shouldFetch) return;
-    const { data: series } = await axios.get('/all-guitar-series');
+    const { data: series } = await getRequest('/all-guitar-series');
     resetAfterFetch();
     setInitialSeries(series);
     return series;
@@ -49,7 +49,7 @@ const GuitarSeries = (props) => {
 
   const [saveSeriesState, saveSeries] = useAsyncFn(async (id) => {
     const { name, uri, order } = series.find(series => series.id === id).edited;
-    const { data: saveResult } = await axios.post(
+    const { data: saveResult } = await postRequest(
       '/guitar-series',
       { id, name, uri, order },
     );
@@ -58,7 +58,7 @@ const GuitarSeries = (props) => {
   }, [series]);
 
   const [deleteSeriesState, deleteSeries] = useAsyncFn(async (id) => {
-    const { data: deleteResult } = await axios.delete(
+    const { data: deleteResult } = await deleteRequest(
       '/guitar-series',
       { data: { id } },
     );

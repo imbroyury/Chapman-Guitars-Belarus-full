@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import useEditableCollection from '../../hooks/useEditableCollection.js';
 import {
@@ -15,6 +14,7 @@ import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../com
 import { Remount } from '../../HOC/Remount';
 import getImageUrl from '../../helpers/getImageUrl.js';
 import { mainProperties } from './properties';
+import { getRequest, deleteRequest, postRequest } from '../../services/NetworkService.js';
 
 const useStyles = makeStyles({
   card: {
@@ -45,7 +45,7 @@ const Artists = (props) => {
 
   const artistsRequestState = useAsync(async () => {
     if (!shouldFetch) return;
-    const { data: artists } = await axios.get('/artists');
+    const { data: artists } = await getRequest('/artists');
     resetAfterFetch();
     setInitialArtists(artists);
     return artists;
@@ -56,7 +56,7 @@ const Artists = (props) => {
       id,
       mainProperties,
     );
-    const { data: saveResult } = await axios.post(
+    const { data: saveResult } = await postRequest(
       '/artist',
       { id, ...propertiesPayload },
     );
@@ -65,7 +65,7 @@ const Artists = (props) => {
   }, [artists]);
 
   const [deleteArtistState, deleteArtist] = useAsyncFn(async (id) => {
-    const { data: deleteResult } = await axios.delete(
+    const { data: deleteResult } = await deleteRequest(
       '/artist',
       { data: { id } },
     );

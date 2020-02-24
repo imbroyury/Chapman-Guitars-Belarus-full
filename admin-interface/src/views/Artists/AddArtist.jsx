@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -14,6 +13,7 @@ import { Redirect } from 'react-router-dom';
 import { Spinner, ErrorSnackbar, FileInput, EditProperty } from '../../components';
 import { mainProperties } from './properties';
 import useItemFormState from '../../hooks/useItemFormState';
+import { putRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -37,7 +37,7 @@ const AddArtist = () => {
       .map(prop => prop.name)
       .forEach(prop => formData.append(prop, artist[prop]));
 
-    const { data: uploadResult } = await axios.put(
+    const { data: uploadResult } = await putRequest(
       '/artist',
       formData,
     );

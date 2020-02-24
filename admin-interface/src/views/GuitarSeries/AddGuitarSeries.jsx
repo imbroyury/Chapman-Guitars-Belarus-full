@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -13,6 +12,7 @@ import { Redirect } from 'react-router-dom';
 import { Spinner, ErrorSnackbar, EditProperty } from '../../components';
 import useItemFormState from '../../hooks/useItemFormState';
 import { mainProperties } from './properties';
+import { putRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -27,7 +27,7 @@ const AddGuitarSeries = () => {
   const [series, handleChangeProperty, isSeriesValid] = useItemFormState(mainProperties);
 
   const [addSeriesState, addSeries] = useAsyncFn(async () => {
-    const { data: uploadResult } = await axios.put(
+    const { data: uploadResult } = await putRequest(
       '/guitar-series',
       series,
     );

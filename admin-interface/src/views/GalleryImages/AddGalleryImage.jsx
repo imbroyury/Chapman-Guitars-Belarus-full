@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -14,6 +13,7 @@ import { Redirect } from 'react-router-dom';
 import { ErrorSnackbar, Spinner, FileInput, EditProperty } from '../../components/index.js';
 import useItemFormState from '../../hooks/useItemFormState';
 import { mainProperties } from './properties';
+import { putRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -39,7 +39,7 @@ const AddGalleryImage = () => {
       .map(prop => prop.name)
       .forEach(prop => formData.append(prop, image[prop]));
 
-    const { data: uploadResult } = await axios.put(
+    const { data: uploadResult } = await putRequest(
       '/gallery-image',
       formData,
     );

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -15,6 +14,7 @@ import { ErrorSnackbar, Spinner, FileInput, EditProperty } from '../../component
 import useItemFormState from '../../hooks/useItemFormState';
 import useFileInputsState from '../../hooks/useFileInputsState';
 import { mainProperties, fileProperties } from './properties';
+import { putRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -41,7 +41,7 @@ const AddGuitarColor = () => {
       .map(prop => prop.name)
       .forEach(prop => formData.append(prop, guitarColor[prop]));
     formData.append('guitarId', guitarId);
-    const { data: uploadResult } = await axios.put(
+    const { data: uploadResult } = await putRequest(
       '/guitar-color',
       formData,
     );

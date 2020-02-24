@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useAsync, useAsyncFn } from 'react-use';
 import {
   Grid,
@@ -15,6 +14,7 @@ import { ErrorSnackbar, Spinner, EditProperty, DisplayProperty } from '../../com
 import useEditableCollection from '../../hooks/useEditableCollection.js';
 import getImageUrl from '../../helpers/getImageUrl.js';
 import { mainProperties } from './properties';
+import { getRequest, deleteRequest, postRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -44,14 +44,14 @@ const GalleryImages = (props) => {
 
   const imagesRequestState = useAsync(async () => {
     if (!shouldFetch) return;
-    const { data: images } = await axios.get('/gallery-images');
+    const { data: images } = await getRequest('/gallery-images');
     resetAfterFetch();
     setInitialImages(images);
     return images;
   }, [shouldFetch]);
 
   const [deleteImageState, deleteImage] = useAsyncFn(async (id) => {
-    const { data: deleteResult } = await axios.delete(
+    const { data: deleteResult } = await deleteRequest(
       '/gallery-image',
       { data: { id } },
     );
@@ -64,7 +64,7 @@ const GalleryImages = (props) => {
       id,
       mainProperties,
     );
-    const { data: changeResult } = await axios.post(
+    const { data: changeResult } = await postRequest(
       '/gallery-image',
       { id, ...propertiesPayload },
     );

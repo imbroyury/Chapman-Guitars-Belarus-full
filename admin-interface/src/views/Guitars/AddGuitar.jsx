@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useAsyncFn, useAsync } from 'react-use';
 import {
   Grid,
@@ -15,6 +14,7 @@ import { Spinner, ErrorSnackbar, EditProperty, LabelledSelect } from '../../comp
 import { mainProperties, additionalProperties } from './properties';
 import useItemFormState from '../../hooks/useItemFormState';
 import { Alert } from '@material-ui/lab';
+import { putRequest, getRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
@@ -33,14 +33,14 @@ const AddGuitar = () => {
 
   const [series, setSeries] = useState([]);
   const guitarSeriesState = useAsync(async () => {
-    const { data: guitarSeries } = await axios.get('/all-guitar-series');
+    const { data: guitarSeries } = await getRequest('/all-guitar-series');
     const series = guitarSeries.map(series => ({ id: series.id, name: series.name }));
     setSeries(series);
     return series;
   }, []);
 
   const [addGuitarState, addGuitar] = useAsyncFn(async () => {
-    const { data: uploadResult } = await axios.put(
+    const { data: uploadResult } = await putRequest(
       '/guitar',
       guitar,
     );

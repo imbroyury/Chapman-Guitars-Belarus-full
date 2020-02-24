@@ -28,8 +28,10 @@ router.post('/logout', async (req, res) => {
 
 router.post('/check-token', async (req, res) => {
   try {
-    await new Promise(resolve => setTimeout(resolve,300));
     const { token } = req.body;
+    if (!token) {
+      return res.status(401).send({ errorMessage: errors.invalidToken });
+    }
     const isTokenValid = await UserService.getIsSessionValid(token);
     if (isTokenValid) {
       await UserService.touchSession(token);

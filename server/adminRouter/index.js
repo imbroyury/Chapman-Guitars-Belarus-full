@@ -8,10 +8,12 @@ import {
   guitarColorRouter,
   authRouter,
 } from './routers';
+import authMiddleware from '../middleware/auth';
 
 const router = express.Router();
 
 router.use('/', authRouter);
+router.use(authMiddleware);
 router.use('/', artistRouter);
 router.use('/', galleryImageRouter);
 router.use('/', guitarSeriesRouter);

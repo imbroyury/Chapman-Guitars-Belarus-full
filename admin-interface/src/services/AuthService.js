@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   setAuthRequestRunning,
   setAuthRequestError,
@@ -6,18 +5,25 @@ import {
   setUserAuthenticated,
   setUserUnauthenticated,
 } from '../store/actions';
+import { postRequest } from './NetworkService';
 
 const AUTH_DATA = 'CHAPMAN_GUITARS_ADMIN_INTERFACE_AUTH_DATA';
 
 const saveAuthData = (login, token) => localStorage.setItem(AUTH_DATA, JSON.stringify({ login, token }));
 const getAuthData = () => JSON.parse(localStorage.getItem(AUTH_DATA));
 
+export const getAuthToken = () => {
+  const authData = getAuthData();
+  return authData ? authData.token : null;
+};
+
 export const loginRequest = async (login, password) => {
   setAuthRequestRunning();
   try {
-    const { data } = await axios.post(
+    const { data } = await postRequest(
       '/login',
-      { login, password }
+      { login, password },
+      false
     );
     console.log(data);
     saveAuthData(login, data.token);
@@ -35,9 +41,10 @@ export const logoutRequest = async () => {
   const { token } = authData;
   setAuthRequestRunning();
   try {
-    await axios.post(
+    await postRequest(
       '/logout',
-      { token }
+      { token },
+      false
     );
     setAuthRequestDone();
   } catch(e) {
@@ -55,9 +62,10 @@ export const checkTokenRequest = async () => {
     setAuthRequestRunning();
     try {
       const { login, token } = authData;
-      const { data } = await axios.post(
+      const { data } = await postRequest(
         'check-token',
-        { token }
+        { token },
+        false
       );
       console.log(data);
       setAuthRequestDone();
