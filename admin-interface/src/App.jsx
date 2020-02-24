@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { routes } from './routes';
 import { Spinner, ErrorSnackbar } from './components';
 import { useSelector } from 'react-redux';
-import { requestStatuses } from './services/requestStatuses';
 import AuthService from './services/AuthService';
+import { requestStatuses } from './enums/requestStatuses';
 
 const drawerWidth = '10rem';
 

@@ -9,7 +9,7 @@ import {
 
 export const setUserAuthenticated = (login) => store.dispatch({
   type: SET_USER_AUTHENTICATED,
-  payload: { login }
+  payload: { login },
 });
 
 export const setUserUnauthenticated = () => store.dispatch({
@@ -17,14 +17,14 @@ export const setUserUnauthenticated = () => store.dispatch({
 });
 
 export const setAuthRequestRunning = () => store.dispatch({
-  type: SET_REQUEST_RUNNING
+  type: SET_REQUEST_RUNNING,
 });
 
 export const setAuthRequestDone = () => store.dispatch({
-  type: SET_REQUEST_DONE
+  type: SET_REQUEST_DONE,
 });
 
 export const setAuthRequestError = (error) => store.dispatch({
   type: SET_REQUEST_ERROR,
-  payload: { error }
+  payload: { error },
 });

@@ -1,4 +1,4 @@
-import { requestStatuses } from '../services/requestStatuses';
+import { requestStatuses } from '../enums/requestStatuses';
 import {
   SET_USER_AUTHENTICATED,
   SET_USER_UNAUTHENTICATED,
