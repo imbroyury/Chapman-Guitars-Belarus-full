@@ -1,4 +1,5 @@
-import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist } from './Models.js';
+import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist, User } from './Models.js';
+import * as UserService from '../UserService';
 
 const imgs = [
   // ml-1 Midnight Sky
@@ -114,4 +115,6 @@ export default async () => {
     description: 'Рабеа - гитарист групп Dorje (#1 в рок чарте Великобритании в 2015 году) и Toska (#1 в мировом чартеBandcamp). Занимался музыкой с детских лет - в 8 лет он сел за барабанную установку, а в 15 взялся за гитару.Участвовал в разработке многих гитар Chapman.',
     photoId: images[4][1].id
   }]);
+
+  await UserService.createUser('admin', 'admin11');
 };

@@ -12,7 +12,7 @@ const AUTH_DATA = 'CHAPMAN_GUITARS_ADMIN_INTERFACE_AUTH_DATA';
 const saveAuthData = (login, token) => localStorage.setItem(AUTH_DATA, JSON.stringify({ login, token }));
 const getAuthData = () => JSON.parse(localStorage.getItem(AUTH_DATA));
 
-const login = async (login, password) => {
+export const loginRequest = async (login, password) => {
   setAuthRequestRunning();
   try {
     const { data } = await axios.post(
@@ -30,14 +30,14 @@ const login = async (login, password) => {
   }
 };
 
-const logout = async () => {
+export const logoutRequest = async () => {
   const authData = getAuthData();
-  const { login, token } = authData;
+  const { token } = authData;
   setAuthRequestRunning();
   try {
     await axios.post(
       '/logout',
-      { login, token }
+      { token }
     );
     setAuthRequestDone();
   } catch(e) {
@@ -47,7 +47,7 @@ const logout = async () => {
   setUserUnauthenticated();
 };
 
-const checkToken = async () => {
+export const checkTokenRequest = async () => {
   const authData = getAuthData();
   if (authData === null) {
     setUserUnauthenticated();
@@ -57,7 +57,7 @@ const checkToken = async () => {
       const { login, token } = authData;
       const { data } = await axios.post(
         'check-token',
-        { login, token }
+        { token }
       );
       console.log(data);
       setAuthRequestDone();
@@ -68,10 +68,4 @@ const checkToken = async () => {
       setUserUnauthenticated();
     }
   }
-};
-
-export default {
-  login,
-  logout,
-  checkToken,
 };

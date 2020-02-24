@@ -11,7 +11,7 @@ import { inputType, inputConfig } from '../../shared/inputs';
 import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-use';
 import { useUserSelector } from '../../store/useSelectors';
-import AuthService from '../../services/AuthService';
+import * as AuthService from '../../services/AuthService';
 
 const useStyles = makeStyles({
   card: {
@@ -85,7 +85,7 @@ const Login = () => {
     <Grid container>
       <Button
         variant="contained"
-        onClick={() => AuthService.login(inputs.login, inputs.password)}
+        onClick={() => AuthService.loginRequest(inputs.login, inputs.password)}
         color="primary"
         disabled={isLoginDisabled}
       >

@@ -1,40 +1,45 @@
 import express from 'express';
 import errors from '../../../admin-interface/src/shared/errors';
+import * as UserService from '../../UserService';
 
 const router = express.Router();
 
-let TOKEN = null;
-const ADMIN_USER = 'admin';
-const ADMIN_PASSWORD = 'admin11';
-
-const generateToken = () => `${Math.random()}-${Math.random()}-${Math.random()}`;
-
 router.post('/login', async (req, res) => {
   const { login, password } = req.body;
-  if (login == ADMIN_USER && password === ADMIN_PASSWORD) {
-    TOKEN = generateToken();
-    res.status(200).send({ token: TOKEN });
-  } else {
-    res.status(401).send({ errorMessage: errors.invalidCredentials });
+
+  const user = await UserService.getUserByLoginAndPassword(login, password);
+  if (user === null) {
+    return res.status(401).send({ errorMessage: errors.invalidCredentials });
   }
+
+  const token = await UserService.createSession(user.id);
+  res.status(200).send({ token });
 });
 
 router.post('/logout', async (req, res) => {
-  const { login, token } = req.body;
-  console.log(login, token);
-  TOKEN = null;
-  res.status(200).send('Logged out');
+  const { token } = req.body;
+  try {
+    await UserService.deleteSession(token);
+  } catch (e) {
+    // ignore
+  }
+  res.status(200).send();
 });
 
 router.post('/check-token', async (req, res) => {
-  await new Promise(resolve => setTimeout(resolve,2000));
-  const { login, token } = req.body;
-  if (login == ADMIN_USER && token === TOKEN) {
-    return res.status(200).send('Authenticated');
-  } else {
-    return res.status(401).send({ errorMessage: errors.sessionExpired });
+  try {
+    await new Promise(resolve => setTimeout(resolve,300));
+    const { token } = req.body;
+    const isTokenValid = await UserService.getIsSessionValid(token);
+    if (isTokenValid) {
+      await UserService.touchSession(token);
+      return res.status(200).send();
+    } else {
+      return res.status(401).send({ errorMessage: errors.invalidToken });
+    }
+  } catch (e) {
+    return res.status(500).send({ errorMessage: errors.somethingWentWrong });
   }
-  return res.status(500).send({ errorMessage: errors.somethingWentWrong });
 });
 
 export default router;

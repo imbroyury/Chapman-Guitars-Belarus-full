@@ -1,5 +1,5 @@
 import sequelize from './sequelize.js';
-import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist } from './Models.js';
+import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist, User, Session } from './Models.js';
 import seed from './seed.js';
 
 export const init = async () => {
@@ -11,6 +11,8 @@ export const init = async () => {
     await sequelize.sync();
 
     console.log('Models x Tables sync complete');
+    await User.hasMany(Session, { foreignKey: 'userId' });
+    await Session.belongsTo(User, { foreignKey: 'userId' });
 
     await GuitarSeries.hasMany(Guitar, { foreignKey: 'seriesId' });
     await Guitar.belongsTo(GuitarSeries, { foreignKey: 'seriesId' });
@@ -45,6 +47,36 @@ export const init = async () => {
   } catch(e) {
     console.error('Unable to connect to the database:', e);
   }
+};
+
+export const putUser = async (login, password) => {
+  const user = await User.create({ login, password });
+  return user;
+};
+
+export const getUserByLoginAndPassword = async (login, password) => {
+  const user = await User.findOne({ where: { login, password } });
+  return user;
+};
+
+export const putSession = async (userId, token) => {
+  const session = await Session.create({ userId, token });
+  return session;
+};
+
+export const getSessionByToken = async (token) => {
+  const session = await Session.findOne({ where: { token } });
+  return session;
+};
+
+export const touchSession = async (token) => {
+  const session = await getSessionByToken(token);
+  session.changed('updatedAt', true);
+  await session.save();
+};
+
+export const deleteSession = async (login, token) => {
+  await Session.destroy({ where: { login, token } });
 };
 
 export const saveImageMetaData = async (name) => {

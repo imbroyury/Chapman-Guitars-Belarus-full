@@ -1,6 +1,51 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from './sequelize.js';
 
+export class User extends Model {}
+User.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  login: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  sequelize,
+  timestamps: false
+});
+export class Session extends Model { }
+Session.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id',
+    },
+  },
+  token: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  // createdAt and updatedAt timestamps used
+}, {
+  sequelize,
+});
+
 export class Image extends Model {}
 Image.init({
   id: {

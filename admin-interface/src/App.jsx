@@ -4,7 +4,7 @@ import { Divider, Drawer, List, ListItem, ListItemText } from '@material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
 import { routes } from './routes';
 import { Spinner, ErrorSnackbar } from './components';
-import AuthService from './services/AuthService';
+import * as AuthService from './services/AuthService';
 import { requestStatuses } from './enums/requestStatuses';
 import { useUserSelector, useAuthRequestSelector } from './store/useSelectors';
 
@@ -133,7 +133,7 @@ const AppRouter = () => {
 const App = () => {
   // on the first app open check if user still has valid credentials
   useEffect(() => {
-    AuthService.checkToken();
+    AuthService.checkTokenRequest();
   }, []);
 
   return (<>
