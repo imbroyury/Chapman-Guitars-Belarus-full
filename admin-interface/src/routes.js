@@ -2,7 +2,7 @@ import GalleryImages from './views/GalleryImages/GalleryImages';
 import AddGalleryImage from './views/GalleryImages/AddGalleryImage';
 import Artists from './views/Artists/Artists';
 import AddArtist from './views/Artists/AddArtist';
-import Login from './views/Login';
+import Login from './views/Login/Login';
 import GuitarSeries from './views/GuitarSeries/GuitarSeries';
 import AddGuitarSeries from './views/GuitarSeries/AddGuitarSeries';
 import Guitars from './views/Guitars/Guitars';

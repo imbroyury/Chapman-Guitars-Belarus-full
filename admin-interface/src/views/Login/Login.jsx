@@ -7,11 +7,11 @@ import {
   Card,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { inputType, inputConfig } from '../shared/inputs';
+import { inputType, inputConfig } from '../../shared/inputs';
 import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-use';
 import { useSelector } from 'react-redux';
-import AuthService from '../services/AuthService';
+import AuthService from '../../services/AuthService';
 
 const useStyles = makeStyles({
   card: {
