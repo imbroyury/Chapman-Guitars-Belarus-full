@@ -37,6 +37,6 @@ export const getIsSessionValid = async (token) => {
   const now = Date.now();
   const updatedAt = new Date(session.updatedAt).getTime();
   const diff = now - updatedAt;
-  const validity = minutes(1);
+  const validity = minutes(10);
   return diff <= validity;
 };

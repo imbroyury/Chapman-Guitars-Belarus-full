@@ -98,6 +98,15 @@ const Guitars = (props) => {
     return deleteResult;
   }, []);
 
+  const [deleteColorState, deleteColor] = useAsyncFn(async (id) => {
+    const { data: deleteResult } = await deleteRequest(
+      '/guitar-color',
+      { data: { id } },
+    );
+    scheduleRefetch();
+    return deleteResult;
+  }, []);
+
   const handleSaveGuitar = (id) => {
     setGuitarEditModeOff(id);
     saveGuitar(id);
@@ -107,6 +116,7 @@ const Guitars = (props) => {
     guitarsGroupedBySeriesRequestState,
     saveGuitarState,
     deleteGuitarState,
+    deleteColorState,
   ];
 
   const isSomeRequestInProgress = requestStates.some(state => state.loading);
@@ -119,22 +129,36 @@ const Guitars = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
-  const renderGuitarColor = guitarColor => {
+  const renderGuitarColor = isEditMode => guitarColor => {
     const guitar = guitarColor.guitarImage.name;
     const tab = guitarColor.tabImage.name;
     const dot = guitarColor.dotImage.name;
     return (<Card key={guitar} className={classes.colorCard} raised>
-      <Grid>
-        <img alt='' src={getImageUrl(tab)} className={classes.tabImage} />
-        <img alt='' src={getImageUrl(dot)} className={classes.dotImage} />
-      </Grid>
-      <Grid>
-        <img alt='' src={getImageUrl(guitar)} className={classes.guitarImg} />
-      </Grid>
+      <CardContent>
+        <Grid>
+          <img alt='' src={getImageUrl(tab)} className={classes.tabImage} />
+          <img alt='' src={getImageUrl(dot)} className={classes.dotImage} />
+        </Grid>
+        <Grid>
+          <img alt='' src={getImageUrl(guitar)} className={classes.guitarImg} />
+        </Grid>
+      </CardContent>
+      {isEditMode &&
+      <CardActions>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => deleteColor(guitarColor.id)}
+          disabled={isInteractionDisabled}
+        >
+            Delete
+        </Button>
+      </CardActions>}
     </Card>);
   };
 
-  const renderGuitarColors = (guitarColors) => <Grid container>{guitarColors.map(renderGuitarColor)}</Grid>;
+  const renderGuitarColors = (guitarColors, isEditMode) =>
+    <Grid container>{guitarColors.map(renderGuitarColor(isEditMode))}</Grid>;
 
   const renderPropertyEditMode = (guitar, property) =>
     <EditProperty
@@ -164,7 +188,7 @@ const Guitars = (props) => {
         {mainProperties.map(property => renderPropertyEditMode(guitar, property))}
         {renderSeriesSelect()}
         <Typography>Colors: </Typography>
-        {renderGuitarColors(guitar.GuitarColors)}
+        {renderGuitarColors(guitar.GuitarColors, true)}
       </CardContent>
       <CardActions>
         <Button
@@ -212,7 +236,7 @@ const Guitars = (props) => {
         <Typography>{`Series: ${currentSeries.name}`}</Typography>
         <Typography>Colors: </Typography>
       </CardContent>
-      {renderGuitarColors(guitar.GuitarColors)}
+      {renderGuitarColors(guitar.GuitarColors, false)}
       <CardActions>
         <Button
           variant="contained"

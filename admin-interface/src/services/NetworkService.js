@@ -21,7 +21,7 @@ authxios.interceptors.response.use(
       setAuthRequestError(error.response.data.errorMessage);
       setUserUnauthenticated();
     }
-    return error;
+    throw error;
   },
 );
 

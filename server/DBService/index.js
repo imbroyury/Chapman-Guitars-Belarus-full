@@ -340,3 +340,22 @@ export const putGuitarColor = async (guitarId, order, name, tabImageId, dotImage
     guitarImageId,
   });
 };
+
+export const getGuitarColor = async (id) => {
+  const guitarColor = await GuitarColor.findOne({
+    where: { id },
+    include: [
+      { model: Image, as: 'guitarImage' },
+      { model: Image, as: 'tabImage' },
+      { model: Image, as: 'dotImage' },
+    ],
+  });
+  return guitarColor;
+};
+
+export const deleteGuitarColor = async (id) => {
+  const guitarColor = await GuitarColor.destroy({
+    where: { id },
+  });
+  return guitarColor;
+};
