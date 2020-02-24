@@ -4,9 +4,9 @@ import { Divider, Drawer, List, ListItem, ListItemText } from '@material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
 import { routes } from './routes';
 import { Spinner, ErrorSnackbar } from './components';
-import { useSelector } from 'react-redux';
 import AuthService from './services/AuthService';
 import { requestStatuses } from './enums/requestStatuses';
+import { useUserSelector, useAuthRequestSelector } from './store/useSelectors';
 
 const drawerWidth = '10rem';
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 
 const PrivateRoute = ({ children, ...rest }) => { // eslint-disable-line react/prop-types
-  const user = useSelector(state => state.user);
+  const user = useUserSelector();
 
   const renderProp = ({ location }) => // eslint-disable-line react/prop-types
     user.isAuthenticated
@@ -44,8 +44,9 @@ const PrivateRoute = ({ children, ...rest }) => { // eslint-disable-line react/p
 };
 
 const AuthProcess = () => {
-  const authRequest = useSelector((state) => state.authRequest);
+  const authRequest = useAuthRequestSelector();
   const isAuthRequestRunning = authRequest.status === requestStatuses.running;
+  const hasAuthRequestErred = authRequest.status === requestStatuses.error;
 
   const renderAuthError = (error) =>
     <ErrorSnackbar
@@ -56,7 +57,7 @@ const AuthProcess = () => {
 
   return <>
     {<Spinner open={isAuthRequestRunning} />}
-    {authRequest.error && renderAuthError(authRequest.error)}
+    {hasAuthRequestErred && renderAuthError(authRequest.error || 'Something went wrong')}
   </>;
 };
 
@@ -79,9 +80,6 @@ const Views = () => {
     <Switch>
       {routes.preAuth.flat().map(renderPublicRoute)}
       {routes.auth.flat().map(renderPrivateRoute)}
-      <Route path="*">
-        404
-      </Route>
     </Switch>
   </main>;
 };
@@ -89,7 +87,7 @@ const Views = () => {
 const NavDrawer = () => {
   const classes = useStyles();
 
-  const user = useSelector((state) => state.user);
+  const user = useUserSelector();
 
   const renderLinkToRoute = route => {
     const { linkLabel, path } = route;

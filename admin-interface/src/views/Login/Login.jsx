@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { inputType, inputConfig } from '../../shared/inputs';
 import { Redirect } from 'react-router-dom';
 import { useLocation } from 'react-use';
-import { useSelector } from 'react-redux';
+import { useUserSelector } from '../../store/useSelectors';
 import AuthService from '../../services/AuthService';
 
 const useStyles = makeStyles({
@@ -25,7 +25,7 @@ const Login = () => {
   let location = useLocation();
   const { from } = (location.state && location.state.state) || { from: { pathname: '/' } };
 
-  const user = useSelector(state => state.user);
+  const user = useUserSelector();
 
   const [inputs, setInputs] = useState({
     [inputType.login]: '',

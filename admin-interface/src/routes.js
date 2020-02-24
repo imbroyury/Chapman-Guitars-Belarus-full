@@ -8,6 +8,7 @@ import AddGuitarSeries from './views/GuitarSeries/AddGuitarSeries';
 import Guitars from './views/Guitars/Guitars';
 import AddGuitar from './views/Guitars/AddGuitar';
 import AddGuitarColor from './views/GuitarColor/AddGuitarColor';
+import Route404 from './views/404/Route404';
 
 export const routes = {
   preAuth: [
@@ -61,6 +62,11 @@ export const routes = {
     [{
       View: AddGuitarColor,
       path: '/add-guitar-color/:guitarId',
+    }],
+    // last
+    [{
+      View: Route404,
+      path: '*'
     }]
   ],
 };
