@@ -75,13 +75,13 @@ router.get('/artists', async (req, res) => {
   res.render('artists', { artists: vm, ...getActiveMenuItemConfig('artists') });
 });
 
-router.get('/artists/:artist', async (req, res) => {
-  const { artist } = req.params;
-  const a = await DBService.getArtistByUri(artist);
+router.get('/artists/:artistUri', async (req, res) => {
+  const { artistUri } = req.params;
+  const artist = await DBService.getArtistByUri(artistUri);
 
-  if (a === null) return res.render('404');
+  if (artist === null) return res.render('404');
 
-  const vm = mapArtistToViewModel(a);
+  const vm = mapArtistToViewModel(artist);
   res.render('artist', { artist: vm, ...getActiveMenuItemConfig('artists') });
 });
 
