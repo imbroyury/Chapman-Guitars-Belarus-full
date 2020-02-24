@@ -59,14 +59,23 @@ const AuthProcess = () => {
   </>;
 };
 
+const withAuth = (View) => (props) => {
+  useEffect(() => {
+    AuthService.checkTokenRequest();
+  }, []);
+  return <View {...props} />;
+};
+
 const Views = () => {
   const classes = useStyles();
 
   const getRouteRenderer = isPrivate => route => {
     const RouteComponent = isPrivate ? PrivateRoute : Route;
     const { View, path, exact } = route;
+    const AuthView = withAuth(View);
+
     return <RouteComponent path={path} key={path} exact={exact}>
-      <View />
+      <AuthView />
     </RouteComponent>;
   };
 
@@ -117,23 +126,14 @@ const NavDrawer = () => {
   </Drawer>;
 };
 
-const AppRouter = () => {
-  return <Router>
-    <NavDrawer />
-    <Views />
-  </Router>;
-};
+const AppRouter = () => <Router>
+  <NavDrawer />
+  <Views />
+</Router>;
 
-const App = () => {
-  // on the first app open check if user still has valid credentials
-  useEffect(() => {
-    AuthService.checkTokenRequest();
-  }, []);
-
-  return (<>
-    <AppRouter />
-    <AuthProcess />
-  </>);
-};
+const App = () => <>
+  <AppRouter />
+  <AuthProcess />
+</>;
 
 export default App;
