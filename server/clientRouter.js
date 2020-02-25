@@ -52,9 +52,9 @@ router.get('/guitars', async (req, res) => {
   res.render('guitars', { guitarSeries: vm, ...getActiveMenuItemConfig('guitars') });
 });
 
-router.get('/guitars/:model', async (req, res) => {
-  const { model } = req.params;
-  const guitar = await DBService.getGuitarByUri(model);
+router.get('/guitars/:modelUri', async (req, res) => {
+  const { modelUri } = req.params;
+  const guitar = await DBService.getGuitarByUri(modelUri);
 
   if (guitar === null) return res.render('404');
 
