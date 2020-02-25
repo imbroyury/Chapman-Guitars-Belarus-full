@@ -272,3 +272,27 @@ Artist.init({
 }, {
   sequelize,
 });
+
+export class Page extends Model {}
+Page.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  url: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  content: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+}, {
+  // add a FULLTEXT index
+  indexes: [
+    { type: 'FULLTEXT', name: 'content_fulltext_index', fields: ['content'] }
+  ],
+  sequelize,
+});

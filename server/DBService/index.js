@@ -105,6 +105,14 @@ export const getGuitarByUri = async (uri) => {
   return guitar;
 };
 
+export const getAllGuitarUris = async () => {
+  const guitars = await Guitar.findAll({
+    attributes: ['uri']
+  });
+  const uris = guitars.map(guitar => guitar.uri);
+  return uris;
+};
+
 export const getGuitar = async (id) => {
   const guitar = await Guitar.findOne({
     where: id,
@@ -242,6 +250,14 @@ export const getAllArtists = async () => {
     order: [['order', 'ASC']],
   });
   return artists;
+};
+
+export const getAllArtistUris = async () => {
+  const artists = await Artist.findAll({
+    attributes: ['uri']
+  });
+  const uris = artists.map(artist => artist.uri);
+  return uris;
 };
 
 export const getArtist = async (id) => {

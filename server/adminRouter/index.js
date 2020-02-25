@@ -9,8 +9,14 @@ import {
   authRouter,
 } from './routers';
 import authMiddleware from '../middleware/auth';
+import { getAllUrlContent } from '../SearchService';
 
 const router = express.Router();
+
+router.use('/indexing', async (req, res) => {
+  const urls = await getAllUrlContent();
+  res.send(urls);
+});
 
 router.use('/', authRouter);
 router.use(authMiddleware);
