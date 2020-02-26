@@ -1,4 +1,4 @@
-import * as UserService from '../UserService';
+import * as UserService from '../services/UserService';
 import errors from '../../admin-interface/src/shared/errors';
 import headers from '../../admin-interface/src/shared/headers';
 

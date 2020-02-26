@@ -2,10 +2,10 @@ import path from 'path';
 import express from 'express';
 import exphbs from 'express-handlebars';
 import bodyParser from 'body-parser';
-import * as DBService from './DBService';
+import * as DBService from './services/DBService';
 import { HTTP_PORT } from '../admin-interface/src/shared/hosts';
-import clientRouter from './clientRouter';
-import adminRouter from './adminRouter';
+import clientRouter from './routers/clientRouter';
+import adminRouter from './routers/adminRouter';
 
 const server = express();
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import * as DBService from './DBService';
+import * as DBService from '../../services/DBService';
 
 const getActiveMenuItemConfig = (activeItem) => {
   if (activeItem === null) return { activeMenuItem: {} };

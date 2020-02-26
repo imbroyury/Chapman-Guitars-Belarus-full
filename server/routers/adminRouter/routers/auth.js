@@ -1,6 +1,6 @@
 import express from 'express';
-import errors from '../../../admin-interface/src/shared/errors';
-import * as UserService from '../../UserService';
+import errors from '../../../../admin-interface/src/shared/errors';
+import * as UserService from '../../../services/UserService';
 
 const router = express.Router();
 

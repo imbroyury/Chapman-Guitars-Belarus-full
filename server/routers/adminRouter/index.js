@@ -8,8 +8,8 @@ import {
   guitarColorRouter,
   authRouter,
 } from './routers';
-import authMiddleware from '../middleware/auth';
-import { getAllUrlContent } from '../SearchService';
+import authMiddleware from '../../middleware/auth';
+import { getAllUrlContent } from '../../services/SearchService';
 
 const router = express.Router();
 
