@@ -1,5 +1,7 @@
 import path from 'path';
 import express from 'express';
+import async from 'async';
+import _ from 'lodash';
 import {
   galleryImageRouter,
   artistRouter,
@@ -9,15 +11,13 @@ import {
   authRouter,
 } from './routers';
 import authMiddleware from '../../middleware/auth';
-import { getAllUrlsContent } from '../../services/SearchService';
+import * as IndexingService from '../../services/IndexingService';
 import * as DBService from '../../services/DBService';
-import _ from 'lodash';
-import async from 'async';
 
 const router = express.Router();
 
 router.use('/indexing', async (req, res) => {
-  const latestPageContents = await getAllUrlsContent();
+  const latestPageContents = await IndexingService.getAllUrlsContent();
   const latestPagesUrls = latestPageContents.map(content => content.url);
 
   const indexedPageUrls = await DBService.getAllSearchablePagesUrls();
