@@ -25,9 +25,9 @@ router.use('/indexing', async (req, res) => {
   console.log(latestPagesUrls);
   console.log(indexedPageUrls);
 
-  const toDelete = _.difference(indexedPageUrls, latestPagesUrls);
-  const toPut = _.difference(latestPagesUrls, indexedPageUrls);
-  const toEdit = _.intersection(latestPagesUrls, indexedPageUrls);
+  const toDelete = _.difference(indexedPageUrls, latestPagesUrls); // in db, but not in latest response
+  const toPut = _.difference(latestPagesUrls, indexedPageUrls); // in latest response, but not in db
+  const toEdit = _.intersection(latestPagesUrls, indexedPageUrls); // botn in response and in db
 
   console.log(toDelete);
   console.log(toPut);
