@@ -1,5 +1,15 @@
 import sequelize from './sequelize.js';
-import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist, User, Session, SearchablePage } from './Models.js';
+import {
+  GuitarSeries,
+  Guitar,
+  GuitarColor,
+  Image,
+  MainGalleryImage,
+  Artist,
+  User,
+  Session,
+  SearchablePage,
+} from './Models.js';
 import seed from './seed.js';
 
 export const init = async () => {

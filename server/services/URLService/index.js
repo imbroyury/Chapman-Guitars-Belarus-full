@@ -1,6 +1,6 @@
 import async from 'async';
 import _ from 'lodash';
-import { getAllGuitarUris, getAllArtistUris } from '../DBService';
+import * as DBService from '../DBService';
 
 const HOST = 'http://localhost:8280';
 
@@ -18,11 +18,11 @@ const URI_PLACEHOLDER = '{{uri}}';
 const dynamicUrlDeclarations = [
   {
     url: `/guitars/${URI_PLACEHOLDER}`,
-    itemUrisFetcher: getAllGuitarUris,
+    itemUrisFetcher: DBService.getAllGuitarUris,
   },
   {
     url: `/artists/${URI_PLACEHOLDER}`,
-    itemUrisFetcher: getAllArtistUris,
+    itemUrisFetcher: DBService.getAllArtistUris,
   }
 ];
 
