@@ -93,8 +93,25 @@ router.get('/contact', async (req, res) => {
   res.render('contact', { ...getActiveMenuItemConfig('contact') });
 });
 
+router.get('/search', express.urlencoded({ extended: true }), async (req, res) => {
+  const { query } = req.query;
+
+  let hits = [];
+
+  if (typeof query === 'string' && query.length > 0) {
+    hits = await DBService.getSearchablePageHitsByQuery(query);
+  }
+
+  res.render('search', {
+    query,
+    results: hits,
+    ...getActiveMenuItemConfig('search')
+  });
+});
+
 router.get('*', async (req, res) => {
   res.render('404');
 });
+
 
 export default router;

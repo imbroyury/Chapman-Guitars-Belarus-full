@@ -1,0 +1,15 @@
+<div class="grid-page-wrap search-page">
+    {{>header}}
+    <section class="main-section">
+        <h1 class="section-header">Поиск по сайту Champan Guitars</h1>
+        <form action="/search" method="GET">
+            <input name="query" type="string" value="{{query}}" />
+            <input type="submit" value="Поиск"/>
+        </form>
+        {{#each results}}
+            <a href="{{this}}">{{this}}</a>
+        {{/each}}
+    </section>
+    {{>menu activeMenuItem}}
+    {{>footer}}
+</div>

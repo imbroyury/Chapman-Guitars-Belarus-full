@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize';
 import sequelize from './sequelize.js';
 import {
   GuitarSeries,
@@ -419,4 +420,16 @@ export const bulkDeleteSearchablePagesByUrls = async (urls) => {
 export const bulkPutSearchablePagesByUrls = async (pages) => {
   const result = await SearchablePage.bulkCreate(pages);
   return result;
+};
+
+export const getSearchablePageHitsByQuery = async (query) => {
+  const results = await SearchablePage.findAll({
+    where: Sequelize.literal('MATCH (content) AGAINST (:query)'),
+    replacements: {
+      query
+    },
+    attributes: ['url'],
+  });
+  const urls = results.map(result => result.url);
+  return urls;
 };
