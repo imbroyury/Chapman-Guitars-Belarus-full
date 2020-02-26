@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jsdom from 'jsdom';
 import series from 'async/series';
+import { zipWith } from 'lodash';
 const { JSDOM } = jsdom;
 import { getAllUrls } from '../URLService';
 
@@ -24,9 +25,12 @@ const getUrlContent = async (url) => {
   return textContent;
 };
 
-export const getAllUrlContent = async () => {
+export const getAllUrlsContent = async () => {
   const urls = await getAllUrls();
-  const urlContetFetchers = urls.map(url => async () => getUrlContent(url));
-  const contents = await series(urlContetFetchers);
+  const absoluteUrls = urls.map(url => url.absolute);
+  const relativeUrls = urls.map(url => url.relative);
+  const urlContetFetchers = absoluteUrls.map(url => async () => getUrlContent(url));
+  const urlContents = await series(urlContetFetchers);
+  const contents = zipWith(relativeUrls, urlContents, (url, content) => ({ url, content }));
   return contents;
 };

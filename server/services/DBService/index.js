@@ -1,5 +1,5 @@
 import sequelize from './sequelize.js';
-import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist, User, Session } from './Models.js';
+import { GuitarSeries, Guitar, GuitarColor, Image, MainGalleryImage, Artist, User, Session, SearchablePage } from './Models.js';
 import seed from './seed.js';
 
 export const init = async () => {
@@ -374,4 +374,39 @@ export const deleteGuitarColor = async (id) => {
     where: { id },
   });
   return guitarColor;
+};
+
+export const getAllSearchablePagesUrls = async () => {
+  const pages = await SearchablePage.findAll({
+    attributes: ['url']
+  });
+  const urls = pages.map(page => page.url);
+  return urls;
+};
+
+export const getSearchablePageByUrl = async (url) => {
+  const page = await SearchablePage.findOne({
+    where: { url }
+  });
+  return page;
+};
+
+export const editSearchablePage = async (url, content) => {
+  console.log('****************editing item with url ************', url);
+  const page = await getSearchablePageByUrl(url);
+  page.content = content;
+  await page.save();
+  console.log('*************done, see any output above *******');
+};
+
+export const bulkDeleteSearchablePagesByUrls = async (urls) => {
+  const result = await SearchablePage.destroy({
+    where: { url: urls },
+  });
+  return result;
+};
+
+export const bulkPutSearchablePagesByUrls = async (pages) => {
+  const result = await SearchablePage.bulkCreate(pages);
+  return result;
 };

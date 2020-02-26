@@ -273,8 +273,8 @@ Artist.init({
   sequelize,
 });
 
-export class Page extends Model {}
-Page.init({
+export class SearchablePage extends Model {}
+SearchablePage.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
