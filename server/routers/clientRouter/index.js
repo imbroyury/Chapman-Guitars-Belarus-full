@@ -96,11 +96,15 @@ router.get('/contact', async (req, res) => {
 router.get('/search', express.urlencoded({ extended: true }), async (req, res) => {
   const { query } = req.query;
 
-  let hits = [];
-
-  if (typeof query === 'string' && query.length > 0) {
-    hits = await DBService.getSearchablePageHitsByQuery(query);
+  if (query === undefined) {
+    return res.render('search', {
+      query: '',
+      results: [],
+      ...getActiveMenuItemConfig('search')
+    });
   }
+
+  const hits = await DBService.getSearchablePageHitsByQuery(query);
 
   res.render('search', {
     query,
