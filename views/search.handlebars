@@ -11,11 +11,11 @@
         <div class="search-results">
             {{#each results}}
                 <div class="search-result">
-                    <a href="{{this}}">{{@index}}. {{this}}</a>
+                    <a href="{{this}}">{{this}}</a>
                 </div>
             {{else}}
                 {{#if query}}
-                    <div>Nothing was found for "{{query}}"</div>
+                    <div>По запросу "{{query}}" ничего не найдено</div>
                 {{/if}}
             {{/each}}
         </div>
