@@ -11,7 +11,8 @@
         <div class="search-results">
             {{#each results}}
                 <div class="search-result">
-                    <a href="{{this.url}}">{{this.index}}. {{this.url}}</a>
+                    <a href="{{this.url}}" class="link">{{this.index}}. {{this.url}}</a>
+                    <div class="snippet">{{this.snippet}}</div>
                 </div>
             {{else}}
                 {{#if query}}

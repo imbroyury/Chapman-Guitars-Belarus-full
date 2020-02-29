@@ -104,8 +104,12 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
     });
   }
 
-  const urlHits = await DBService.getSearchablePageHitsByQuery(query);
-  const vm = urlHits.map((url, index) => ({ index: index + 1, url }));
+  const hits = await DBService.getSearchablePageHitsByQuery(query);
+  const vm = hits.map((hit, index) => ({
+    index: index + 1,
+    url: hit.url,
+    snippet: hit.content.length < 150 ? hit.content : hit.content.slice(0, 150) + '...'
+  }));
 
   res.render('search', {
     query,

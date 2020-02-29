@@ -428,8 +428,6 @@ export const getSearchablePageHitsByQuery = async (query) => {
     replacements: {
       query
     },
-    attributes: ['url'],
   });
-  const urls = results.map(result => result.url);
-  return urls;
+  return results;
 };
