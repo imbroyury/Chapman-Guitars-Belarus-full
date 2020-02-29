@@ -6,32 +6,41 @@ const HOST = 'http://localhost:8280';
 
 const getAbsoluteUrl = (relativeUrl) => HOST + relativeUrl;
 
-const staticUrls = [
-  '/',
-  '/guitars',
-  '/artists',
-  '/purchase',
-  '/contact',
-];
-
-const URI_PLACEHOLDER = '{{uri}}';
-
+// hardcoded to reference a function to fetch items
 const dynamicUrlDeclarations = [
   {
-    url: `/guitar/${URI_PLACEHOLDER}`,
+    uri: '/guitar',
     itemUrisFetcher: DBService.getAllGuitarUris,
   },
   {
-    url: `/artist/${URI_PLACEHOLDER}`,
+    uri: '/artist',
     itemUrisFetcher: DBService.getAllArtistUris,
   }
 ];
 
 export const getAllUrls = async () => {
-  const dynamicUrls = dynamicUrlDeclarations.map(urlWithItem => urlWithItem.url);
-  const itemUrisOfUrls = await async.series(dynamicUrlDeclarations.map(urlDeclaration => urlDeclaration.itemUrisFetcher));
-  const zipper = (url, uris) => uris.map(uri => url.replace(URI_PLACEHOLDER, uri));
-  const calculatedUrls = _.flatten(_.zipWith(dynamicUrls, itemUrisOfUrls, zipper));
-  const allUrls = [...staticUrls, ...calculatedUrls].map(url => ({ absolute: getAbsoluteUrl(url), relative: url }));
+  const pagesMetadata = await DBService.getAllPagesMetadata();
+  const [dynamicPages, staticPages] = _.partition(pagesMetadata, (page) => page.isBasePage);
+
+  const staticUrls = staticPages.map(page => page.uri);
+
+  const dynamicPageDeclarationsToProcess = _.intersectionBy(
+    dynamicUrlDeclarations,
+    dynamicPages,
+    'uri',
+  );
+  const dynamicPageBaseUrls = dynamicPageDeclarationsToProcess.map(urlWithItem => urlWithItem.uri);
+  const itemUrisOfDynamicPages = await async.series(
+    dynamicPageDeclarationsToProcess.map(declaration => declaration.itemUrisFetcher)
+  );
+
+  const zipper = (baseUrl, itemUri) => itemUri.map(itemUri => baseUrl + '/' + itemUri);
+  const calculatedUrls = _.flatten(_.zipWith(dynamicPageBaseUrls, itemUrisOfDynamicPages, zipper));
+
+  const allUrls = [
+    ...staticUrls,
+    ...calculatedUrls
+  ].map(url => ({ absolute: getAbsoluteUrl(url), relative: url }));
+
   return allUrls;
 };
