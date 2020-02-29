@@ -7,7 +7,7 @@ const HOST = 'http://localhost:8280';
 const getAbsoluteUrl = (relativeUrl) => HOST + relativeUrl;
 
 // hardcoded to reference a function to fetch items
-const dynamicUrlDeclarations = [
+const dynamicPageDeclarations = [
   {
     uri: '/guitar',
     itemUrisFetcher: DBService.getAllGuitarUris,
@@ -25,21 +25,21 @@ export const getAllUrls = async () => {
   const staticUrls = staticPages.map(page => page.uri);
 
   const dynamicPageDeclarationsToProcess = _.intersectionBy(
-    dynamicUrlDeclarations,
+    dynamicPageDeclarations,
     dynamicPages,
     'uri',
   );
-  const dynamicPageBaseUrls = dynamicPageDeclarationsToProcess.map(urlWithItem => urlWithItem.uri);
+  const dynamicPageBaseUris = dynamicPageDeclarationsToProcess.map(declaration => declaration.uri);
   const itemUrisOfDynamicPages = await async.series(
     dynamicPageDeclarationsToProcess.map(declaration => declaration.itemUrisFetcher)
   );
 
-  const zipper = (baseUrl, itemUri) => itemUri.map(itemUri => baseUrl + '/' + itemUri);
-  const calculatedUrls = _.flatten(_.zipWith(dynamicPageBaseUrls, itemUrisOfDynamicPages, zipper));
+  const zipper = (baseUri, itemUri) => itemUri.map(itemUri => baseUri + '/' + itemUri);
+  const dynamicUrls = _.flatten(_.zipWith(dynamicPageBaseUris, itemUrisOfDynamicPages, zipper));
 
   const allUrls = [
     ...staticUrls,
-    ...calculatedUrls
+    ...dynamicUrls,
   ].map(url => ({ absolute: getAbsoluteUrl(url), relative: url }));
 
   return allUrls;
