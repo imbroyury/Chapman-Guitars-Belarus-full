@@ -192,6 +192,48 @@ export default async () => {
     uri: '/',
     isBasePage: false,
     title: 'Chapman Guitars Беларусь',
+    metaKeywords: 'гитары, беларусь',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/guitars',
+    isBasePage: false,
+    title: 'Chapman Guitars - Галлерея гитар',
+    metaKeywords: 'гитары',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/artists',
+    isBasePage: false,
+    title: 'Chapman Guitars - Артисты бренда',
+    metaKeywords: 'гитары',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/purchase',
+    isBasePage: false,
+    title: 'Chapman Guitars - Как купить',
+    metaKeywords: 'гитары, покупка',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/contact',
+    isBasePage: false,
+    title: 'Chapman Guitars - Как связаться',
+    metaKeywords: 'гитары, связь',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/search',
+    isBasePage: false,
+    title: 'Chapman Guitars - Поиск',
+    metaKeywords: 'поиск',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/guitar',
+    isBasePage: true,
+    title: 'Chapman Guitars - Гитары -',
+    metaKeywords: 'гитары',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }, {
+    uri: '/artist',
+    isBasePage: true,
+    title: 'Chapman Guitars - Артисты -',
     metaKeywords: 'гитары',
     metaDescription: 'Гитары Chapman в Беларуси',
   }]);

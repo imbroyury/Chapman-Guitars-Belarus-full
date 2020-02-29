@@ -459,6 +459,15 @@ export const getPage = async (id) => {
   return page;
 };
 
+export const getPageByUri = async (uri) => {
+  const page = await Page.findOne({
+    where: {
+      uri
+    }
+  });
+  return page;
+};
+
 export const editPage = async (id, uri, title, isBasePage, metaKeywords, metaDescription) => {
   const page = await getPage(id);
   page.id = id,

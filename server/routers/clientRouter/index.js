@@ -1,21 +1,31 @@
 import express from 'express';
 import * as DBService from '../../services/DBService';
+import { pageMetadataMiddleware } from '../../middleware/pageMetadata';
 
 const getActiveMenuItemConfig = (activeItem) => {
   if (activeItem === null) return { activeMenuItem: {} };
   return { activeMenuItem: { [activeItem]: true } };
 };
 
+const concatMetadataForItemPage = (base, item) => ({
+  title: base.title + item.name,
+  metaKeywords: base.metaKeywords + ', ' + item.metaKeywords,
+  metaDescription: base.metaDescription + ' ' + item.metaDescription,
+});
+
 const router = express.Router();
+
+router.use(pageMetadataMiddleware);
 
 router.get('/', async (req, res) => {
   const images = await DBService.getMainGalleryImages();
   const vm = images.map(image => ({
     src: image.Image.name,
   }));
+
   res.render('home', {
-    title: 'Chapman Guitars 🎸 Беларусь',
     images: vm,
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig(null)
   });
 });
@@ -54,8 +64,8 @@ router.get('/guitars', async (req, res) => {
   }));
 
   res.render('guitars', {
-    title: 'Chapman Guitars - Гитары',
     guitarSeries: vm,
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig('guitars') });
 });
 
@@ -67,10 +77,8 @@ router.get('/guitar/:modelUri', async (req, res) => {
 
   const vm = mapGuitarToViewModel(guitar);
   res.render('guitar', {
-    title: `Chapman Guitars - Гитары - ${guitar.name}`,
-    metaKeywords: guitar.metaKeywords,
-    metaDescription: guitar.metaDescription,
     guitar: vm,
+    ...concatMetadataForItemPage(req.pageMetadata, guitar),
     ...getActiveMenuItemConfig('guitars')
   });
 });
@@ -85,9 +93,10 @@ const mapArtistToViewModel = artist => ({
 router.get('/artists', async (req, res) => {
   const artists = await DBService.getAllArtists();
   const vm = artists.map(mapArtistToViewModel);
+
   res.render('artists', {
-    title: 'Chapman Guitars - Артисты',
     artists: vm,
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig('artists')
   });
 });
@@ -100,24 +109,22 @@ router.get('/artist/:artistUri', async (req, res) => {
 
   const vm = mapArtistToViewModel(artist);
   res.render('artist', {
-    title: `Chapman Guitars - Артисты - ${artist.name}`,
-    metaKeywords: artist.metaKeywords,
-    metaDescription: artist.metaDescription,
     artist: vm,
+    ...concatMetadataForItemPage(req.pageMetadata, artist),
     ...getActiveMenuItemConfig('artists')
   });
 });
 
 router.get('/purchase', async (req, res) => {
   res.render('purchase', {
-    title: 'Chapman Guitars - Как купить',
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig('purchase')
   });
 });
 
 router.get('/contact', async (req, res) => {
   res.render('contact', {
-    title: 'Chapman Guitars - Связаться с нами',
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig('contact')
   });
 });
@@ -127,9 +134,9 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
 
   if (query === undefined) {
     return res.render('search', {
-      title: 'Chapman Guitars - Поиск',
       query: '',
       results: [],
+      ...req.pageMetadata,
       ...getActiveMenuItemConfig('search')
     });
   }
@@ -142,15 +149,17 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
   }));
 
   res.render('search', {
-    title: 'Chapman Guitars - Поиск',
     query,
     results: vm,
+    ...req.pageMetadata,
     ...getActiveMenuItemConfig('search')
   });
 });
 
 router.get('*', async (req, res) => {
-  res.render('404');
+  res.render('404', {
+    ...req.pageMetadata,
+  });
 });
 
 
