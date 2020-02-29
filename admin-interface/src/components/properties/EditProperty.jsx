@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {
   Grid,
   TextField,
+  FormControlLabel,
+  Checkbox
 } from '@material-ui/core';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -12,11 +14,23 @@ const EditProperty = (props) => {
 
   const handleWYSIWYGOnChange = (content) => onChange(property.name, content);
   const handleInputOnChange = (e) => onChange(property.name, e.target.value);
+  const handleCheckboxOnChange = (e) => onChange(property.name, e.target.checked);
 
   const renderWYSIWYG = () => <ReactQuill
     value={item[property.name]}
     onChange={handleWYSIWYGOnChange}
     readOnly={disabled}
+  />;
+
+  const renderCheckbox = () => <FormControlLabel
+    control={
+      <Checkbox
+        checked={item[property.name]}
+        onChange={handleCheckboxOnChange}
+        color="primary"
+      />
+    }
+    label={property.label}
   />;
 
   const renderInput = () => <Grid container>
@@ -31,6 +45,7 @@ const EditProperty = (props) => {
   </Grid>;
 
   if (property.type === 'html') return renderWYSIWYG();
+  if (property.type === 'boolean') return renderCheckbox();
   return renderInput();
 };
 

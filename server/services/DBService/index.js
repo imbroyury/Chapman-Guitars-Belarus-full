@@ -10,6 +10,7 @@ import {
   User,
   Session,
   SearchablePage,
+  Page,
 } from './Models.js';
 import seed from './seed.js';
 
@@ -442,4 +443,43 @@ export const getSearchablePageHitsByQuery = async (query) => {
     },
   });
   return results;
+};
+
+export const getAllPages = async () => {
+  const pages = await Page.findAll();
+  return pages;
+};
+
+export const getPage = async (id) => {
+  const page = await Page.findOne({
+    where: {
+      id
+    }
+  });
+  return page;
+};
+
+export const editPage = async (id, uri, title, isBasePage, metaKeywords, metaDescription) => {
+  const page = await getPage(id);
+  page.id = id,
+  page.uri = uri,
+  page.title = title,
+  page.isBasePage = isBasePage,
+  page.metaKeywords = metaKeywords,
+  page.metaDescription = metaDescription,
+  await page.save();
+};
+
+export const putPage = async (uri, title, isBasePage, metaKeywords, metaDescription) => {
+  await Page.create({
+    uri, title, isBasePage, metaKeywords, metaDescription
+  });
+};
+
+export const deletePage = async (id) => {
+  await Page.destroy({
+    where: {
+      id
+    }
+  });
 };

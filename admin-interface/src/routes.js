@@ -10,6 +10,8 @@ import AddGuitar from './views/Guitars/AddGuitar';
 import AddGuitarColor from './views/GuitarColor/AddGuitarColor';
 import Route404 from './views/404/Route404';
 import Main from './views/Main/Main';
+import Pages from './views/Pages/Pages';
+import AddPage from './views/Pages/AddPage';
 
 export const routes = {
   preAuth: [
@@ -59,6 +61,15 @@ export const routes = {
       View: AddGuitar,
       path: '/add-guitar',
       linkLabel: 'Add Guitar'
+    }],
+    [{
+      View: Pages,
+      path: '/pages',
+      linkLabel: 'Pages'
+    }, {
+      View: AddPage,
+      path: '/add-page',
+      linkLabel: 'Add Page'
     }],
     // group of routes w/o links in the drawer
     [{

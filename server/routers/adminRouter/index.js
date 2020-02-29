@@ -7,6 +7,7 @@ import {
   guitarRouter,
   guitarColorRouter,
   authRouter,
+  pageRouter,
 } from './routers';
 import authMiddleware from '../../middleware/auth';
 import indexingMiddleware from '../../middleware/indexing';
@@ -21,6 +22,7 @@ router.use('/', galleryImageRouter);
 router.use('/', guitarSeriesRouter);
 router.use('/', guitarRouter);
 router.use('/', guitarColorRouter);
+router.use('/', pageRouter);
 
 const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
 // For everything else, serve index file

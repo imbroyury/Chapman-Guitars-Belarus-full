@@ -289,6 +289,38 @@ Artist.init({
   sequelize,
 });
 
+export class Page extends Model {}
+Page.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  uri: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  isBasePage: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  metaDescription: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  metaKeywords: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  sequelize,
+});
+
 export class SearchablePage extends Model {}
 SearchablePage.init({
   id: {

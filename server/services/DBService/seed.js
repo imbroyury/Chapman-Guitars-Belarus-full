@@ -188,6 +188,13 @@ export default async () => {
     },
   ]);
 
+  await Page.bulkCreate([{
+    uri: '/',
+    isBasePage: false,
+    title: 'Chapman Guitars Беларусь',
+    metaKeywords: 'гитары',
+    metaDescription: 'Гитары Chapman в Беларуси',
+  }]);
 
   await UserService.createUser('admin', 'admin11');
 };
