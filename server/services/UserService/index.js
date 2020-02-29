@@ -3,8 +3,8 @@ import { encryptPassword, generateToken } from './crypto';
 
 const seconds = (n = 1) => n * 1000;
 const minutes = (n = 1) => n * seconds(60);
-const hours = (n = 1) => n * minutes(60);
-const days = (n = 1) => n * hours(24);
+
+const TOKEN_VALIDITY = minutes(10);
 
 export const createUser = async (login, password) => {
   const encryptedPassword = await encryptPassword(password);
@@ -37,6 +37,5 @@ export const getIsSessionValid = async (token) => {
   const now = Date.now();
   const updatedAt = new Date(session.updatedAt).getTime();
   const diff = now - updatedAt;
-  const validity = minutes(10);
-  return diff <= validity;
+  return diff <= TOKEN_VALIDITY;
 };
