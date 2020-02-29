@@ -13,10 +13,6 @@ import indexingMiddleware from '../../middleware/indexing';
 
 const router = express.Router();
 
-router.use('/indexing', async (req, res) => {
-  res.send();
-});
-
 router.use('/', authRouter);
 router.use(authMiddleware);
 router.use(indexingMiddleware);

@@ -38,7 +38,6 @@ const getAllUrlsContent = async () => {
 
 export const runIndexingProcess = async () => {
   console.log('*** RUN VERY LONG INDEXING PROCESS START ***');
-  await new Promise(resolve => setTimeout(resolve, 10000));
 
   const latestPageContents = await getAllUrlsContent();
   const latestPagesUrls = latestPageContents.map(content => content.url);
@@ -66,7 +65,6 @@ export const runIndexingProcess = async () => {
     const toEditContents = latestPageContents.filter(content => toEdit.includes(content.url));
     await async.series(toEditContents.map(page => async () => DBService.editSearchablePage(page.url, page.content)));
   }
-
 
   console.log('*** RUN VERY LONG INDEXING PROCESS DONE ***');
 };
