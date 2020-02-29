@@ -23,7 +23,7 @@ const UPLOADS = path.join(__dirname, '..', 'static', 'uploads');
 
 server.use('/admin', express.static(ADMIN_INTERFACE_BUILD));
 server.use('/uploads', express.static(UPLOADS));
-server.use('/static', express.static(STATIC));
+server.use('/', express.static(STATIC));
 
 // Routers
 server.use('/admin', adminRouter);
