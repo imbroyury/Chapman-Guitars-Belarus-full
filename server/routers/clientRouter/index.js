@@ -8,7 +8,7 @@ const getActiveMenuItemConfig = (activeItem) => {
 };
 
 const concatMetadataForItemPage = (base, item) => ({
-  title: base.title + item.name,
+  title: base.title + ' ' + item.name,
   metaKeywords: base.metaKeywords + ', ' + item.metaKeywords,
   metaDescription: base.metaDescription + ' ' + item.metaDescription,
 });

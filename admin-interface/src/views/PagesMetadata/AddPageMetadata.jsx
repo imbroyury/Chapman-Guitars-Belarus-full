@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AddPage = () => {
+const AddPageMetadata = () => {
   const classes = useStyles();
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -28,7 +28,7 @@ const AddPage = () => {
 
   const [addPageState, addSeries] = useAsyncFn(async () => {
     const { data: uploadResult } = await putRequest(
-      '/page',
+      '/page-metadata',
       series,
     );
     setShouldRedirect(true);
@@ -87,8 +87,8 @@ const AddPage = () => {
     {<Spinner open={isSomeRequestInProgress} />}
     {requestErrors.map(renderErrorMessage)}
     {renderAddPageForm()}
-    {shouldRedirect && <Redirect to="/pages" />}
+    {shouldRedirect && <Redirect to="/pages-metadata" />}
   </Grid>);
 };
 
-export default AddPage;
+export default AddPageMetadata;

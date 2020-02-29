@@ -10,7 +10,7 @@ import {
   User,
   Session,
   SearchablePage,
-  Page,
+  PageMetadata,
 } from './Models.js';
 import seed from './seed.js';
 
@@ -445,13 +445,13 @@ export const getSearchablePageHitsByQuery = async (query) => {
   return results;
 };
 
-export const getAllPages = async () => {
-  const pages = await Page.findAll();
+export const getAllPagesMetadata = async () => {
+  const pages = await PageMetadata.findAll();
   return pages;
 };
 
-export const getPage = async (id) => {
-  const page = await Page.findOne({
+export const getPageMetadata = async (id) => {
+  const page = await PageMetadata.findOne({
     where: {
       id
     }
@@ -459,8 +459,8 @@ export const getPage = async (id) => {
   return page;
 };
 
-export const getPageByUri = async (uri) => {
-  const page = await Page.findOne({
+export const getPageMetadataByUri = async (uri) => {
+  const page = await PageMetadata.findOne({
     where: {
       uri
     }
@@ -468,8 +468,8 @@ export const getPageByUri = async (uri) => {
   return page;
 };
 
-export const editPage = async (id, uri, title, isBasePage, metaKeywords, metaDescription) => {
-  const page = await getPage(id);
+export const editPageMetadata = async (id, uri, title, isBasePage, metaKeywords, metaDescription) => {
+  const page = await getPageMetadata(id);
   page.id = id,
   page.uri = uri,
   page.title = title,
@@ -479,14 +479,14 @@ export const editPage = async (id, uri, title, isBasePage, metaKeywords, metaDes
   await page.save();
 };
 
-export const putPage = async (uri, title, isBasePage, metaKeywords, metaDescription) => {
-  await Page.create({
+export const putPageMetadata = async (uri, title, isBasePage, metaKeywords, metaDescription) => {
+  await PageMetadata.create({
     uri, title, isBasePage, metaKeywords, metaDescription
   });
 };
 
-export const deletePage = async (id) => {
-  await Page.destroy({
+export const deletePageMetadata = async (id) => {
+  await PageMetadata.destroy({
     where: {
       id
     }

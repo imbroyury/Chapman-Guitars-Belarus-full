@@ -7,7 +7,7 @@ export const pageMetadataMiddleware = async (req, res, next) => {
   const root = parts[0];
 
   // try to fetch page meta data by root part
-  const page = await DBService.getPageByUri(root);
+  const page = await DBService.getPageMetadataByUri(root);
 
   // likely a 404, add default values
   if (page === null) {

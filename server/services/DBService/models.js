@@ -289,8 +289,8 @@ Artist.init({
   sequelize,
 });
 
-export class Page extends Model {}
-Page.init({
+export class PageMetadata extends Model {}
+PageMetadata.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

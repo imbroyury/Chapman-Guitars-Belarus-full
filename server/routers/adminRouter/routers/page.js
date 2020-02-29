@@ -3,12 +3,12 @@ import * as DBService from '../../../services/DBService';
 
 const router = express.Router();
 
-router.get('/pages', async (req, res) => {
-  const pages = await DBService.getAllPages();
+router.get('/pages-metadata', async (req, res) => {
+  const pages = await DBService.getAllPagesMetadata();
   res.send(pages);
 });
 
-router.put('/page', async (req, res) => {
+router.put('/page-metadata', async (req, res) => {
   try {
     const {
       uri,
@@ -17,7 +17,7 @@ router.put('/page', async (req, res) => {
       metaKeywords,
       metaDescription,
     } = req.body;
-    await DBService.putPage(
+    await DBService.putPageMetadata(
       uri,
       title,
       isBasePage,
@@ -30,7 +30,7 @@ router.put('/page', async (req, res) => {
   }
 });
 
-router.post('/page', async (req, res) => {
+router.post('/page-metadata', async (req, res) => {
   try {
     const {
       id,
@@ -40,7 +40,7 @@ router.post('/page', async (req, res) => {
       metaKeywords,
       metaDescription,
     } = req.body;
-    await DBService.editPage(
+    await DBService.editPageMetadata(
       id,
       uri,
       title,
@@ -54,10 +54,10 @@ router.post('/page', async (req, res) => {
   }
 });
 
-router.delete('/page', async (req, res) => {
+router.delete('/page-metadata', async (req, res) => {
   try {
     const { id } = req.body;
-    await DBService.deletePage(id);
+    await DBService.deletePageMetadata(id);
     res.status(200).send();
   } catch(e) {
     console.log(e);

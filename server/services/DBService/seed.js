@@ -1,4 +1,4 @@
-import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist, User, Page } from './Models.js';
+import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist, User, PageMetadata } from './Models.js';
 import * as UserService from '../UserService';
 
 const imgs = [
@@ -188,7 +188,7 @@ export default async () => {
     },
   ]);
 
-  await Page.bulkCreate([{
+  await PageMetadata.bulkCreate([{
     uri: '/',
     isBasePage: false,
     title: 'Chapman Guitars Беларусь',

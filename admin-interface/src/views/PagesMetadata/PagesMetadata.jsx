@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Pages = (props) => {
+const PagesMetadata = (props) => {
   const reloadHandler = props.remount;
   const classes = useStyles();
 
@@ -40,7 +40,7 @@ const Pages = (props) => {
 
   const pagesRequestState = useAsync(async () => {
     if (!shouldFetch) return;
-    const { data: pages } = await getRequest('/pages');
+    const { data: pages } = await getRequest('/pages-metadata');
     resetAfterFetch();
     setInitialPages(pages);
     return pages;
@@ -52,7 +52,7 @@ const Pages = (props) => {
       mainProperties,
     );
     const { data: saveResult } = await postRequest(
-      '/page',
+      '/page-metadata',
       { id, ...propertiesPayload },
     );
     scheduleRefetch();
@@ -61,7 +61,7 @@ const Pages = (props) => {
 
   const [deletePageState, deletePage] = useAsyncFn(async (id) => {
     const { data: deleteResult } = await deleteRequest(
-      '/page',
+      '/page-metadata',
       { data: { id } },
     );
     scheduleRefetch();
@@ -165,8 +165,8 @@ const Pages = (props) => {
   </Grid>);
 };
 
-Pages.propTypes = {
+PagesMetadata.propTypes = {
   remount: PropTypes.func,
 };
 
-export default Remount(Pages);
+export default Remount(PagesMetadata);
