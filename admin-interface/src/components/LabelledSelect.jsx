@@ -20,6 +20,8 @@ const LabelledSelect = (props) => {
   const id = Math.random();
   const labelId = `select-${id}`;
 
+  const handleOnChange = (e) => onChange(name, e.target.value);
+
   const renderOption = (option) =>
     <MenuItem
       value={option.id}
@@ -33,7 +35,7 @@ const LabelledSelect = (props) => {
     <Select
       name={name}
       value={value}
-      onChange={onChange}
+      onChange={handleOnChange}
       labelId={labelId}
     >
       {options.map(renderOption)}
