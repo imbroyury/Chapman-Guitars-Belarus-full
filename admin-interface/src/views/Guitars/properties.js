@@ -12,6 +12,8 @@ export const mainProperties = [
   { label: 'Bridge pickup', name: 'bridgePickup', type: 'string', initial: '' },
   { label: 'Bridge', name: 'bridge', type: 'string', initial: '' },
   { label: 'Weight, g', name: 'weight', type: 'number', initial: 0 },
+  { label: 'Meta keywords', name: 'metaKeywords', type: 'string', initial: '' },
+  { label: 'Meta description', name: 'metaDescription', type: 'string', initial: '' },
 ];
 export const additionalProperties = [
   { name: 'seriesId', type: 'select', initial: '' }

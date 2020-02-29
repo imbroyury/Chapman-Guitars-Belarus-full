@@ -146,6 +146,8 @@ export const putGuitar = async (
   bridgePickup,
   bridge,
   weight,
+  metaKeywords,
+  metaDescription,
 ) => {
   await Guitar.create({
     name,
@@ -162,6 +164,8 @@ export const putGuitar = async (
     bridgePickup,
     bridge,
     weight,
+    metaKeywords,
+    metaDescription,
   });
 };
 
@@ -189,6 +193,8 @@ export const editGuitar = async (
   bridgePickup,
   bridge,
   weight,
+  metaKeywords,
+  metaDescription,
 ) => {
   const guitar = await getGuitar(id);
   guitar.name = name,
@@ -205,6 +211,8 @@ export const editGuitar = async (
   guitar.bridgePickup = bridgePickup,
   guitar.bridge = bridge,
   guitar.weight = weight,
+  guitar.metaKeywords = metaKeywords,
+  guitar.metaDescription = metaDescription,
   await guitar.save();
 };
 
@@ -289,13 +297,15 @@ export const getArtistByUri = async (uri) => {
   return artist;
 };
 
-export const putArtist = async (order, name, uri, description, photoId) => {
+export const putArtist = async (order, name, uri, description, photoId, metaKeywords, metaDescription) => {
   await Artist.create({
     order,
     name,
     uri,
     description,
     photoId,
+    metaKeywords,
+    metaDescription,
   });
 };
 
@@ -307,12 +317,14 @@ export const deleteArtist = async (id) => {
   });
 };
 
-export const editArtist = async (id, order, name, uri, description) => {
+export const editArtist = async (id, order, name, uri, description, metaKeywords, metaDescription) => {
   const artist = await getArtist(id);
   artist.order = order;
   artist.name = name;
   artist.uri = uri;
   artist.description = description;
+  artist.metaKeywords = metaKeywords;
+  artist.metaDescription = metaDescription;
   await artist.save();
 };
 

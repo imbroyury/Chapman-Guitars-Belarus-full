@@ -13,7 +13,11 @@ router.get('/', async (req, res) => {
   const vm = images.map(image => ({
     src: image.Image.name,
   }));
-  res.render('home', { images: vm, ...getActiveMenuItemConfig(null) });
+  res.render('home', {
+    title: 'Chapman Guitars 🎸 Беларусь',
+    images: vm,
+    ...getActiveMenuItemConfig(null)
+  });
 });
 
 const mapGuitarColorToViewModel = (gc) => ({
@@ -38,7 +42,7 @@ const mapGuitarToViewModel = (guitar) => ({
     { key: 'Бриджевый звукосниматель', value: guitar.bridgePickup },
     { key: 'Бридж', value: guitar.bridge },
     { key: 'Вес, г', value: guitar.weight },
-  ]
+  ],
 });
 
 router.get('/guitars', async (req, res) => {
@@ -46,20 +50,29 @@ router.get('/guitars', async (req, res) => {
 
   const vm = guitarSeries.map(series => ({
     name: series.name.toUpperCase(),
-    uri: series.uri,
     guitars: series.Guitars.map(mapGuitarToViewModel),
   }));
-  res.render('guitars', { guitarSeries: vm, ...getActiveMenuItemConfig('guitars') });
+
+  res.render('guitars', {
+    title: 'Chapman Guitars - Гитары',
+    guitarSeries: vm,
+    ...getActiveMenuItemConfig('guitars') });
 });
 
-router.get('/guitars/:modelUri', async (req, res) => {
+router.get('/guitar/:modelUri', async (req, res) => {
   const { modelUri } = req.params;
   const guitar = await DBService.getGuitarByUri(modelUri);
 
   if (guitar === null) return res.render('404');
 
   const vm = mapGuitarToViewModel(guitar);
-  res.render('guitar', { guitar: vm, ...getActiveMenuItemConfig('guitars') });
+  res.render('guitar', {
+    title: `Chapman Guitars - Гитары - ${guitar.name}`,
+    metaKeywords: guitar.metaKeywords,
+    metaDescription: guitar.metaDescription,
+    guitar: vm,
+    ...getActiveMenuItemConfig('guitars')
+  });
 });
 
 const mapArtistToViewModel = artist => ({
@@ -72,25 +85,41 @@ const mapArtistToViewModel = artist => ({
 router.get('/artists', async (req, res) => {
   const artists = await DBService.getAllArtists();
   const vm = artists.map(mapArtistToViewModel);
-  res.render('artists', { artists: vm, ...getActiveMenuItemConfig('artists') });
+  res.render('artists', {
+    title: 'Chapman Guitars - Артисты',
+    artists: vm,
+    ...getActiveMenuItemConfig('artists')
+  });
 });
 
-router.get('/artists/:artistUri', async (req, res) => {
+router.get('/artist/:artistUri', async (req, res) => {
   const { artistUri } = req.params;
   const artist = await DBService.getArtistByUri(artistUri);
 
   if (artist === null) return res.render('404');
 
   const vm = mapArtistToViewModel(artist);
-  res.render('artist', { artist: vm, ...getActiveMenuItemConfig('artists') });
+  res.render('artist', {
+    title: `Chapman Guitars - Артисты - ${artist.name}`,
+    metaKeywords: artist.metaKeywords,
+    metaDescription: artist.metaDescription,
+    artist: vm,
+    ...getActiveMenuItemConfig('artists')
+  });
 });
 
 router.get('/purchase', async (req, res) => {
-  res.render('purchase', { ...getActiveMenuItemConfig('purchase') });
+  res.render('purchase', {
+    title: 'Chapman Guitars - Как купить',
+    ...getActiveMenuItemConfig('purchase')
+  });
 });
 
 router.get('/contact', async (req, res) => {
-  res.render('contact', { ...getActiveMenuItemConfig('contact') });
+  res.render('contact', {
+    title: 'Chapman Guitars - Связаться с нами',
+    ...getActiveMenuItemConfig('contact')
+  });
 });
 
 router.get('/search', express.urlencoded({ extended: true }), async (req, res) => {
@@ -98,6 +127,7 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
 
   if (query === undefined) {
     return res.render('search', {
+      title: 'Chapman Guitars - Поиск',
       query: '',
       results: [],
       ...getActiveMenuItemConfig('search')
@@ -112,6 +142,7 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
   }));
 
   res.render('search', {
+    title: 'Chapman Guitars - Поиск',
     query,
     results: vm,
     ...getActiveMenuItemConfig('search')

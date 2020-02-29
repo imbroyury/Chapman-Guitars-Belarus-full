@@ -31,6 +31,8 @@ router.put('/guitar', async (req, res) => {
       bridgePickup,
       bridge,
       weight,
+      metaKeywords,
+      metaDescription,
     } = req.body;
 
     await DBService.putGuitar(
@@ -48,6 +50,8 @@ router.put('/guitar', async (req, res) => {
       bridgePickup,
       bridge,
       weight,
+      metaKeywords,
+      metaDescription,
     );
     res.status(200).send();
   } catch (e) {
@@ -74,6 +78,8 @@ router.post('/guitar', async (req, res) => {
       bridgePickup,
       bridge,
       weight,
+      metaKeywords,
+      metaDescription,
     } = req.body;
     await DBService.editGuitar(
       id,
@@ -91,6 +97,8 @@ router.post('/guitar', async (req, res) => {
       bridgePickup,
       bridge,
       weight,
+      metaKeywords,
+      metaDescription,
     );
     res.status(200).send();
   } catch(e) {

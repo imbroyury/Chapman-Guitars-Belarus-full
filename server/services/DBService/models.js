@@ -181,6 +181,14 @@ Guitar.init({
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  metaDescription: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  metaKeywords: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   sequelize,
 });
@@ -268,7 +276,15 @@ Artist.init({
       model: Image,
       key: 'id',
     }
-  }
+  },
+  metaDescription: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  metaKeywords: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   sequelize,
 });

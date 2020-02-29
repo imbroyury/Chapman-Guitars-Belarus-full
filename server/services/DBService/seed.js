@@ -1,4 +1,4 @@
-import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist, User } from './Models.js';
+import { GuitarSeries, MainGalleryImage, Guitar, GuitarColor, Image, Artist, User, Page } from './Models.js';
 import * as UserService from '../UserService';
 
 const imgs = [
@@ -20,6 +20,12 @@ const imgs = [
     '7febe580-4539-11ea-b407-0b22c6d90d7f.png',
     '836b9660-4539-11ea-b407-0b22c6d90d7f.png',
   ],
+  // mlv
+  [
+    '4258ff30-5ae9-11ea-88fe-ad59fa5e167b.png',
+    '425b2210-5ae9-11ea-88fe-ad59fa5e167b.png',
+    '425c3380-5ae9-11ea-88fe-ad59fa5e167b.png'
+  ]
 ];
 
 const galleryImgs = [
@@ -33,15 +39,20 @@ const artistImgs = [
   '8a14a38d-f830-4bfa-a21d-bd9a91bbd37f.jpeg',
   'a665d8f9-d52d-43e5-9c57-0d49b742333f.jpeg',
   'b2df4139-9913-415e-819e-8e174c13c343.jpeg',
+  '24490ec0-5af0-11ea-8eca-cf89d66ca9f2.jpeg'
 ];
 
 export default async () => {
-  const series = await GuitarSeries.create({ name: 'Standard', uri: 'st', order: 1 });
+  const series = await GuitarSeries.bulkCreate([{
+    name: 'Standard', uri: 'st', order: 1
+  }, {
+    name: 'Pro', uri: 'pro', order: 2,
+  }]);
 
   const guitars = await Guitar.bulkCreate([{
     name: 'ML1 Modern',
     uri: 'ml1-m',
-    seriesId: series.get('id'),
+    seriesId: series[0].get('id'),
     order: 1,
     tuners: 'Закрытые Chapman Classic (18:1)',
     neck: 'Клён с матовым финишем',
@@ -53,10 +64,12 @@ export default async () => {
     bridgePickup: 'Chapman Sonorous Zerø Humbucker',
     bridge: 'Хардтейл (струны сквозь корпус)',
     weight: 3500,
+    metaKeywords: 'гитара, клён, эбен, махогани',
+    metaDescription: 'Гитара из махогани с хардтейлом'
   }, {
     name: 'ML2 Modern',
     uri: 'ml2-m',
-    seriesId: series.get('id'),
+    seriesId: series[0].get('id'),
     order: 2,
     tuners: 'Закрытые Chapman Classic (18:1)',
     neck: 'Клён с матовым финишем',
@@ -68,6 +81,25 @@ export default async () => {
     bridgePickup: 'Chapman Stentorian Zerø Humbucker',
     bridge: 'Tune-o-matic со стоп-баром',
     weight: 3500,
+    metaKeywords: 'гитара, клён, эбен, махогани',
+    metaDescription: 'Гитара из махогани с тюн-о-матиком'
+  }, {
+    name: 'MLV Modern',
+    uri: 'mlv-m',
+    seriesId: series[1].get('id'),
+    order: 1,
+    tuners: 'Локовые Hipshot (18:1)',
+    neck: 'Махогани с матовым финишем',
+    fretboard: 'Индийский эбен',
+    frets: '224 джамбо лада (нержавеющая сталь)',
+    scaleLength: 648,
+    body: 'Махогани',
+    neckPickup: 'Chapman Stentorian Humbucke',
+    bridgePickup: 'Chapman Stentorian Humbucke',
+    bridge: 'Тремоло Floyd Rose',
+    weight: 3750,
+    metaKeywords: 'гитара, клён, эбен, махогани, флойд',
+    metaDescription: 'Гитара из махогани с флойдом'
   }]);
 
   const images = await Promise.all(
@@ -98,10 +130,18 @@ export default async () => {
     dotImageId: images[2][1].get('id'),
     guitarImageId: images[2][2].get('id'),
   },
+  {
+    name: 'Iris',
+    order: 0,
+    guitarId: guitars[2].get('id'),
+    tabImageId: images[3][0].get('id'),
+    dotImageId: images[3][1].get('id'),
+    guitarImageId: images[3][2].get('id'),
+  },
   ]);
 
   await MainGalleryImage.bulkCreate(
-    images[3].map((galleryImage, i) => ({ order: i, imageId: galleryImage.id }))
+    images[4].map((galleryImage, i) => ({ order: i, imageId: galleryImage.id }))
   );
 
   await Artist.bulkCreate([
@@ -110,27 +150,44 @@ export default async () => {
       order: 1,
       uri: 'rob-chapman',
       description: 'Роб - гитарист из Брайтона, Великобритания. Основатель Chapman Guitars, фронтмен группы Dorje, обозреватель для магазина Andertons Music.',
-      photoId: images[4][0].id,
+      photoId: images[5][0].id,
+      metaKeywords: 'гитарист, великборитани',
+      metaDescription: 'Гитарист из великобритании'
     }, {
       name: 'Rabea Massaad',
       order: 2,
       uri: 'rabea-massaad',
       description: 'Рабеа - гитарист групп Dorje (#1 в рок чарте Великобритании в 2015 году) и Toska (#1 в мировом чартеBandcamp). Занимался музыкой с детских лет - в 8 лет он сел за барабанную установку, а в 15 взялся за гитару.Участвовал в разработке многих гитар Chapman.',
-      photoId: images[4][1].id
+      photoId: images[5][1].id,
+      metaKeywords: 'гитарист, великборитани',
+      metaDescription: 'Гитарист из великобритании',
     }, {
       name: 'Rob Scallon',
       order: 3,
       uri: 'rob-scallon',
       description: 'Роб - талантливый музыкант-мультиинструменталист. Его видео и каверы на популярные песни на необычных инструментах (например Slipknot - Psychosocial на банжо) завоевали уже более 1 миллиона человек. Любимым инструментом Роба все же остается его 8-струнная гитара Chapman.',
-      photoId: images[4][2].id
+      photoId: images[5][2].id,
+      metaKeywords: 'гитарист, youtube',
+      metaDescription: 'Гитарист youtube-р',
     }, {
       name: 'Leo Moracchioli',
       order: 3,
       uri: 'leo-moracchioli',
       description: 'Лео - норвежский музыкант, основатель Frog Leap Studios. Записывает музыку, продюсирует группы, выступает вживую. Запустил канал на YouTube с кавера на песню Lady Gaga - Poker Face, набравшего почти 9 миллиона просмотров, после чего активно развивается на данной платформе.',
-      photoId: images[4][3].id
+      photoId: images[5][3].id,
+      metaKeywords: 'гитарист, норвегия, youtube',
+      metaDescription: 'Гитарист-норвежец youtube-р'
+    }, {
+      name: 'Felix Hagan',
+      order: 3,
+      uri: 'felix-hagan',
+      description: 'Феликс - основатель группы из 7 участников Felix Hagan & The Family. Ребята экспериментируют в жанрах new-glam, high camp pop, панк, классический рок.',
+      photoId: images[5][4].id,
+      metaKeywords: 'гитарист, группа, эксперименты',
+      metaDescription: 'Гитарист в группе'
     },
   ]);
+
 
   await UserService.createUser('admin', 'admin11');
 };

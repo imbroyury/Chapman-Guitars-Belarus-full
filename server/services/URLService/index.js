@@ -7,6 +7,7 @@ const HOST = 'http://localhost:8280';
 const getAbsoluteUrl = (relativeUrl) => HOST + relativeUrl;
 
 const staticUrls = [
+  '/',
   '/guitars',
   '/artists',
   '/purchase',
@@ -17,11 +18,11 @@ const URI_PLACEHOLDER = '{{uri}}';
 
 const dynamicUrlDeclarations = [
   {
-    url: `/guitars/${URI_PLACEHOLDER}`,
+    url: `/guitar/${URI_PLACEHOLDER}`,
     itemUrisFetcher: DBService.getAllGuitarUris,
   },
   {
-    url: `/artists/${URI_PLACEHOLDER}`,
+    url: `/artist/${URI_PLACEHOLDER}`,
     itemUrisFetcher: DBService.getAllArtistUris,
   }
 ];
