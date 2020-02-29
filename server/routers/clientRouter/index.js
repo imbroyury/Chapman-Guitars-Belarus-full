@@ -104,11 +104,12 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
     });
   }
 
-  const hits = await DBService.getSearchablePageHitsByQuery(query);
+  const urlHits = await DBService.getSearchablePageHitsByQuery(query);
+  const vm = urlHits.map((url, index) => ({ index: index + 1, url }));
 
   res.render('search', {
     query,
-    results: hits,
+    results: vm,
     ...getActiveMenuItemConfig('search')
   });
 });
