@@ -2,6 +2,7 @@ import async from 'async';
 import _ from 'lodash';
 import * as DBService from '../DBService';
 
+// TODO: import from shared admin interface
 const HOST = 'http://localhost:8280';
 
 const getAbsoluteUrl = (relativeUrl) => HOST + relativeUrl;
