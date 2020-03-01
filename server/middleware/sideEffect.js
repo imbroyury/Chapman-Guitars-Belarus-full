@@ -22,12 +22,11 @@ const sideEffectQueue = async.queue(async (_, callback) => {
 sideEffectQueue.drain(() => console.log('*** all sideffect requests have been processed ***'));
 
 const modifyingMethods = ['POST', 'PUT', 'DELETE'];
-const routes = ['artist', 'guitar', 'guitar-series', 'page-metadata'];
 
 const sideEffectMiddleware = (req, res, next) => {
   res.on('finish', () => {
+    // modifying methods can lead to content change
     if (!modifyingMethods.includes(req.method)) return;
-    if (!routes.some(route => req.originalUrl.includes(route))) return;
     // if there's at least 1 queued request, our changes will be included, no need to schedule another one
     if (sideEffectQueue.length() >= 1) return;
 
