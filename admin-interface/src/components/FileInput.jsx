@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 const FileInput = (props) => {
   const classes = useStyles();
-  const { label, onChange, disabled, fileList } = props;
+  const { label, onChange, disabled, fileList, accept } = props;
 
   const renderUploadMessage = () => (fileList === null || fileList.length === 0)
     ? <Typography>No file chosen</Typography>
@@ -30,6 +30,7 @@ const FileInput = (props) => {
     {label}
     <input
       type="file"
+      accept={accept}
       className={classes.uploadInput}
       onChange={onChange}
     />
@@ -45,10 +46,15 @@ FileInput.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
+  accept: PropTypes.string,
   fileList: PropTypes.shape({
     length: PropTypes.number,
     0: PropTypes.object,
   }),
+};
+
+FileInput.defaultProps = {
+  accept: 'image/*'
 };
 
 export default FileInput;
