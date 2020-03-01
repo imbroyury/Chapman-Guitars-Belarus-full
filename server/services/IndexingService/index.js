@@ -3,7 +3,7 @@ import jsdom from 'jsdom';
 import async from 'async';
 import _ from 'lodash';
 const { JSDOM } = jsdom;
-import * as URLService from '../URLService';
+import * as PageService from '../PageService';
 import * as DBService from '../DBService';
 
 const disregardedElementSelectors = ['.footer', '.side-menu'];
@@ -27,12 +27,16 @@ const getUrlContent = async (url) => {
 };
 
 const getAllUrlsContent = async () => {
-  const allUrls = await URLService.getAllUrls();
-  const absoluteUrls = allUrls.map(url => url.absolute);
-  const relativeUrls = allUrls.map(url => url.relative);
+  const allPages = await PageService.getAllPages();
+  const absoluteUrls = allPages.map(page => page.absoluteUrl);
+  const relativeUrls = allPages.map(page => page.relativeUrl);
   const urlContentFetchers = absoluteUrls.map(url => async () => getUrlContent(url));
   const urlContents = await async.series(urlContentFetchers);
-  const contents = _.zipWith(relativeUrls, urlContents, (url, content) => ({ url, content }));
+  const contents = _.zipWith(
+    relativeUrls,
+    urlContents,
+    (url, content) => ({ url, content })
+  );
   return contents;
 };
 

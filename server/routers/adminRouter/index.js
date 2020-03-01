@@ -10,13 +10,13 @@ import {
   pageMetadataRouter,
 } from './routers';
 import authMiddleware from '../../middleware/auth';
-import indexingMiddleware from '../../middleware/indexing';
+import sideEffectMiddleware from '../../middleware/sideEffect';
 
 const router = express.Router();
 
 router.use('/', authRouter);
 router.use(authMiddleware);
-router.use(indexingMiddleware);
+router.use(sideEffectMiddleware);
 router.use('/', artistRouter);
 router.use('/', galleryImageRouter);
 router.use('/', guitarSeriesRouter);
