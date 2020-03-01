@@ -9,14 +9,17 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
-import { Spinner, ErrorSnackbar, EditProperty } from '../../components';
+import { Spinner, ErrorSnackbar, EditProperty, LabelledSelect } from '../../components';
 import useItemFormState from '../../hooks/useItemFormState';
-import { mainProperties } from './properties';
+import { mainProperties, additionalProperties, changefreqOptions } from './properties';
 import { putRequest } from '../../services/NetworkService';
 
 const useStyles = makeStyles({
   card: {
     margin: '10px',
+  },
+  input: {
+    width: '18rem'
   },
 });
 
@@ -24,16 +27,16 @@ const AddPageMetadata = () => {
   const classes = useStyles();
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [series, handleChangeProperty, isSeriesValid] = useItemFormState(mainProperties);
+  const [page, handleChangeProperty, isPageValid] = useItemFormState(mainProperties, additionalProperties);
 
   const [addPageState, addSeries] = useAsyncFn(async () => {
     const { data: uploadResult } = await putRequest(
       '/page-metadata',
-      series,
+      page,
     );
     setShouldRedirect(true);
     return uploadResult;
-  }, [series]);
+  }, [page]);
 
   const requestStates = [
     addPageState,
@@ -47,7 +50,7 @@ const AddPageMetadata = () => {
 
   const isInteractionDisabled = isSomeRequestInProgress;
 
-  const isAddDisabled = isInteractionDisabled || !isSeriesValid;
+  const isAddDisabled = isInteractionDisabled || !isPageValid;
 
   const renderErrorMessage = (error) =>
     (<ErrorSnackbar
@@ -61,15 +64,27 @@ const AddPageMetadata = () => {
   const renderPropertyEditMode = (property) =>
     <EditProperty
       key={property.name}
-      item={series}
+      item={page}
       property={property}
       onChange={handleChangeProperty}
       inputClassName={classes.input}
     />;
 
+  const renderChangefreqSelect = () => {
+    return (<LabelledSelect
+      options={changefreqOptions}
+      name="changefreq"
+      label="Change Frequency"
+      value={page.changefreq}
+      onChange={handleChangeProperty}
+      className={classes.input}
+    />);
+  };
+
   const renderAddPageForm = () => <Card className={classes.card}>
     <CardContent>
       {mainProperties.map(renderPropertyEditMode)}
+      {renderChangefreqSelect()}
     </CardContent>
     <CardActions>
       <Button

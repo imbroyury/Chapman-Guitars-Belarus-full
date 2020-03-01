@@ -8,16 +8,20 @@ import {
   CardContent,
   CardActions,
   Button,
+  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty } from '../../components';
+import { Spinner, ErrorSnackbar, EditProperty, DisplayProperty, LabelledSelect } from '../../components';
 import { Remount } from '../../HOC/Remount';
-import { mainProperties } from './properties';
+import { mainProperties, changefreqOptions, additionalProperties } from './properties';
 import { getRequest, deleteRequest, postRequest } from '../../services/NetworkService.js';
 
 const useStyles = makeStyles({
   card: {
     margin: '10px',
+  },
+  input: {
+    width: '18rem'
   },
 });
 
@@ -50,6 +54,7 @@ const PagesMetadata = (props) => {
     const propertiesPayload = getEditedPagePropertiesPayload(
       id,
       mainProperties,
+      additionalProperties,
     );
     const { data: saveResult } = await postRequest(
       '/page-metadata',
@@ -89,6 +94,7 @@ const PagesMetadata = (props) => {
 
   const isInteractionDisabled = isSomeRequestInProgress || hasSomeRequestErred;
 
+
   const renderPropertyEditMode = (page, property) =>
     <EditProperty
       key={property.name}
@@ -96,31 +102,46 @@ const PagesMetadata = (props) => {
       property={property}
       onChange={editPageProperty(page.id)}
       disabled={isInteractionDisabled}
+      inputClassName={classes.input}
     />;
 
-  const renderEditMode = (page) => (<Card className={classes.card} key={page.id}>
-    <CardContent>
-      {mainProperties.map(property => renderPropertyEditMode(page, property))}
-    </CardContent>
-    <CardActions>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleSavePage(page.id)}
-        disabled={isInteractionDisabled}
-      >
-        Save
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => deletePage(page.id)}
-        disabled={isInteractionDisabled}
-      >
-        Delete
-      </Button>
-    </CardActions>
-  </Card>);
+  const renderEditMode = (page) => {
+    const renderChangefreqSelect = () => {
+      return (<LabelledSelect
+        options={changefreqOptions}
+        name="changefreq"
+        label="Change Frequency"
+        value={page.changefreq}
+        onChange={editPageProperty(page.id)}
+        className={classes.input}
+      />);
+    };
+
+    return (<Card className={classes.card} key={page.id}>
+      <CardContent>
+        {mainProperties.map(property => renderPropertyEditMode(page, property))}
+        {renderChangefreqSelect()}
+      </CardContent>
+      <CardActions>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleSavePage(page.id)}
+          disabled={isInteractionDisabled}
+        >
+          Save
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => deletePage(page.id)}
+          disabled={isInteractionDisabled}
+        >
+          Delete
+        </Button>
+      </CardActions>
+    </Card>);
+  };
 
   const renderPropertyDisplayMode = (page, property) =>
     <DisplayProperty
@@ -132,6 +153,7 @@ const PagesMetadata = (props) => {
   const renderDisplayMode = (page) => (<Card className={classes.card} key={page.id}>
     <CardContent>
       {mainProperties.map(property => renderPropertyDisplayMode(page, property))}
+      <Typography>{`Change Frequency: ${page.changefreq}`}</Typography>
     </CardContent>
     <CardActions>
       <Button

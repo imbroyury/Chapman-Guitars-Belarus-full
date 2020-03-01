@@ -11,7 +11,7 @@ import 'react-quill/dist/quill.snow.css';
 
 const EditProperty = (props) => {
   const { item, property, onChange, inputClassName, disabled } = props;
-
+  const inputProps = property.inputProps || {};
   const handleWYSIWYGOnChange = (content) => onChange(property.name, content);
   const handleInputOnChange = (e) => onChange(property.name, e.target.value);
   const handleCheckboxOnChange = (e) => onChange(property.name, e.target.checked);
@@ -41,6 +41,7 @@ const EditProperty = (props) => {
       onChange={handleInputOnChange}
       disabled={disabled}
       className={inputClassName}
+      inputProps={inputProps}
     />
   </Grid>;
 
@@ -58,6 +59,11 @@ EditProperty.propTypes = {
   }),
   onChange: PropTypes.func,
   inputClassName: PropTypes.string,
+  inputProps: PropTypes.object
+};
+
+EditProperty.defaultProps = {
+  inputProps: {}
 };
 
 export default EditProperty;

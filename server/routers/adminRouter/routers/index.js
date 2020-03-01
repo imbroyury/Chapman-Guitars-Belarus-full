@@ -4,4 +4,4 @@ export { default as guitarSeriesRouter } from './guitarSeries';
 export { default as guitarRouter } from './guitar';
 export { default as guitarColorRouter } from './guitarColor';
 export { default as authRouter } from './auth';
-export { default as pageRouter } from './page';
+export { default as pageMetadataRouter } from './pageMetadata';

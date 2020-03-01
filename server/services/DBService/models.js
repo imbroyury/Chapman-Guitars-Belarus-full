@@ -317,6 +317,14 @@ PageMetadata.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
+  priority: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  changefreq: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 }, {
   sequelize,
 });

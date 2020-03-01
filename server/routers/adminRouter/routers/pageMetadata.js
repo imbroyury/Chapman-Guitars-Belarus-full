@@ -16,6 +16,8 @@ router.put('/page-metadata', async (req, res) => {
       isBasePage,
       metaKeywords,
       metaDescription,
+      priority,
+      changefreq,
     } = req.body;
     await DBService.putPageMetadata(
       uri,
@@ -23,6 +25,8 @@ router.put('/page-metadata', async (req, res) => {
       isBasePage,
       metaKeywords,
       metaDescription,
+      priority,
+      changefreq,
     );
     res.status(200).send();
   } catch(e) {
@@ -39,6 +43,8 @@ router.post('/page-metadata', async (req, res) => {
       isBasePage,
       metaKeywords,
       metaDescription,
+      priority,
+      changefreq,
     } = req.body;
     await DBService.editPageMetadata(
       id,
@@ -47,6 +53,8 @@ router.post('/page-metadata', async (req, res) => {
       isBasePage,
       metaKeywords,
       metaDescription,
+      priority,
+      changefreq,
     );
     res.status(200).send();
   } catch(e) {

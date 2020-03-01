@@ -468,7 +468,7 @@ export const getPageMetadataByUri = async (uri) => {
   return page;
 };
 
-export const editPageMetadata = async (id, uri, title, isBasePage, metaKeywords, metaDescription) => {
+export const editPageMetadata = async (id, uri, title, isBasePage, metaKeywords, metaDescription, priority, changefreq) => {
   const page = await getPageMetadata(id);
   page.id = id,
   page.uri = uri,
@@ -476,12 +476,14 @@ export const editPageMetadata = async (id, uri, title, isBasePage, metaKeywords,
   page.isBasePage = isBasePage,
   page.metaKeywords = metaKeywords,
   page.metaDescription = metaDescription,
+  page.priority = priority,
+  page.changefreq = changefreq,
   await page.save();
 };
 
-export const putPageMetadata = async (uri, title, isBasePage, metaKeywords, metaDescription) => {
+export const putPageMetadata = async (uri, title, isBasePage, metaKeywords, metaDescription, priority, changefreq) => {
   await PageMetadata.create({
-    uri, title, isBasePage, metaKeywords, metaDescription
+    uri, title, isBasePage, metaKeywords, metaDescription, priority, changefreq
   });
 };
 

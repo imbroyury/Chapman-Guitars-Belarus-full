@@ -1,4 +1,5 @@
 import * as IndexingService from '../services/IndexingService';
+import * as SitemapService from '../services/SitemapService';
 import async from 'async';
 
 // setup queue to manage indexing process
@@ -6,6 +7,7 @@ const indexingQueue = async.queue(async (_, callback) => {
   console.log('*** starting to process indexing task ***');
   try {
     await IndexingService.runIndexingProcess();
+    await SitemapService.generateSitemap();
   } catch(e) {
     // ignore
   }

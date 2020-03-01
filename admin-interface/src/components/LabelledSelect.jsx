@@ -44,7 +44,10 @@ const LabelledSelect = (props) => {
 };
 
 LabelledSelect.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, id: PropTypes.number })).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  })).isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
