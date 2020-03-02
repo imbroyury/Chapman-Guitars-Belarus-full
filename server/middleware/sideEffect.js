@@ -22,13 +22,17 @@ const sideEffectQueue = async.queue(async (_, callback) => {
 sideEffectQueue.drain(() => console.log('*** all sideffect requests have been processed ***'));
 
 const modifyingMethods = ['POST', 'PUT', 'DELETE'];
+const getIsNotModifyingMethod = method => !modifyingMethods.includes(method);
+const getIsQueueNotEmpty = () => sideEffectQueue.length() >= 1;
 
 const sideEffectMiddleware = (req, res, next) => {
+  if (getIsNotModifyingMethod(req.method)) {
+    console.log('\n*** handler won`t be attached ***\n');
+    return next();
+  }
+
   res.on('finish', () => {
-    // modifying methods can lead to content change
-    if (!modifyingMethods.includes(req.method)) return;
-    // if there's at least 1 queued request, our changes will be included, no need to schedule another one
-    if (sideEffectQueue.length() >= 1) return;
+    if (getIsQueueNotEmpty()) return;
 
     console.log('******* sideEffect PROCESS SCHEDULED FOR : *******');
     console.log('Request URL:', req.originalUrl);
