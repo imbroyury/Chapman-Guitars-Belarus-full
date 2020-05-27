@@ -48,9 +48,9 @@ export const runIndexingProcess = async () => {
 
   const indexedPageUrls = await DBService.getAllSearchablePagesUrls();
 
-  const toDelete = _.difference(indexedPageUrls, latestPagesUrls); // in db, but not in latest response
-  const toPut = _.difference(latestPagesUrls, indexedPageUrls); // in latest response, but not in db
-  const toEdit = _.intersection(latestPagesUrls, indexedPageUrls); // both in response and in db
+  const toDelete = _.difference(indexedPageUrls, latestPagesUrls);  // in db, but not in latest response
+  const toPut = _.difference(latestPagesUrls, indexedPageUrls);     // in latest response, but not in db
+  const toEdit = _.intersection(latestPagesUrls, indexedPageUrls);  // both in response and in db
 
   console.log(toDelete);
   console.log(toPut);
