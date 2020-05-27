@@ -3,6 +3,7 @@ import express from 'express';
 import exphbs from 'express-handlebars';
 import bodyParser from 'body-parser';
 import * as DBService from './services/DBService';
+import * as SitemapService from './services/SitemapService';
 import { HTTP_PORT } from '../admin-interface/src/shared/hosts';
 import clientRouter from './routers/clientRouter';
 import adminRouter from './routers/adminRouter';
@@ -32,6 +33,8 @@ server.use('/', clientRouter);
 // Entry-point
 (async() => {
   await DBService.init();
+
+  await SitemapService.generateSitemap();
 
   server.listen(HTTP_PORT, () => console.log(`🎸 Chapman Guitars 🎸 is listening on port ${HTTP_PORT}!`));
 })();
