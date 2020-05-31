@@ -24,13 +24,11 @@ router.put(
       const image = await Jimp.read(pathToOriginal);
       const watermark = await Jimp.read(pathToWatermark);
 
-      image.resize(2400, Jimp.AUTO);
+      if (image.bitmap.width > 2400) {
+        image.resize(2400, Jimp.AUTO);
+      }
 
-      image.composite(watermark, 50, image.bitmap.height - watermark.bitmap.height - 50, {
-        mode: Jimp.BLEND_SOURCE_OVER,
-        opacitySource: 0.1,
-        opacityDest: 0.1,
-      });
+      image.composite(watermark, 50, image.bitmap.height - watermark.bitmap.height - 50);
 
       await image.writeAsync(pathToOriginal);
 
