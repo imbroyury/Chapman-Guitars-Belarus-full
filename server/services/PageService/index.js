@@ -1,11 +1,9 @@
 import async from 'async';
 import _ from 'lodash';
 import * as DBService from '../DBService';
+import { HTTP_URL } from '../../../admin-interface/src/shared/hosts';
 
-// TODO: import from shared admin interface
-const HOST = 'http://localhost:8280';
-
-const getAbsoluteUrl = (relativeUrl) => HOST + relativeUrl;
+const getAbsoluteUrl = (relativeUrl) => HTTP_URL + relativeUrl;
 
 // hardcoded to reference a function to fetch items
 const dynamicPageDeclarations = [
