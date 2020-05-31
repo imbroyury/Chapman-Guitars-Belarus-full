@@ -1,7 +1,7 @@
 import express from 'express';
 import * as DBService from '../../../services/DBService';
 import * as FSService from '../../../services/FSService';
-import { upload } from '../storage';
+import { upload } from '../../../middleware/storage';
 
 const router = express.Router();
 

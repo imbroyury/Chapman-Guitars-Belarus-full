@@ -1,7 +1,8 @@
 import express from 'express';
 import * as DBService from '../../../services/DBService';
 import * as FSService from '../../../services/FSService';
-import { upload } from '../storage';
+import { upload } from '../../../middleware/storage';
+import { watermarkUploadedImage } from '../../../middleware/watermarkUploadedImage';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get('/artists', async (req, res) => {
   res.send(artists);
 });
 
-router.put('/artist', upload.single('photo'), async (req, res) => {
+router.put('/artist', upload.single('photo'), watermarkUploadedImage(), async (req, res) => {
   try {
     const { file, body } = req;
     const {

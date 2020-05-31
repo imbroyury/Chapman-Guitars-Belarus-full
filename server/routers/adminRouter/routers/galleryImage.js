@@ -1,9 +1,8 @@
 import express from 'express';
 import * as DBService from '../../../services/DBService';
 import * as FSService from '../../../services/FSService';
-import { upload } from '../storage';
-import path from 'path';
-import Jimp from 'jimp';
+import { upload } from '../../../middleware/storage';
+import { watermarkUploadedImage } from '../../../middleware/watermarkUploadedImage';
 
 const router = express.Router();
 
@@ -15,28 +14,7 @@ router.get('/gallery-images', async (req, res) => {
 router.put(
   '/gallery-image',
   upload.single('image'),
-  async (req, res, next) => {
-    try {
-      const { file } = req;
-      const pathToOriginal = path.join('static', 'uploads', file.filename);
-      const pathToWatermark = path.join('static', 'images', 'design', 'watermark.png');
-
-      const image = await Jimp.read(pathToOriginal);
-      const watermark = await Jimp.read(pathToWatermark);
-
-      if (image.bitmap.width > 2400) {
-        image.resize(2400, Jimp.AUTO);
-      }
-
-      image.composite(watermark, 50, image.bitmap.height - watermark.bitmap.height - 50);
-
-      await image.writeAsync(pathToOriginal);
-
-      next();
-    } catch(e) {
-      next(e);
-    }
-  },
+  watermarkUploadedImage(true, 2400),
   async (req, res) => {
     try {
       const { file, body } = req;
