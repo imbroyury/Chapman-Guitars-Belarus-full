@@ -2,6 +2,8 @@ import express from 'express';
 import * as DBService from '../../../services/DBService';
 import * as FSService from '../../../services/FSService';
 import { upload } from '../storage';
+import path from 'path';
+import Jimp from 'jimp';
 
 const router = express.Router();
 
@@ -10,17 +12,45 @@ router.get('/gallery-images', async (req, res) => {
   res.send(images);
 });
 
-router.put('/gallery-image', upload.single('image'), async (req, res) => {
-  try {
-    const { file, body } = req;
-    const image = await DBService.saveImageMetaData(file.filename);
-    const galleryImage = await DBService.putMainGalleryImage(image.id, body.order);
-    res.send(galleryImage);
+router.put(
+  '/gallery-image',
+  upload.single('image'),
+  async (req, res, next) => {
+    try {
+      const { file } = req;
+      const pathToOriginal = path.join('static', 'uploads', file.filename);
+      const pathToWatermark = path.join('static', 'images', 'design', 'watermark.png');
+
+      const image = await Jimp.read(pathToOriginal);
+      const watermark = await Jimp.read(pathToWatermark);
+
+      image.resize(2400, Jimp.AUTO);
+
+      image.composite(watermark, 50, image.bitmap.height - watermark.bitmap.height - 50, {
+        mode: Jimp.BLEND_SOURCE_OVER,
+        opacitySource: 0.1,
+        opacityDest: 0.1,
+      });
+
+      await image.writeAsync(pathToOriginal);
+
+      next();
+    } catch(e) {
+      next(e);
+    }
+  },
+  async (req, res) => {
+    try {
+      const { file, body } = req;
+      const image = await DBService.saveImageMetaData(file.filename);
+      const galleryImage = await DBService.putMainGalleryImage(image.id, body.order);
+      res.send(galleryImage);
+    }
+    catch (e) {
+      res.status(500).send(e);
+    }
   }
-  catch (e) {
-    res.status(500).send(e);
-  }
-});
+);
 
 router.delete('/gallery-image', async (req, res) => {
   try {
