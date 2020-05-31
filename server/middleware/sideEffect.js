@@ -4,17 +4,16 @@ import async from 'async';
 
 // setup queue to manage indexing and sitemap process
 const sideEffectQueue = async.queue(async (_, callback) => {
-  console.log('*** starting to process indexing and sitemap task ***');
   try {
     await IndexingService.runIndexingProcess();
   } catch(e) {
-    // log & ignore
+    // TODO: log & ignore
   }
 
   try {
     await SitemapService.generateSitemap();
   } catch(e) {
-    // log & ignore
+    // TODO: log & ignore
   }
   callback();
 }, 1);
@@ -27,7 +26,6 @@ const getIsQueueNotEmpty = () => sideEffectQueue.length() >= 1;
 
 const sideEffectMiddleware = (req, res, next) => {
   if (getIsNotModifyingMethod(req.method)) {
-    console.log('\n*** handler won`t be attached ***\n');
     return next();
   }
 

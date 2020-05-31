@@ -1,8 +1,8 @@
 import * as DBService from '../DBService';
 import { encryptPassword, generateToken } from './crypto';
 
-const seconds = (n = 1) => n * 1000;
-const minutes = (n = 1) => n * seconds(60);
+const seconds = (nSec = 1) => nSec * 1000;
+const minutes = (nMin = 1) => nMin * seconds(60);
 
 const TOKEN_VALIDITY = minutes(10);
 

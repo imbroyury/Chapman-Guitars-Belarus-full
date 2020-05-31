@@ -41,8 +41,6 @@ const getAllUrlsContent = async () => {
 };
 
 export const runIndexingProcess = async () => {
-  console.log('*** RUN VERY LONG INDEXING PROCESS START ***');
-
   const latestPageContents = await getAllUrlsContent();
   const latestPagesUrls = latestPageContents.map(content => content.url);
 
@@ -51,10 +49,6 @@ export const runIndexingProcess = async () => {
   const toDelete = _.difference(indexedPageUrls, latestPagesUrls);  // in db, but not in latest response
   const toPut = _.difference(latestPagesUrls, indexedPageUrls);     // in latest response, but not in db
   const toEdit = _.intersection(latestPagesUrls, indexedPageUrls);  // both in response and in db
-
-  console.log(toDelete);
-  console.log(toPut);
-  console.log(toEdit);
 
   if (toPut.length > 0) {
     const contentToAppend = latestPageContents.filter(content => toPut.includes(content.url));
@@ -69,6 +63,4 @@ export const runIndexingProcess = async () => {
     const toEditContents = latestPageContents.filter(content => toEdit.includes(content.url));
     await async.series(toEditContents.map(page => async () => DBService.editSearchablePage(page.url, page.content)));
   }
-
-  console.log('*** RUN VERY LONG INDEXING PROCESS DONE ***');
 };
