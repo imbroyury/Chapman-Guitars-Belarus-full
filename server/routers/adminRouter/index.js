@@ -11,6 +11,7 @@ import {
 } from './routers';
 import authMiddleware from '../../middleware/auth';
 import sideEffectMiddleware from '../../middleware/sideEffect';
+import { errorHandlingMiddleware } from '../../middleware/errorHandling';
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.use('/', guitarSeriesRouter);
 router.use('/', guitarRouter);
 router.use('/', guitarColorRouter);
 router.use('/', pageMetadataRouter);
+router.use(errorHandlingMiddleware);
 
 const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
 // For everything else, serve index file
