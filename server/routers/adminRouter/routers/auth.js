@@ -5,15 +5,19 @@ import * as UserService from '../../../services/UserService';
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
-  const { login, password } = req.body;
+  try {
+    const { login, password } = req.body;
 
-  const user = await UserService.getUserByLoginAndPassword(login, password);
-  if (user === null) {
-    return res.status(401).send({ errorMessage: errors.invalidCredentials });
+    const user = await UserService.getUserByLoginAndPassword(login, password);
+    if (user === null) {
+      return res.status(401).send({ errorMessage: errors.invalidCredentials });
+    }
+
+    const token = await UserService.createSession(user.id);
+    res.status(200).send({ token });
+  } catch (e) {
+    return res.status(500).send({ errorMessage: errors.somethingWentWrong });
   }
-
-  const token = await UserService.createSession(user.id);
-  res.status(200).send({ token });
 });
 
 router.post('/logout', async (req, res) => {

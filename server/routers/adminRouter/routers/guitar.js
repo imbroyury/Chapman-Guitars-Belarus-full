@@ -10,7 +10,6 @@ router.get('/guitars', wrapAsync(async (req, res) => {
 }));
 
 router.put('/guitar', wrapAsync(async (req, res) => {
-  // FIXME: actual properties
   const {
     name,
     uri,
