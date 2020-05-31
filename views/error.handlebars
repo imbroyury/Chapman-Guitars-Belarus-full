@@ -1,0 +1,14 @@
+<div class="grid-page-wrap error-page">
+    {{>header}}
+    <section class="main-section">
+        <h1 class="section-header">
+            {{#if e404}} Ошибка 404 - такой страницы не существует! {{/if}}
+            {{#if e500}} Ошибка 500 - что-то пошло не так... {{/if}}
+        </h1>
+        <div class="error-img-wrapper">
+            <img class="error-img" src="/images/design/error.png"/>
+        </div>
+    </section>
+    {{>menu activeMenuItem}}
+    {{>footer}}
+</div>

@@ -1,6 +1,7 @@
 import express from 'express';
 import * as DBService from '../../services/DBService';
 import { pageMetadataMiddleware } from '../../middleware/pageMetadata';
+import { wrapAsync, errorHandlingMiddleware, ERROR_HANDLING_TYPE } from '../../middleware/errorHandling';
 
 const getActiveMenuItemConfig = (activeItem) => {
   if (activeItem === null) return { activeMenuItem: {} };
@@ -17,7 +18,7 @@ const router = express.Router();
 
 router.use(pageMetadataMiddleware);
 
-router.get('/', async (req, res) => {
+router.get('/', wrapAsync(async (req, res) => {
   const images = await DBService.getMainGalleryImages();
   const vm = images.map(image => ({
     src: image.Image.name,
@@ -28,7 +29,7 @@ router.get('/', async (req, res) => {
     ...req.pageMetadata,
     ...getActiveMenuItemConfig(null)
   });
-});
+}));
 
 const mapGuitarColorToViewModel = (gc) => ({
   name: gc.name,
@@ -55,7 +56,7 @@ const mapGuitarToViewModel = (guitar) => ({
   ],
 });
 
-router.get('/guitars', async (req, res) => {
+router.get('/guitars', wrapAsync(async (req, res) => {
   const guitarSeries = await DBService.getAllGuitarsGroupedBySeries();
 
   const vm = guitarSeries.map(series => ({
@@ -67,13 +68,16 @@ router.get('/guitars', async (req, res) => {
     guitarSeries: vm,
     ...req.pageMetadata,
     ...getActiveMenuItemConfig('guitars') });
-});
+}));
 
-router.get('/guitar/:modelUri', async (req, res) => {
+router.get('/guitar/:modelUri', wrapAsync(async (req, res) => {
   const { modelUri } = req.params;
   const guitar = await DBService.getGuitarByUri(modelUri);
 
-  if (guitar === null) return res.render('404');
+  if (guitar === null) return res.render('error', {
+    ...req.pageMetadata,
+    e404: true,
+  });
 
   const vm = mapGuitarToViewModel(guitar);
   res.render('guitar', {
@@ -81,7 +85,7 @@ router.get('/guitar/:modelUri', async (req, res) => {
     ...concatMetadataForItemPage(req.pageMetadata, guitar),
     ...getActiveMenuItemConfig('guitars')
   });
-});
+}));
 
 const mapArtistToViewModel = artist => ({
   name: artist.name,
@@ -90,7 +94,7 @@ const mapArtistToViewModel = artist => ({
   photo: artist.photo.name,
 });
 
-router.get('/artists', async (req, res) => {
+router.get('/artists', wrapAsync(async (req, res) => {
   const artists = await DBService.getAllArtists();
   const vm = artists.map(mapArtistToViewModel);
 
@@ -99,13 +103,16 @@ router.get('/artists', async (req, res) => {
     ...req.pageMetadata,
     ...getActiveMenuItemConfig('artists')
   });
-});
+}));
 
-router.get('/artist/:artistUri', async (req, res) => {
+router.get('/artist/:artistUri', wrapAsync(async (req, res) => {
   const { artistUri } = req.params;
   const artist = await DBService.getArtistByUri(artistUri);
 
-  if (artist === null) return res.render('404');
+  if (artist === null) return res.render('error', {
+    ...req.pageMetadata,
+    e404: true,
+  });
 
   const vm = mapArtistToViewModel(artist);
   res.render('artist', {
@@ -113,23 +120,23 @@ router.get('/artist/:artistUri', async (req, res) => {
     ...concatMetadataForItemPage(req.pageMetadata, artist),
     ...getActiveMenuItemConfig('artists')
   });
-});
+}));
 
-router.get('/purchase', async (req, res) => {
+router.get('/purchase', wrapAsync(async (req, res) => {
   res.render('purchase', {
     ...req.pageMetadata,
     ...getActiveMenuItemConfig('purchase')
   });
-});
+}));
 
-router.get('/contact', async (req, res) => {
+router.get('/contact', wrapAsync(async (req, res) => {
   res.render('contact', {
     ...req.pageMetadata,
     ...getActiveMenuItemConfig('contact')
   });
-});
+}));
 
-router.get('/search', express.urlencoded({ extended: true }), async (req, res) => {
+router.get('/search', express.urlencoded({ extended: true }), wrapAsync(async (req, res) => {
   const { query } = req.query;
 
   if (query === undefined) {
@@ -154,13 +161,15 @@ router.get('/search', express.urlencoded({ extended: true }), async (req, res) =
     ...req.pageMetadata,
     ...getActiveMenuItemConfig('search')
   });
-});
+}));
 
-router.get('*', async (req, res) => {
-  res.render('404', {
+router.get('*', wrapAsync(async (req, res) => {
+  res.render('error', {
     ...req.pageMetadata,
+    e404: true,
   });
-});
+}));
 
+router.use(errorHandlingMiddleware(ERROR_HANDLING_TYPE.CLIENT));
 
 export default router;

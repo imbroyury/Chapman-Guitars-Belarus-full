@@ -1,7 +1,7 @@
 @import "../help/variables";
 @import "../help/mixins";
 
-.grid-page-wrap.page-404 {
+.grid-page-wrap.error-page {
   .main-section {
     .flex-center-column;
     height: 100%;
@@ -9,9 +9,13 @@
       .flex-center-column;
       height: 30%;
     }
-    .img-404 {
-      width: 80%;
-      height: auto;
+    .error-img-wrapper {
+      display: block;
+      text-align: center;
+      .error-img {
+        width: 80%;
+        height: auto;
+      }
     }
   }
 }
