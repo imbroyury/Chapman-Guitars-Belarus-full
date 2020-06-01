@@ -7,6 +7,7 @@ import * as SitemapService from './services/SitemapService';
 import { HTTP_PORT } from '../admin-interface/src/shared/hosts';
 import clientRouter from './routers/clientRouter';
 import adminRouter from './routers/adminRouter';
+import { loggingMiddleware } from './middleware/logging';
 
 const server = express();
 
@@ -22,6 +23,7 @@ const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'bui
 const STATIC = path.join(__dirname, '..', 'static');
 const UPLOADS = path.join(__dirname, '..', 'static', 'uploads');
 
+server.use(loggingMiddleware);
 server.use('/admin', express.static(ADMIN_INTERFACE_BUILD));
 server.use('/uploads', express.static(UPLOADS));
 server.use('/', express.static(STATIC));
