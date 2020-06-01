@@ -1,6 +1,7 @@
 import * as IndexingService from '../services/IndexingService';
 import * as SitemapService from '../services/SitemapService';
 import * as LoggerService from '../services/LoggerService';
+import { serializeError } from 'serialize-error';
 import async from 'async';
 
 // setup queue to manage indexing and sitemap process
