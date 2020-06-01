@@ -4,6 +4,7 @@ import exphbs from 'express-handlebars';
 import bodyParser from 'body-parser';
 import * as DBService from './services/DBService';
 import * as SitemapService from './services/SitemapService';
+import * as IndexingService from './services/IndexingService';
 import { HTTP_PORT } from '../admin-interface/src/shared/hosts';
 import clientRouter from './routers/clientRouter';
 import adminRouter from './routers/adminRouter';
@@ -36,7 +37,13 @@ server.use('/', clientRouter);
 (async() => {
   await DBService.init();
 
-  await SitemapService.generateSitemap();
-
-  server.listen(HTTP_PORT, () => console.log(`🎸 Chapman Guitars 🎸 is listening on port ${HTTP_PORT}!`));
+  server.listen(HTTP_PORT, async () => {
+    console.log(`🎸 Chapman Guitars 🎸 is listening on port ${HTTP_PORT}!`);
+    try {
+      await IndexingService.runIndexingProcess();
+      await SitemapService.generateSitemap();
+    } catch(e) {
+      console.log(e);
+    }
+  });
 })();

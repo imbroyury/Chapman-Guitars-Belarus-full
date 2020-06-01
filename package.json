@@ -10,7 +10,6 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
-    "immutability-helper": "^3.0.1",
     "jimp": "^0.12.1",
     "jsdom": "^16.2.0",
     "lodash": "^4.17.15",
@@ -33,9 +32,8 @@
     "gulp-less": "^4.0.1"
   },
   "scripts": {
-    "start": "nodemon -r esm server/index.js --ignore admin-interface",
+    "start": "set NODE_ENV=development&& nodemon -r esm server/index.js --ignore admin-interface",
     "production": "server/index.js",
-    "watch-styles": "gulp watch",
     "build-styles": "gulp less"
   }
 }
