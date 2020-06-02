@@ -8,7 +8,7 @@ set -o xtrace;
 cd ../backup;
 
 # sql restore
-mysql -u root -p chapman < ./latest/chapman.sql;
+mysql -u root -p < ./latest/chapman.sql;
 
 # also files
 cp ./latest/server/server-log.log ../server/server-log.log;

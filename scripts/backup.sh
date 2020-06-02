@@ -14,7 +14,7 @@ ver;
 mkdir ~tmp/static;
 
 # sql dump
-mysqldump -u root -p chapman > ./~tmp/chapman.sql;
+mysqldump -u root -p --databases --add-drop-database chapman > ./~tmp/chapman.sql;
 
 # also files
 cp ../server/server-log.log ./~tmp/server/server-log.log;

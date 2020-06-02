@@ -16,6 +16,16 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `chapman`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `chapman`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `chapman` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
+
+USE `chapman`;
+
+--
 -- Table structure for table `artists`
 --
 
@@ -344,4 +354,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-02 16:03:14
+-- Dump completed on 2020-06-02 16:57:54
