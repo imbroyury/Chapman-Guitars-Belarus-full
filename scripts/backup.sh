@@ -9,8 +9,7 @@ cd ../backup;
 
 # prepare folders
 mkdir ~tmp;
-mkdir ~tmp/ser
-ver;
+mkdir ~tmp/server;
 mkdir ~tmp/static;
 
 # sql dump
