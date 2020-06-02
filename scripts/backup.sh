@@ -24,5 +24,6 @@ cp -r ../static/uploads ./~tmp/static/uploads;
 rm -rf latest;
 mkdir latest;
 
+# and move current one in its place
 mv ~tmp/* latest;
 rm -rf ~tmp;
