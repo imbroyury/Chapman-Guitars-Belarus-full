@@ -7,10 +7,12 @@ set -o xtrace;
 
 cd ../backup;
 
+BACKUP_FOLDER="0"
+
 # sql restore
-mysql -u root -p < ./0/chapman.sql;
+mysql -u root -p < ./${BACKUP_FOLDER}/chapman.sql;
 
 # also files
-cp ./0/server/server-log.log ../server/server-log.log;
-cp ./0/static/sitemap.xml ../static/sitemap.xml;
-cp -r ./0/static/uploads/* ../static/uploads;
+cp ./${BACKUP_FOLDER}/server/server-log.log ../server/server-log.log;
+cp ./${BACKUP_FOLDER}/static/sitemap.xml ../static/sitemap.xml;
+cp -r ./${BACKUP_FOLDER}/static/uploads/* ../static/uploads;
