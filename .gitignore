@@ -2,3 +2,4 @@ node_modules
 admin-interface/build
 static/css
 static/sitemap.xml
+server/server-log.log
