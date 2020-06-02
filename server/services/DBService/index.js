@@ -12,7 +12,8 @@ import {
   SearchablePage,
   PageMetadata,
 } from './Models.js';
-import seed from './seed.js';
+import * as LoggerService from '../LoggerService';
+import { serializeError } from 'serialize-error';
 
 export const init = async () => {
   try {
@@ -47,17 +48,16 @@ export const init = async () => {
 
     console.log('Relationships established');
 
-    try {
-      // await sequelize.drop();
-      // await sequelize.sync();
-      // await seed();
+    /* try {
+      await sequelize.drop();
+      await sequelize.sync();
+      await seed();
     } catch (e) {
       console.error(e);
-      console.log('*** Seeding failed because reasons ***');
-    }
+    } */
 
   } catch(e) {
-    console.error('Unable to connect to the database:', e);
+    LoggerService.log(`[ERRD] - <${new Date().toISOString()}> - ${JSON.stringify(serializeError(e))}`);
   }
 };
 
@@ -416,11 +416,9 @@ export const getSearchablePageByUrl = async (url) => {
 };
 
 export const editSearchablePage = async (url, content) => {
-  console.log('****************editing item with url ************', url);
   const page = await getSearchablePageByUrl(url);
   page.content = content;
   await page.save();
-  console.log('*************done, see any output above *******');
 };
 
 export const bulkDeleteSearchablePagesByUrls = async (urls) => {
