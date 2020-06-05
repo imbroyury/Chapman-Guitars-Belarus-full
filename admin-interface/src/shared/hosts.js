@@ -1,7 +1,9 @@
 const HTTP_PROTOCOL = 'http';
 
 const LOCAL_HOST = 'localhost';
-const REMOTE_HOST = '178.172.195.18';
+const REMOTE_HOST = 'localhost';
+// TODO: actual prod IP
+// const REMOTE_HOST = '178.172.195.18';
 
 export const HTTP_PORT = 8280;
 

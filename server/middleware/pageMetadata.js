@@ -1,6 +1,7 @@
 import * as DBService from '../services/DBService';
+import { wrapAsync } from './errorHandling';
 
-export const pageMetadataMiddleware = async (req, res, next) => {
+export const pageMetadataMiddleware = wrapAsync(async (req, res, next) => {
   if (req.originalUrl === '/favicon.ico') return next();
 
   const parts = req.originalUrl.split(/(?=\/)/);
@@ -26,4 +27,4 @@ export const pageMetadataMiddleware = async (req, res, next) => {
   };
 
   next();
-};
+});

@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
 import exphbs from 'express-handlebars';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as DBService from './services/DBService';
 import * as SitemapService from './services/SitemapService';
@@ -12,6 +13,9 @@ import { loggingMiddleware } from './middleware/logging';
 
 const server = express();
 
+// CORS middleware
+server.use(cors());
+
 // Handlebars
 server.engine('handlebars', exphbs());
 server.set('view engine', 'handlebars');
@@ -20,14 +24,11 @@ server.set('view engine', 'handlebars');
 server.use(bodyParser.json());
 
 // Static files
-const ADMIN_INTERFACE_BUILD = path.join(__dirname, '..', 'admin-interface', 'build');
+// Only for admin interface, which bypasses NGINX
 const STATIC = path.join(__dirname, '..', 'static');
-const UPLOADS = path.join(__dirname, '..', 'static', 'uploads');
+server.use('/', express.static(STATIC));
 
 server.use(loggingMiddleware);
-server.use('/admin', express.static(ADMIN_INTERFACE_BUILD));
-server.use('/uploads', express.static(UPLOADS));
-server.use('/', express.static(STATIC));
 
 // Routers
 server.use('/admin', adminRouter);

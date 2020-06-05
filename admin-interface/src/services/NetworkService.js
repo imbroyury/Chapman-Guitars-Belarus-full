@@ -2,9 +2,11 @@ import axios from 'axios';
 import headers from '../shared/headers';
 import { getAuthToken } from './AuthService';
 import { setUserUnauthenticated, setAuthRequestError } from '../store/actions';
+import { HTTP_URL } from '../shared/hosts';
 
-const unauthxios = axios.create();
-const authxios = axios.create();
+const baseUrl = `${HTTP_URL}/admin`;
+const unauthxios = axios.create({ baseURL: baseUrl });
+const authxios = axios.create({ baseURL: baseUrl });
 
 authxios.interceptors.request.use(
   (config) => {
