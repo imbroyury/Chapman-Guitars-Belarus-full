@@ -11,7 +11,7 @@ import {
   Session,
   SearchablePage,
   PageMetadata,
-} from './Models.js';
+} from './models.js';
 import * as LoggerService from '../LoggerService';
 import { serializeError } from 'serialize-error';
 

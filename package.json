@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "set NODE_ENV=development&& nodemon -r esm server/index.js --ignore admin-interface",
-    "production": "server/index.js",
+    "production": "set NODE_ENV=production&& node -r esm server/index.js",
     "build-styles": "gulp less"
   }
 }
