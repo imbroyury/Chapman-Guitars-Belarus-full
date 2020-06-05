@@ -188,7 +188,7 @@ CREATE TABLE `images` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +197,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (20,'24490ec0-5af0-11ea-8eca-cf89d66ca9f2.jpeg'),(16,'26f13240-4521-11ea-ab06-ad38a67e52fc.jpeg'),(1,'26f13240-4521-11ea-ab06-ad38a67e52fc.png'),(2,'2bc3a1e0-4521-11ea-ab06-ad38a67e52fc.png'),(3,'319f1d10-4521-11ea-ab06-ad38a67e52fc.png'),(10,'4258ff30-5ae9-11ea-88fe-ad59fa5e167b.png'),(11,'425b2210-5ae9-11ea-88fe-ad59fa5e167b.png'),(12,'425c3380-5ae9-11ea-88fe-ad59fa5e167b.png'),(13,'5d3d83f0-45d3-11ea-9f37-75cdc8dd7f78.jpeg'),(14,'615248e0-45d3-11ea-9f37-75cdc8dd7f78.jpeg'),(7,'7c100ae0-4539-11ea-b407-0b22c6d90d7f.png'),(8,'7febe580-4539-11ea-b407-0b22c6d90d7f.png'),(9,'836b9660-4539-11ea-b407-0b22c6d90d7f.png'),(4,'83ca6a20-4537-11ea-8153-a53ebdbd6a0f.png'),(5,'87f85c60-4537-11ea-8153-a53ebdbd6a0f.png'),(17,'8a14a38d-f830-4bfa-a21d-bd9a91bbd37f.jpeg'),(6,'8ca62d00-4537-11ea-8153-a53ebdbd6a0f.png'),(18,'a665d8f9-d52d-43e5-9c57-0d49b742333f.jpeg'),(19,'b2df4139-9913-415e-819e-8e174c13c343.jpeg'),(15,'dc002870-4f4f-11ea-989a-bb3e4aa67001.jpeg');
+INSERT INTO `images` VALUES (20,'24490ec0-5af0-11ea-8eca-cf89d66ca9f2.jpeg'),(16,'26f13240-4521-11ea-ab06-ad38a67e52fc.jpeg'),(1,'26f13240-4521-11ea-ab06-ad38a67e52fc.png'),(2,'2bc3a1e0-4521-11ea-ab06-ad38a67e52fc.png'),(21,'2bcb3c00-a716-11ea-8d78-d504d06b1af1.jpeg'),(3,'319f1d10-4521-11ea-ab06-ad38a67e52fc.png'),(22,'31bd9a90-a716-11ea-8d78-d504d06b1af1.jpeg'),(10,'4258ff30-5ae9-11ea-88fe-ad59fa5e167b.png'),(11,'425b2210-5ae9-11ea-88fe-ad59fa5e167b.png'),(12,'425c3380-5ae9-11ea-88fe-ad59fa5e167b.png'),(23,'43226c70-a716-11ea-8d78-d504d06b1af1.jpeg'),(24,'48d1ce90-a716-11ea-8d78-d504d06b1af1.jpeg'),(25,'4f9a41d0-a716-11ea-8d78-d504d06b1af1.jpeg'),(7,'7c100ae0-4539-11ea-b407-0b22c6d90d7f.png'),(8,'7febe580-4539-11ea-b407-0b22c6d90d7f.png'),(9,'836b9660-4539-11ea-b407-0b22c6d90d7f.png'),(4,'83ca6a20-4537-11ea-8153-a53ebdbd6a0f.png'),(5,'87f85c60-4537-11ea-8153-a53ebdbd6a0f.png'),(17,'8a14a38d-f830-4bfa-a21d-bd9a91bbd37f.jpeg'),(6,'8ca62d00-4537-11ea-8153-a53ebdbd6a0f.png'),(18,'a665d8f9-d52d-43e5-9c57-0d49b742333f.jpeg'),(19,'b2df4139-9913-415e-819e-8e174c13c343.jpeg');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +215,7 @@ CREATE TABLE `maingalleryimages` (
   PRIMARY KEY (`id`),
   KEY `imageId` (`imageId`),
   CONSTRAINT `maingalleryimages_ibfk_1` FOREIGN KEY (`imageId`) REFERENCES `images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +224,7 @@ CREATE TABLE `maingalleryimages` (
 
 LOCK TABLES `maingalleryimages` WRITE;
 /*!40000 ALTER TABLE `maingalleryimages` DISABLE KEYS */;
-INSERT INTO `maingalleryimages` VALUES (1,0,13),(2,1,14),(3,2,15);
+INSERT INTO `maingalleryimages` VALUES (4,4,21),(5,5,22),(6,1,23),(7,2,24),(8,3,25);
 /*!40000 ALTER TABLE `maingalleryimages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +307,7 @@ CREATE TABLE `sessions` (
   UNIQUE KEY `token` (`token`),
   KEY `userId` (`userId`),
   CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,6 +316,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+INSERT INTO `sessions` VALUES (1,1,'9196141497e212e2cf8b668c8c3192b5e89b33f62502d22c236e002502ae76e5','2020-06-05 10:16:35','2020-06-05 10:21:34');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,4 +355,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-02 16:57:54
+-- Dump completed on 2020-06-05 13:24:11
