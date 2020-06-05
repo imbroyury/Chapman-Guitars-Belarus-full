@@ -48,14 +48,6 @@ export const init = async () => {
 
     console.log('Relationships established');
 
-    /* try {
-      await sequelize.drop();
-      await sequelize.sync();
-      await seed();
-    } catch (e) {
-      console.error(e);
-    } */
-
   } catch(e) {
     LoggerService.log(`[ERRD] - <${new Date().toISOString()}> - ${JSON.stringify(serializeError(e))}`);
   }
