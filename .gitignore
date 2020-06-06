@@ -2,5 +2,6 @@ node_modules
 admin-interface/build
 static/css
 static/sitemap.xml
+static/uploads
 server/server-log.log
 backup/latest

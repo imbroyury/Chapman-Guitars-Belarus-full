@@ -1,9 +1,10 @@
 import { Sequelize } from 'sequelize';
+import credentials from './mysql-credentials.json';
 
 export default new Sequelize(
   'chapman',
-  'root',
-  'root',
+  credentials.user,
+  credentials.password,
   {
     host: 'localhost',
     dialect: 'mariadb',
