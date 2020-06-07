@@ -10,7 +10,7 @@ cd ../backup;
 BACKUP_FOLDER="latest"
 
 # sql restore
-mysql -u root -p < ./${BACKUP_FOLDER}/chapman.sql;
+mysql < ./${BACKUP_FOLDER}/chapman.sql;
 
 # also files
 cp ./${BACKUP_FOLDER}/server/server-log.log ../server/server-log.log;
