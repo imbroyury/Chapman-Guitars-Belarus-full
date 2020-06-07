@@ -1,0 +1,10 @@
+{
+    "mysql": {
+        "user" : "root",
+        "password" : "that-is-not-the-password"
+    },
+    "users": {
+        "passwordSalt": "that-is-not-the-salt",
+        "loginTokenValidity": "60000"
+    }
+}

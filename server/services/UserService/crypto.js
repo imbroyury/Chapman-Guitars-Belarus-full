@@ -1,11 +1,11 @@
 import crypto from 'crypto';
 import util from 'util';
+import { users } from '../../configuration.json';
 
 const scrypt = util.promisify(crypto.scrypt);
 const randomBytes = util.promisify(crypto.randomBytes);
 
-// TODO: hide it
-const SALT = 'SecretSaltForCookingPasswords';
+const SALT = users.passwordSalt;
 const KEYLEN = 64;
 const TOKENLEN = 32;
 

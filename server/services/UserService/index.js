@@ -1,10 +1,8 @@
 import * as DBService from '../DBService';
 import { encryptPassword, generateToken } from './crypto';
+import { users } from '../../configuration.json';
 
-const seconds = (nSec = 1) => nSec * 1000;
-const minutes = (nMin = 1) => nMin * seconds(60);
-
-const TOKEN_VALIDITY = minutes(10);
+const TOKEN_VALIDITY = users.loginTokenValidity;
 
 export const createUser = async (login, password) => {
   const encryptedPassword = await encryptPassword(password);
