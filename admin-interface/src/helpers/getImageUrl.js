@@ -1,5 +1,5 @@
-import { HTTP_URL } from '../shared/hosts';
+import { URLS, SERVER_TYPE_ENUM } from '../shared/hosts';
 
-const getImageUrl = (imageName) => `${HTTP_URL}/uploads/${imageName}`;
+const getImageUrl = (imageName) => `${URLS[SERVER_TYPE_ENUM.proxy]}/uploads/${imageName}`;
 
 export default getImageUrl;

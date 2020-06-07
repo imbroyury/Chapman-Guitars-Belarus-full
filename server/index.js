@@ -4,7 +4,7 @@ import exphbs from 'express-handlebars';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as DBService from './services/DBService';
-import { EXPRESS_HTTP_PORT } from '../admin-interface/src/shared/hosts';
+import { PORTS, SERVER_TYPE_ENUM } from '../admin-interface/src/shared/hosts';
 import clientRouter from './routers/clientRouter';
 import adminRouter from './routers/adminRouter';
 import { loggingMiddleware } from './middleware/logging';
@@ -36,5 +36,5 @@ server.use('/', clientRouter);
 (async() => {
   await DBService.init();
 
-  server.listen(EXPRESS_HTTP_PORT, () => console.log(`🎸 Chapman Guitars 🎸 is listening on port ${EXPRESS_HTTP_PORT}!`));
+  server.listen(PORTS[SERVER_TYPE_ENUM.express], () => console.log(`🎸 Chapman Guitars 🎸 is listening on port ${PORTS[SERVER_TYPE_ENUM.express]}!`));
 })();

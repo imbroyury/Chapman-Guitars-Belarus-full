@@ -1,12 +1,12 @@
 import { SitemapStream, streamToPromise } from 'sitemap';
 import * as PageService from '../PageService';
 import * as FSService from '../FSService';
-import { HTTP_URL } from '../../../admin-interface/src/shared/hosts';
+import { URLS, SERVER_TYPE_ENUM } from '../../../admin-interface/src/shared/hosts';
 
 export const generateSitemap = async () => {
   const allPages = await PageService.getAllPages();
   // Creates a sitemap object given the input configuration with URLs
-  const sitemapStream = new SitemapStream({ hostname: HTTP_URL });
+  const sitemapStream = new SitemapStream({ hostname: URLS[SERVER_TYPE_ENUM.proxy] });
 
   allPages.forEach(page => sitemapStream.write({
     url: page.relativeUrl,

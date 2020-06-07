@@ -1,9 +1,9 @@
 import async from 'async';
 import _ from 'lodash';
 import * as DBService from '../DBService';
-import { HTTP_URL } from '../../../admin-interface/src/shared/hosts';
+import { URLS, SERVER_TYPE_ENUM } from '../../../admin-interface/src/shared/hosts';
 
-const getAbsoluteUrl = (relativeUrl) => HTTP_URL + relativeUrl;
+const getAbsoluteUrl = (relativeUrl) => URLS[SERVER_TYPE_ENUM.express] + relativeUrl;
 
 // hardcoded to reference a function to fetch items
 const dynamicPageDeclarations = [

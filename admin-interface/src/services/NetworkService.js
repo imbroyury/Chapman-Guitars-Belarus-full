@@ -2,9 +2,9 @@ import axios from 'axios';
 import headers from '../shared/headers';
 import { getAuthToken } from './AuthService';
 import { setUserUnauthenticated, setAuthRequestError } from '../store/actions';
-import { HTTP_URL } from '../shared/hosts';
+import { URLS, SERVER_TYPE_ENUM } from '../shared/hosts';
 
-const baseUrl = `${HTTP_URL}/admin`;
+const baseUrl = `${URLS[SERVER_TYPE_ENUM.proxy]}/admin`;
 const unauthxios = axios.create({ baseURL: baseUrl });
 const authxios = axios.create({ baseURL: baseUrl });
 

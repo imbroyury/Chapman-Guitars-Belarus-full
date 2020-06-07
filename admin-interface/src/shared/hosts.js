@@ -1,18 +1,48 @@
-const HTTP_PROTOCOL = 'http';
+const ENV_ENUM = {
+  development: 'development',
+  production: 'production',
+};
 
-const LOCAL_HOST = 'localhost';
-const REMOTE_HOST = '161.35.16.69';
+export const SERVER_TYPE_ENUM = {
+  express: 'express',
+  proxy: 'proxy',
+};
 
-export const EXPRESS_HTTP_PORT = 8280;
+const ENV_TO_PORTS_MAP = {
+  [ENV_ENUM.development]: {
+    [SERVER_TYPE_ENUM.express]: 8280,
+    [SERVER_TYPE_ENUM.proxy]: 80,
+  },
+  [ENV_ENUM.production]: {
+    [SERVER_TYPE_ENUM.express]: 8280,
+    [SERVER_TYPE_ENUM.proxy]: 80,
+  }
+};
 
-const NGINX_HTTP_PORT = 80;
+const ENV_TO_HOSTS_MAP = {
+  [ENV_ENUM.development]: {
+    [SERVER_TYPE_ENUM.express]: 'http://localhost',
+    [SERVER_TYPE_ENUM.proxy]: 'http://localhost',
+  },
+  [ENV_ENUM.production]: {
+    [SERVER_TYPE_ENUM.express]: 'http://localhost',
+    [SERVER_TYPE_ENUM.proxy]: 'http://161.35.16.69',
+  },
+};
 
-const isDevEnv = process.env.NODE_ENV === 'development';
+const getUrl = (env, serverType) => `${ENV_TO_HOSTS_MAP[env][serverType]}:${ENV_TO_PORTS_MAP[env][serverType]}`;
 
-const getUrl = (protocol, host, port) => `${protocol}://${host}:${port}`;
+const ENV_TO_URLS_MAP = {
+  [ENV_ENUM.development]: {
+    [SERVER_TYPE_ENUM.express]: getUrl(ENV_ENUM.development, SERVER_TYPE_ENUM.express),
+    [SERVER_TYPE_ENUM.proxy]: getUrl(ENV_ENUM.development, SERVER_TYPE_ENUM.proxy),
+  },
+  [ENV_ENUM.production]: {
+    [SERVER_TYPE_ENUM.express]: getUrl(ENV_ENUM.production, SERVER_TYPE_ENUM.express),
+    [SERVER_TYPE_ENUM.proxy]: getUrl(ENV_ENUM.production, SERVER_TYPE_ENUM.proxy),
+  }
+};
 
-const getHTTPUrl = (host) => getUrl(HTTP_PROTOCOL, host, NGINX_HTTP_PORT);
+export const PORTS = ENV_TO_PORTS_MAP[process.env.NODE_ENV];
 
-export const HTTP_URL = isDevEnv
-  ? getHTTPUrl(LOCAL_HOST)
-  : getHTTPUrl(REMOTE_HOST);
+export const URLS = ENV_TO_URLS_MAP[process.env.NODE_ENV];
