@@ -12,7 +12,7 @@
     "express-handlebars": "^3.1.0",
     "jimp": "^0.12.1",
     "jsdom": "^16.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mariadb": "^2.1.5",
     "mime-types": "^2.1.26",
     "multer": "^1.4.2",
